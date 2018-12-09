@@ -1,0 +1,34 @@
+<p>The SloppyCell package is a software environment for simulation and analysis of biomolecular networks developed by the groups of Jim Sethna and Chris Myers at Cornell University. It is hosted at <a class="external" href="http://sloppycell.sourceforge.net/"> SourceForge</a>, and here is a paper entitled <a class="external" href="http://arxiv.org/pdf/0704.3259">Python unleashed on Systems Biology</a> about it at the arXiv. </p>
+
+<h2>SBML support</h2>
+
+<p>We have provided an interface to SloppyCell that can import basic <a class="external" href="http://sbml.org">SBML</a> model specifications and SloppyCell model specifications (<tt>PyDSTool/Toolbox/makeSloppyModel.py</tt>). The SloppyCell developers say that they support "much" of SBML level 2 version 3, in particular: </p>
+<ul>
+<li><p> Algebraic rules </p>
+</li>
+<li><p> Mathematical expressions using piecewise </p>
+</li>
+<li><p> Logical operators in event triggers </p>
+</li>
+</ul>
+<p>Others features not currently supported: </p>
+<ul>
+<li><p> Delay terms in mathematical expressions </p>
+</li>
+<li><p> Unit manipulations </p>
+</li>
+</ul>
+<p>They also state that "We are interested in adding support for those features that folks are using. Please contact us if we're missing a feature you would find useful." </p>
+<p>To use SBML with SloppyCell, you will need to install the <tt>libsbml</tt> <a class="external" href="http://sbml.org/Software/libSBML/docs/python-api/index.html"> python API package</a>. </p>
+<p>Then, use the <tt>IO.from_SBML_file</tt> function from SloppyCell to import your SBML file. This creates a <tt>SloppyCell.Network</tt> object, which has a method <tt>get_eqn_structure</tt>. This method generates a dictionary of strings of the form you can see in the demo script <tt>PyDSTool/tests/sloppycell_example.py</tt>. From there, just follow that script. The dictionary has 5 keys: </p>
+<p>* 'odes': The differential equation for each variable, indexed by variable, for example <tt>['odes']['x']&nbsp;=&nbsp;'-x*y&nbsp;+&nbsp;x'</tt> </p>
+<p>* 'functions': Functions defined and used in the equations, e.g. <tt>['functions']['f(x,y,z)']&nbsp;=&nbsp;'x**(y-z)'</tt> </p>
+<p>* 'parameters': The parameters used in the equations, e.g. <tt>['parameters']['param_1']&nbsp;=&nbsp;1.2</tt> </p>
+<p>* 'assignments': Assigned quantities used in the equations, e.g. <tt>['assignments']['q']&nbsp;=&nbsp;'x**2'</tt> substitutes x**2 for q everywhere in the equations. </p>
+<p>* 'events': Indexed by triggering expression, mapped to a dictionary of variable transformations, e.g. <tt>['events']['gt(x-cos(y),&nbsp;sqrt(z))']&nbsp;=&nbsp;{'x':&nbsp;'1.5&nbsp;*&nbsp;cos(y)'}&nbsp;</tt>. When x-cos(y) becomes greater than sqrt(z), set the value of x to 1.5 * cos(y) </p>
+<p>Note that <em>delayed events</em> are not currently supported in this interface. Both SloppyCell and PyDSTool support delayed events but the technical differences between the two implementations were too complex for inclusion in this version of the interface. </p>
+<p>Please contact us if you have any further questions or comments about this interface, or wish to contribute to it. </p>
+
+<h2>LaTex support</h2>
+
+<p>SloppyCell also provides output of equations directly to LaTeX, which we intend to port for use with PyDSTool in the near future (this should be an easy task). </p>

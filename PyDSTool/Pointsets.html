@@ -1,0 +1,493 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Pointsets - PyDSTool</title></head>
+<body dir="ltr" lang="en">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1>Pointsets</h1>
+
+<div class="table-of-contents"><p class="table-of-contents-heading">Contents
+<ol><li><a href="#Points_and_Pointsets_are_enhanced_arrays">Points and Pointsets are enhanced arrays</a></li>
+<li><a href="#Labelling">Labelling</a></li>
+<li><a href="#Coordinate_access_and_manipulation">Coordinate access and manipulation</a></li>
+<li><a href="#Point_arithmetic_and_comparison">Point arithmetic and comparison</a></li>
+<li><a href="#Implementation_details">Implementation details</a></li>
+<li><a href="#Interactive">An interactive exploration of Points and Pointsets</a></li>
+<li><a href="#utils">Other pointset-related utility functions</a></li>
+</ol>
+
+</div> <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867">
+
+<hr>
+
+<h1 id="Points_and_Pointsets_are_enhanced_arrays">1. Points and Pointsets are enhanced arrays</h1>
+<span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><p class="line874">The Point and Pointset classes are essentially enhanced Numpy array classes. The primary goal of these two classes is to free the user from dealing with explicit array indices when manipulating scientific or numerically-computed data which are commonly most naturally referenced by names. We believe the "index free" array is a liberating substrate for users, that permits construction of sophisticated computations without the tedious book-keeping of arbitrary integer array indices. This comes at little cost to efficiency, especially as regular arrays can easily be extracted from a Pointset or reassembled into one, so that data porting to other applications is easy. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><p class="line862">Pointsets may either be parameterized by an independent variable -- in which case they are <em>callable</em> with values of that variable, or they may be non-parameterized -- in which case they are not callable. In either case they can be referenced by array index, or in other ways (see below). <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><p class="line874">The display of point and pointset contents uses a numerical precision of 8 significant figures. This cannot be changed by the user, who should extract a subset of the pointset as an array in order to see the values at full precision. Of course, arithmetic comparisons using pointset values use full precision. <span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line867">
+
+<p><b>Attributes of Pointsets</b></p>
+<ul>
+  <li>coordnames</li>
+  <li>coordarray</li>
+  <li>coordtype	(A numeric type, float or int)</li>
+  <li>indepvarname	</li>
+  <li>indepvararray	(stored variables in rows, as per display output)</li>
+  <li>indepvartype (A numeric type, float or int)</li>
+  <li>dimension</li>
+  <li>parameterized	(Boolean)</li>
+</ul>
+
+<p>Individual values of a Point or Pointset can be set using their 'set' method.</p>
+
+
+<h1 id="Labelling">2. Labelling</h1>
+<span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line862">A further feature of Points and Pointsets is their inherent point labelling system, which can be queried and manipulated much like a dictionary, as a way to organize sophisticated access to array data. For instance, this becomes especially useful when exploring the bifurcation sets of a dynamical system using <a href="./PyCont.html">PyCont</a>. <span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span>
+<p class="line862">In a Pointset, denoted <tt>w</tt>, labels are stored by <em>index</em>. To see which point is labelled at index <tt>i</tt>, look at <tt>w[i]</tt>. To find out which index corresponds to an independent variable value <tt>t</tt>, call <tt>w.find(t)</tt> (parameterized pointsets only). If the value of <tt>t</tt> is not in the pointset then a <em>pair</em> will be returned that indicates where <tt>t</tt> lies with respect to existing independent variable values in <tt>w</tt>. <span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line862">To see which points in a pointset possess a given string label <tt>s</tt>, use <tt>w.bylabel(s)</tt>. <span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><p class="line862">Labels should be added and removed using the <tt>addlabel</tt> and <tt>removelabel</tt> methods. <span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line862">Additionally, a pointset may be given a name, which resides in the attribute <tt>name</tt>. <span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><p class="line867">
+<h1 id="Coordinate_access_and_manipulation">3. Coordinate access and manipulation</h1>
+<span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><p class="line862">The displayed order of point or pointset coordinates is <em>alphabetical</em>. This is the only supported ordering of coordinates, and also provides the ordering for exported arrays from these objects. <span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><p class="line874">A point can be called and referenced by coordinate name or index. <span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><p class="line862">A point can be removed, appended, or inserted into a pointset using the methods <tt>remove</tt>, <tt>append</tt> and <tt>insert</tt>. Note that, unlike with lists, you can append either an individual point or a pointset object. A method named <tt>extend</tt> is also provided, and has identical functionality to <tt>append</tt>. <span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><p class="line862">A parameterized pointset can be called at a specific independent variable value (or set of values), with an additional argument to select coordinates in the output. A pointset can be referenced by point index (returning a point), a set of indices (returning a pointset corresponding to points at those indices), or by coordinate name (returning a pointset containing only that coordinate at all point indices). The <tt>bylabel</tt> method also allows points to be selected based on their label. <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><p class="line874">Both points and pointsets can have their values set in the same ways that both a dictionary and a list can be. <span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><p class="line862">The full range of possibilities in the point and pointset interface can be seen by running the <tt>Points.py</tt> file as a script and reading the examples in the output. <span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><p class="line862">Pointsets can be reversed <em>in place</em> using the <tt>reverse</tt> method. <span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><p class="line867">
+<h1 id="Point_arithmetic_and_comparison">4. Point arithmetic and comparison</h1>
+<span class="anchor" id="line-57"></span><span class="anchor" id="line-58"></span><p class="line874">Basic arithmetic and comparison operations can be performed on Points and Pointsets, in much the same way as can be done with arrays. The ordering and test of equality for points is defined according to the choice of norm for the points. By default, this is L2 norm, although this can be changed using the 'norm' key in the argument dictionary at initialization to be values from 1 to Inf. Comparison of both points and pointsets using the usual arithmetic operators will compare objects point-wise based on their norms.  <span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><span class="anchor" id="line-61"></span><p class="line862">To compare two points or pointsets, coordinate for coordinate, use the <tt>comparePointCoords</tt> function (which also accepts appropriately keyed dictionaries). The comparison can be made stricter using the optional <tt>fussy</tt> boolean argument, in which case the norm and coordinate type are also checked for equality, provided only points and pointsets are passed to the function. <span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><p class="line874">Points can be compared to single values, returning a Boolean array that indicate matching coordinates (ordered). Similarly, Pointsets can be compared to Points, returning a Boolean array indicating matching positions. This functionality is much like that of Numpy arrays. <span class="anchor" id="line-64"></span><span class="anchor" id="bottom"></span></div>
+
+<p class="line867">
+<h1 id="Implementation_details">5. Implementation details</h1>
+<span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span>
+<p class="line874">Unlabelled points and unlabelled non-parameterized pointsets can be created by calling the appropriate class constructor with a dictionary mapping coordinate name keys to numeric or array/list values. <span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span>
+<p class="line862">Points and pointsets can have their <em>values</em> (i.e. not including the independent variable, if present) turned into a dictionary by calling the in-built function <tt>dict</tt> with the point or pointset as argument. A <tt>todict</tt> method is also implemented. <span class="anchor" id="line-52"></span><span class="anchor" id="line-53"></span>
+<p class="line862">The <tt>Point</tt> class is defined to closely resemble a mapping object class such as <tt>dict</tt> (although it is not a subtype of <tt>dict</tt>). <tt>Pointset</tt> is a subclass of <tt>Point</tt>, although it acts more like a list than a dictionary. Most natural operations for dictionaries and lists apply equally to the respective subclasses. <span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span>
+
+
+<h1 id="Interactive">6. An interactive exploration of Points and Pointsets</h1>
+
+<p>See the file <tt>/tests/test_pointsets.py</tt> for the code for the following demo.</p>
+
+
+<h2>Point exploration</h2>
+
+<pre>
+>>> x = Point({'coorddict': {'x0': [1.123456789], 'x1': [-0.4],
+               'x2': [4000]}, 'coordtype': float})
+>>> x
+x0:  1.123456789
+x1:  -0.4
+x2:  4000.0
+
+>>> x.toarray()
+ array([  1.12345679e+00  -4.00000000e-01   4.00000000e+03])
+
+>>> x.dimension
+3
+
+>>> x.coordnames
+['x0', 'x1', 'x2']
+
+>>> x.coordtype
+<type 'numpy.float64'>
+
+>>> x('x1')  # returns a float
+-0.4
+
+>>> x(['x1','x0'])  # returns another Point
+x0:  1.123456789
+x1:  -0.4
+
+>>> x([0,1])
+x0:  1.123456789
+x1:  -0.4
+
+>>> x[1] = -0.45  #Changing x entries is done by x[index] = value:
+                  
+                  
+>>> x[['x0', 'x1']] = [4.11103, -0.56])  #The index can also be a name, a list of names, or even a dictionary
+
+>>> y = Point({'y': 4})   # y is a 1D point (with integer type)
+
+>>> print y
+y:  4.0
+
+>>> y(0)
+4.0
+
+>>> type(y(0))
+<type 'numpy.float64'>
+
+>>> y([0])
+y:  4.0
+
+>>> y.toarray()
+4.0
+</pre>
+
+
+
+<h2>Pointset exploration</h2>
+
+<p>In the following, <tt>v</tt> is a 'singleton' pointset (only one entry)</p>
+
+<pre>
+>>> v = Pointset({'coorddict': {'x0': 0.2, 'x1': -1.2},
+             'indepvardict': {'t': 0.01},
+             'coordtype': float64,
+             'indepvartype': float64
+              })
+>>> print v
+Pointset <no name> (parameterized)
+
+>>> print v(0.01)  # a Point object
+x0:  0.2
+x1:  -1.2
+
+>>> print v(0.01, 0)   # also a Point object (index 0 only = 'x0')
+x0:  0.2
+
+>>> print v(0.01, 'x0')   # alternative to using index, use the name directly
+x0:  0.2
+</pre>
+
+<p>In the following, Pointset <tt>k</tt> shows a different way to specify a single-point Pointset:</p>
+
+<pre>
+>>> k = Pointset({'coordarray': array(0.1),
+              'coordnames': 'k0',
+              'indepvarname': 't',
+              'indepvararray': array(0.0)})
+
+>>> print k.toarray()
+[ 0.1]
+
+>>> print k['t']
+[ 0.]
+
+>>> print k(0.0)
+k0:  0.1
+
+>>> print k
+Pointset <no name> (parameterized)
+</pre>
+
+<p>In the following, <tt>u</tt> is a non-parameterized Pointset:</p>
+
+<pre>
+>>> u = Pointset({'coordarray': array([10., 20., 30., 40.])})
+
+>>> u.toarray()
+[ 10.  20.  30.  40.]
+
+>>> isparameterized(u)
+False
+
+>>> print u
+Pointset <no name> (non-parameterized)
+</pre>
+
+<p>In the following, <tt>w</tt> shows alternative declaration syntax, and other forms of calling:</p>
+
+<pre>
+>>> wp = Pointset({'coordarray': array([[4.456, 2.34634, 7.3431, 5.443],
+                              [-10.0336, -5.2235, -3.23221, -0.01],
+                              [3e5, 3.1e5, 3.3e5, 2.8e5]], float64),
+              'coordnames': ['x0', 'x1', 'x2'],
+              'indepvarname': 't',
+              'indepvararray': array([0.0, 1.0, 2.0, 3.0], float64)})
+
+>>> wp.dimension
+3
+
+>>> print wp(0.0)
+x0:  4.456
+x1:  -10.0336
+x2:  300000.0
+
+>>> type(wp(0.0))
+<class 'PyDSTool.Points.Point'>
+
+>>> print wp(1.0)(0)
+2.34634
+
+>>> print wp(2.0, 'x1')
+x1:  -3.23221
+
+>>> print wp(2.0, ['x2', 'x1'])
+x1:  -3.23221
+x2:  330000.0
+
+>>> type(wp(2.0, ['x1', 'x2']))
+<class 'PyDSTool.Points.Point'>
+
+>>> print wp[['x1','x0']]
+Pointset <no name> (parameterized)
+
+>>> wp.info(1)
+Pointset <no name> (parameterized)
+Independent variable:
+t:  [ 0.  1.  2.  3.]
+Coordinates:
+x0:  [ 4.456    2.34634  7.3431   5.443  ]
+x1:  [ -1.00336000e+01  -5.22350000e+00  -3.23221000e+00  -1.00000000e-02]
+x2:  [ 300000.  310000.  330000.  280000.]
+Labels by index: Empty
+
+>>> wp(1.0).info(1)
+x0:  2.34634
+x1:  -5.2235
+x2:  310000.0
+
+>>> wp['t']
+[ 0.  1.  2.  3.]
+
+>>> # Call several 't' values at once (explicit values only -- no ellipses):
+>>> wp([1., 2.])
+Pointset <no name> (parameterized)
+
+>>> # Extract a coordinate (only by name) as a regular array:
+>>> w_x0 = wp['x0']
+>>> print w_x0
+[ 4.456    2.34634  7.3431   5.443  ]
+
+>>> # Extract a point of w as a regular array:
+>>> w_at_1 = wp(1.).toarray()
+>>> print w_at_1
+[  2.34634000e+00  -5.22350000e+00   3.10000000e+05]
+
+>>> # Many forms to access individual values or sub-arrays:
+>>> wp(1., 'x1')
+x1:  -5.2235
+
+>>> wp(1.)('x1')
+-5.2235
+
+>>> wp(1., 1))
+x1:  -5.2235
+
+>>> wp([1.,3.], 1)
+Pointset <no name> (parameterized)
+
+>>> wp([1.,3.])('x1')
+[-5.2235 -0.01  ]
+
+>>> wp(1.)([0,1])
+x0:  2.34634
+x1:  -5.2235
+
+>>> wp([1.])(1., [0,1])
+x0:  2.34634
+x1:  -5.2235
+
+>>> # ... because wp([1.]) is a Pointset and wp(1.) is a Point
+    #This is why wp(1.).toarray() shows a different array shape to wp([1.]).toarray():
+    
+>>> wp(1.).toarray().shape
+(3,)
+
+>>> wp([1.]).toarray().shape
+(3, 1)
+
+>>> # Change a point in w using wp[indepvar_value] = point:
+    # Old value at t=1.0:
+>>> wp(1.0)
+x0:  2.34634
+x1:  -5.2235
+x2:  310000.0
+
+>>> wp[1] = x
+>>> # w has now been updated for the meshpoint at t=1.0  =>
+    # New value at t=1.0:
+>>> wp(1.0)
+x0:  4.11103
+x1:  -0.56
+x2:  4000.0
+
+>>> # We can test equality between arrays, as expected:
+>>> w_at_1 != wp(1.).toarray()
+[ True  True  True]
+
+>>> # We can also compare with a Pointset object:
+>>> wp(1.) != w_at_1
+[ True  True  True]
+
+>>> # But we can't put an array on the left-hand side if a Point or Pointset is on the right.
+
+>>> # To demonstrate appending a Point and Pointset to another Pointset:
+>>> vw.labels
+1: {c: {}}
+
+>>> wp.append(vw)
+
+>>> wp.labels
+5: {c: {}}
+
+>>> wp.toarray()
+[[  4.45600000e+00   4.11103000e+00   7.34310000e+00   5.44300000e+00
+    1.00000000e-01   1.50000000e-01   2.00000000e+00]
+ [ -1.00336000e+01  -5.60000000e-01  -3.23221000e+00  -1.00000000e-02
+    1.00000000e+02   1.02000000e+02  -3.00000000e+02]
+ [  3.00000000e+05   4.00000000e+03   3.30000000e+05   2.80000000e+05
+    2.00000000e-01   1.00000000e-01  -9.99700000e-01]]
+
+>>> wp(4.5)
+x0:  0.1
+x1:  100.0
+x2:  0.2
+
+>>> wp[[3,6]]
+Pointset <no name> (parameterized)
+
+>>> wp[3:5]
+Pointset <no name> (parameterized)
+
+>>> wp[2:]
+Pointset <no name> (parameterized)
+
+>>> wp[wp.findIndex(4.5)]
+x0:  0.1
+x1:  100.0
+x2:  0.2
+
+>>> wp.labels
+5: {c: {}}
+
+>>> # Labels test:
+>>> wp.labels[3]
+{'a': {'bif': 'SN'}}
+
+>>> wp_part.labels
+0: {a: {keys=bif}}
+
+>>> # wp_ins object created to insert into wp:
+
+>>> wp.insert(wp_ins) # returns a new Pointset
+Pointset <no name> (parameterized)
+
+>>> # To demonstrate building a Pointset from a list of Point objects:
+
+>>> pointlist = []
+>>> for t in wp['t']:
+      pointlist.append(wp(t))
+
+>>> w_reconstructed = pointsToPointset(pointlist, 't', wp['t'])
+
+>>> # And to demonstrate that this yields an identical object:
+>>> w_reconstructed == w
+[ True  True  True  True  True  True  True  True  True  True  True]
+
+>>> # (ensure that any independent variable values to append are well-ordered)
+
+>>> # Test of non-parameterized use of pointsToPointset:
+    # (Adding two additional labels to wnp)
+
+>>> wnp[:]   # can use index slicing, etc. as expected
+Pointset <no name> (non-parameterized)
+
+>>> # Can iterate over points and pointsets:
+>>> for p in wnp.bylabel('a'):
+      print p
+
+x0:  4.456
+x1:  -10.0336
+x2:  300000.0
+Labels: a ({'bif': 'SN'})
+Labels: b ({})
+x0:  7.3431
+x1:  -3.23221
+x2:  330000.0
+Labels: a ({'bif': 'H'})
+</pre>
+
+
+<h1 id="utils">Other pointset-related utility functions</h1>
+
+<ul>
+  <li>pointsToPointset(pointlist, indepvarname='', indepvararray=None, indepvartype=float, norm=2):</li>
+
+    <p>Generate a Pointset from a list of Point objects (or a singleton Point).
+    Include a name for the independent variable if constructing a
+    parameterized pointset. The independent variable should be a
+    coordinate of the Points passed, otherwise it can be passed as the
+    optional third argument.</p>
+  
+  <li>arrayToPointset(a, vnames=None, ia=None, iname=""):</li>
+  <p>  Convert an array to a non-parameterized Pointset. The inclusion of an
+    optional independent variable array creates a parameterized Pointset.
+    Coordinate (and independent variable) names are optional: the defaults are
+    the array indices (and 't' for the independent variable).
+</p>
+
+  <li>exportPointset (thepointset, infodict, separator='   ',
+                   precision=12, varvaldir='col', ext='', append=False):</li>
+
+    <p>Export a pointset to a set of ASCII whitespace- (or
+    user-defined character-) separated data files. Option to list each
+    variable's data in rows ('across') or in columns ('down').
+    Existing files of the same names will be overwritten, unless the
+    'append' boolean option is set.</p>
+
+    <p>NB. If the file extension argument 'ext' is present without a
+    leading dot, one will be added.
+    infodict should consist of: keys = filenames, values = tuples of pointset variable names to export.</p>
+    
+  <li>export_pointset_to_CSV (filename, pts):</li>
+
+    <p>Simple export that ignores all metadata in pts,
+    including name, tags, norm, etc.
+    Data is arranged by row only. Independent variable is first column, if it exists in pts.</p>
+    
+  <li>importPointset (xFileName, t=None, indices=None, sep=" ", preamblelines=0):</li>
+
+    <p>Import ASCII format files containing data points. If the first row contains string names then the output
+    will be a pointset, otherwise a numeric array. A dictionary is returned, with keys 'vararray' will point to the
+    data. The 't' argument can specify one of several things:</p>
+    
+    <p>string: filename to read single-column of time values (same length as
+            xFileName)</p>
+    <p>sequence type: time values (same length as xFileName)</p>
+    <p>integer: column in xFileName to treat as time data</p>
+
+    <p>If used, this leads to and an additional key in the return
+    dictionary where 't' points to the independent variable array.</p>
+
+    <p>Specific columns can be selected for the variable data array by
+    specifying a list of column indices in argument 'indices'.</p>
+
+    <p>The separator used in the ASCII file can be specified by argument
+    'sep' (defaults to single whitespace character).
+    preamblelines (positive integer) specifies how many lines to skip before starting to read data (in case of preceding text) -- default 0.</p>
+    
+  <li>mergePointsets (pts1, pts2):</li>
+  <p>Merges two pointsets into a new pointset, preserving (merging) any
+    metadata in each.
+    In particular, if each have different accuracy tolerances, the
+    larger of the two will be used. If each have different 'checklevel' values,
+    the larger of the two will be used. Point labels will be merged. Names
+    will also be merged. If both are parameterized, their independent variable arrays must be identical. If only one is parameterized, the result will be too. The two pointsets must be identical in length. The norm associated with each pointset must be the same.</p>
+    
+ <li>padPointset (pts, pinterval, value_dict, eps=None):</li>
+ <p>Pad a pointset pts with values from value_dict over the interval given by pinterval (pair). For each side of the interval outside of the current independent variable domain of pts, two new points are added, one at the outer limit of the interval, and one a distance eps (default the abseps setting of pts) from the existing closest point in pts.</p>
+ 
+ <li>comparePointCoords (p1, p2, fussy=False):</li>
+
+    <p>Compare two Points, Pointsets, or dictionary of point data, coordinate-wise.
+    If p1 or p2 are Pointsets, their independent variable values, if present, are
+    *not* compared.
+    fussy option causes point norm order and coordinate types to be
+    checked too (requires both arguments to be Points or Pointsets).</p>
+    
+ <li>makeNonParameterized (p):</li>
+
+    <p>Return a new Pointset stripped of its parameterization.</p>
+    
+</ul>
+
+<div id="pagebottom"></div>
+</div>
+
+</body>
+</html>
+

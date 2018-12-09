@@ -1,0 +1,316 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Intervals - PyDSTool</title></head>
+<body dir="ltr" lang="en">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1>Intervals</h1>
+
+<div class="table-of-contents"><p class="table-of-contents-heading">Contents
+<ol>
+<li><a href="#Intervals">The Interval class</a></li>
+<li><a href="#Interaction">Basic interaction and manipulation</a></li>
+<li><a href="#Contains">Interval containment and the IntervalMembership class</a></li>
+<li><a href="#Interval_arithmetic_and_comparison">Interval arithmetic and comparison</a></li>
+<li><a href="#Logic">Interval logic</a></li>
+<li><a href="#Sampling">Interval sampling</a></li>
+<li><a href="#Infinite">Infinite intervals</a></li>
+</ol>
+
+</div>
+
+<hr>
+
+<h1 id="Intervals">1. The Interval class</h1>
+
+<p><tt>Interval</tt> is a numeric interval (a.k.a. <em>range</em>) class. It can be used by itself for various mathematical tasks during your calculations, but it is also used internally by PyDSTool classes such as Variable, Trajectory, and Generator to represent the domains and ranges of independent and dependent variables.</p>
+<p>This class has attributes: </p>
+
+<ul>
+  <li>
+    name: str  (a label - does not have to be unique)
+  </li>
+  <li>
+    typestr: 'int' or 'float' (immutable) - doesn't handle complex numbers yet
+  </li>
+  <li>
+    type: type int or float
+  </li>
+  <li>
+    _loval: numeric (low endpoint val)
+  </li>
+  <li>
+    _hival: numeric (high endpoint val)
+  </li>
+  <li>
+    _abseps: numeric (default 10E-13)
+  </li>
+  <li>
+    issingleton: boolean
+  </li>
+  <li>
+    _intervalstr: str
+  </li>
+</ul>
+
+<p>Intervals can be <em>singletons</em>, meaning they contain one value only (essentially, they are a point). Specifiy a single value instead of a pair when intializaing, or a pair with the same value repeated.</p>
+<p><strong>Syntax quirk</strong>: There is no distinction in PyDSTool between open and closed numeric intervals. However, notice that Python syntax allows endpoints to be specified as a pair in both the form of a list [a, b] and a tuple (a, b), but both are interpreted the same way.</p>
+
+<p>See the file <tt>/tests/test_interval.py</tt> for code corresponding to the following demonstrations.</p>
+
+<pre>
+>>> a = Interval('a', float, [-1,1], abseps=1e-5)
+>>> b = Interval('b', float, [-1.,1.])
+>>> c = Interval('c', float, [-3.,-2.])
+>>> d = Interval('d', float, 1)  # singleton float
+</pre>
+
+
+<br>
+
+<h1 id="Interaction">2. Basic interaction and manipulation</h1>
+
+<pre>
+>>> m = Interval('test1', float, (0,1))
+>>> m
+Interval test1
+
+>>> m()  # returns a defining tuple
+('test1', <type 'numpy.float64'>, 'float', (0.0, 1.0))
+
+>>> m.info()
+Interval test1
+  float: test1 = [0,1] @ eps = 1e-13
+
+>>> m.get()
+[0, 1]
+
+>>> m[0]
+0
+
+>>> m.set((-1, 1))
+>>> m.get()
+[-1, 1]
+
+>>> m.atEndPoint(-1, 'lo')  # alternatively use 0 for second argument
+True
+
+>>> m.atEndPoint(10, 'hi')  # alternatively use 1 for second argument
+False
+
+>>> m.atEndPoint(-1 - 0.5*m._abseps, 'lo')  # tests up to _abseps away from endpoint in case of precision error
+True
+
+>>> m.issingleton
+False
+</pre>
+
+<br>
+
+<h1 id="Contains">3. Interval containment and the IntervalMembership class</h1>
+<p class="line862">Containment of values and intervals inside other intervals can become tricky when testing values that have been computed using floating point arithmetic. Rounding and representation error can mean that a value that would have been safely inside the interval may become very slightly outside of the interval after arithmetic involving operands that are much larger. Because of this issue, testing values at endpoints will return an UncertainValueError if they are within +/- abseps of the specified endpoint, where abseps is the endpoint tolerance (default 10E-13). Intervals can also be tested for containment within each other. Again, if endpoints are common then an UncertainValueError will be returned when using the 'in' infix operator. Note that these issues do not arise for <em>integer-typed</em> intervals.</p>
+<p class="line862">To help with these issues, the IntervalMembership class can be used to test membership in intervals. See the demo below:<br>
+</p>
+
+<pre>
+>>> m = Interval('test1', float, (0,1))
+>>> 0.1 in m   # test containment of a value using python's in-built infix operator
+True
+
+>>> n = Interval('test2', float, (0,0.4))
+>>> n in m     # test containment of another interval, but it has a common endpoint
+UncertainValueError:  'cannot determine membership (uncertain) at variable = Interval test2'
+
+>>> s = Interval('a_singleton', float, 0.4)
+>>> s.get()
+0.4
+
+>>> s in m  # containment tests work for singleton interval s
+True
+
+>>> r = Interval('another_singleton', float, 0.0)
+>>> b = Interval('b', int, 0)
+>>> b in m
+UncertainValueError:  'cannot determine membership (uncertain) at variable = Interval b'
+
+>>> i = Interval('i', int, (0,1))
+>>> b in i  # (true because we're comparing integer intervals)
+True  
+
+>>> # Use the explicit `contains` method to avoid exceptions, and instead
+    # get an IntervalMembership type returned...
+>>> m.contains(i)
+uncertain
+
+>>> m.contains(0.4)
+contained
+
+>>> j = Interval('test3', float, (0,0.999999999))
+>>> p = m.contains(j)
+>>> p is uncertain
+True
+
+>>> # But don't try to compare IntervalMembership objects to booleans...
+>>> q = m.contains(0.9)
+>>> q is True  # (false because q is not a boolean type)
+False  
+
+>>> # ... but can use in a statement such as 'if m.contains(0.9): ...etc.'
+</pre>
+
+<br>
+
+<h1 id="Interval_arithmetic_and_comparison">4. Interval arithmetic and comparison</h1>
+
+<p>Basic arithmetic and comparison operations can be performed on Intervals, in an intuitive fashion. This is <em>not</em> an implementation of &quot;interval arithmetic&quot; in the proper mathematical sense, per se, although some of those concepts are present here. Intervals may have a constant added to/subtracted from them, or scaled by a constant multiplication or division, all of which return a new interval with the appropriately shifted endpoints. Currently, intervals cannot be 'added' together as a union, or 'subtracted' as an intersection. If intervals are divided into a finite scalar, a new interval with endpoint values divided into that scalar  will be returned. This may result in a semi-infinite or infinite interval (see below).</p>
+
+<p>Intervals may also be compared to scalar values using inequalities, which tests whether all values in the interval satisfy the inequality. Intervals may also be tested for equality, which checks not only the endpoints but also the numeric type, and 'abseps' attributes. The following assertions all hold for intervals a, b, and c defined above:</p>
+
+<pre>
+>>> a = Interval('a', float, [-1,1], abseps=1e-5)
+>>> b = Interval('b', float, [-1.,1.])
+>>> c = Interval('c', float, [-3.,-2.])
+
+>>> assert b.contains(a) == uncertain
+>>> assert -2 < a
+>>> assert a > -2
+>>> assert a < 1 + 2*a._abseps
+>>> assert not (a < 1 + 0.5*a._abseps)
+>>> assert 1 + 2*a._abseps > a
+>>> assert not (1 + 0.5*a._abseps > a)
+>>> assert c < b
+>>> assert c < a
+>>> assert a > c
+>>> assert ([-5, 0, -1] < a) == [True, False, False]
+>>> assert (a> array([-5, -4, -1])) == [True, True, False]
+
+>>> ii = i+3
+>>> assert ii[0] == i[0]+3
+>>> assert ii[1] == i[1]+3
+
+>>> iii = 4*i
+>>> assert iii[0] == 4*i[0]
+>>> assert iii[1] == 4*i[1]
+
+>>> iiii = 2-i
+>>> assert iiii[0] == 2-i[1]
+>>> assert iiii[1] == 2-i[0]
+
+>>> iiiii_1 = 1/i
+>>> assert iiiii_1[0] == 1
+>>> assert iiiii_1[1] == Inf
+
+>>> iiiii_2 = -1/i
+>>> assert iiiii_2[0] == -Inf
+>>> assert iiiii_2[1] == -1
+>>> assert i.contains(1) is contained   # because discrete-valued interval
+</pre>
+
+<br>
+
+<h1 id="Logic">5. Interval logic</h1>
+
+<p>Elementary `interval logic` can be performed when checking endpoints
+   for interval containment.</p>
+
+<pre>
+>>> contained and notcontained
+notcontained
+
+>>> contained and uncertain
+uncertain
+
+>>> notcontained and notcontained
+notcontained
+
+>>> contained or uncertain
+contained
+</pre>
+
+<h1 id="Sampling">6. Interval sampling</h1>
+
+<p>Sample an interval using its 'sample' method (renamed from 'uniformSample' in 2012). The 'strict' optional boolean argument forces the first argument, dt, to be used throughout the interval, with a final step of less than dt if not commensurate.
+The default strict=False used for auto-selection of sample rate to fit interval (choice based on dt argument).</p>
+
+<pre>
+>>> m.sample(0.09)
+[0.0, 0.10000000000000001, 0.20000000000000001, 0.30000000000000004, 0.40000000000000002, 0.5, 0.60000000000000009,
+  0.70000000000000007, 0.80000000000000004, 0.90000000000000002, 1.0]
+
+>>> m.sample(0.09, avoidendpoints=True)  # avoids by an amount given by interval's _abseps attribute
+[1.1000000000000001e-13, 0.10000000000000001, 0.20000000000000001, 0.30000000000000004, 0.40000000000000002, 0.5,
+  0.60000000000000009, 0.70000000000000007, 0.80000000000000004, 0.90000000000000002, 0.99999999999988998]
+
+>>> i2 = Interval('i2', int, (0,10))
+>>> i2.sample(2, strict=False, avoidendpoints=True)
+[1, 3, 5, 7, 9]
+
+>>> i3=Interval('i3', float, (0.,0.4))
+>>> i3.sample(0.36, strict=False)
+[0.0, 0.40000000000000002]
+
+>>> i3.sample(0.36, strict=False, avoidendpoints=True)
+[1.1000000000000001e-13, 0.39999999999989]
+
+>>> i3.sample(0.36, strict=True)  # notice non-uniform sampling!
+[0.0, 0.35999999999999999, 0.40000000000000002]
+</pre>
+
+
+<h1 id="Infinite">7. Infinite intervals</h1>
+
+<pre>
+>>> inf1 = Interval('inf1', float, [0,Inf])
+>>> 0 in inf1
+True
+
+>>> inf1.contains(inf1)
+notcontained
+
+>>> inf2 = Interval('inf2', float, [-Inf,Inf])
+>>> inf2.contains(inf2)
+uncertain
+
+>>> inf2.contains(inf1)
+uncertain
+
+>>> inf3 = Interval('inf3', float, [-Inf,0])
+>>> inf3.contains(inf2)
+notcontained
+
+>>> inf_int = Interval('inf3', int, [-Inf,0])
+>>> inf_int.contains(inf3) 
+PyDSTool_TypeError: 'Interval type mismatch'
+
+>>> inf_int.contains(-Inf)
+contained
+
+>>> i4 = Interval('i4', int, [-5,5])
+>>> inf_int.intersect(i4)
+[-5, 0]
+
+>>> # Intersection will fail on mixed-type intervals (inconsistent types)...
+>>> inf3.intersect(i4)
+PyDSTool_TypeError: 'Can only intersect with other Intervals having same numeric type'
+
+>>> j.intersect(i2)
+PyDSTool_TypeError: 'Can only intersect with other Intervals having same numeric type'
+</pre>
+
+
+<div id="pagebottom"></div>
+
+</body>
+</html>
+

@@ -1,0 +1,582 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><title>ProjectOverview - PyDSTool</title></head>
+<body dir="ltr" lang="en">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1>Project Overview</h1>
+
+<div id="page" dir="ltr" lang="en">
+
+<ol>
+
+<li>
+<a href="#head-d6ce7513a7d84689358d010800c5d2f5233dcfbc">Project overview</a>
+</li>
+
+<li>
+<a href="#head-427383ec25a31e0aab787f6ca439ef7ab18cb25c">Motivation</a>
+</li>
+
+<li>
+<a href="#head-820367a4c8c5636f4667d361fcfe8e574f35b6b2">Features implemented</a>
+</li>
+
+<li>
+<a href="#head-815e9fc65f67d9a4027299cb950891ed4a3beb72">User interface</a>
+</li>
+
+<li>
+<a href="#head-a4c77d1abf45a3b886eaf377a14deb255dba388c">Why Python?</a>
+</li>
+
+<li>
+<a href="#head-2a6c7c8ad1fbf266ad78ffb151fc64cd081a0e9a">Design philosophy</a>
+</li>
+
+<li>
+<a href="#head-e351142e211032d03807a4fd2b25f23a650f86d3">Coming attractions</a>
+</li>
+
+<li>
+<a href="#head-04ffa54d412e4fab86eebdeeeb8accf60dae8b55">Historical context (DsTool)</a>
+</li>
+
+<li>
+<a href="#head-3cb0ad73514d814637d7490bc4f1be8404b30f4e">Comparison to other packages</a>
+<ol>
+
+<li>
+<a href="#head-4fcdedcc35572206e2a4ad8223ed223d780cfefb">General packages</a>
+<ol>
+
+<li>
+<a href="#head-97e5b7eea1ee46f5c6da3511bb7cdacb4d1df67b">Matlab / Simulink</a>
+</li>
+
+<li>
+<a href="#head-702b485f9c8e1152ee4a6cd65f2cc5974da6a8ea">XPP</a>
+</li>
+
+<li>
+<a href="#head-ee5611ea633e4f3a59f4c91311fe58da4ab9f72d">AUTO and MATCONT</a>
+</li>
+
+<li>
+<a href="#head-1527acaee7a1ac313890e023243f0b2775e75ab1">Custom code in other languages</a>
+</li>
+
+<li><a href="#Sundials">SUNDIALS and PySUNDIALS, odeint, etc.</a></li>
+
+<li><a href="#CAS"> Maple, Sage, and other computer algebra systems</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-3130b8037aeabac71c8713c0de4e5104f8a10156">Application-specific packages</a>
+<ol>
+
+<li>
+<a href="#head-552e2a6102ddd8c39d3994eecb9c50f1eedcbf33">NEURON, GENESIS, Brian, and other neural simulators</a>
+</li>
+
+<li>
+<a href="#SysBio">PySces and other systems biology packages</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+</div>
+
+<hr>
+<br>
+
+<h2 id="head-d6ce7513a7d84689358d010800c5d2f5233dcfbc">1. Project overview</h2>
+
+<p>PyDSTool is a Python-based Dynamical Systems Toolkit. With PyDSTool we aim to provide a powerful suite of computational 
+tools for the development, simulation, and analysis of dynamical systems
+ that are used for the modeling of physical processes in many scientific
+ disciplines, but especially in the biological sciences. We place emphasis on the support of data analysis and model fitting as a core part 
+of the process of data-driven modeling. Our focus is on models 
+involving ordinary differential equations (ODEs), differential-algebraic
+ equations (DAEs), and discrete maps. Our approach differs from <a href="#head-3cb0ad73514d814637d7490bc4f1be8404b30f4e">many existing software packages</a> because of our focus on making model building, simulation, and analysis intuitive and efficient for an<em> advanced</em> end-user (who is unlikely to be either a mathematician or a computer programmer by trade) without sacrificing speed. We say for <em>advanced</em> users because PyDSTool does not provide a graphical interface, but instead a <a href="#head-815e9fc65f67d9a4027299cb950891ed4a3beb72">scripting  environment</a> with flexible, programmable library tools.</p>
+ 
+<p>The software package is written primarily in the high-level interpreted language <a class="external" href="http://www.python.org/">Python</a>, and is freely available under the BSD open-source license from the <a class="external" href="http://sourceforge.net/projects/pydstool">SourceForge</a> community website and repository. For certain computationally intensive tasks, code written in C and Fortran can be invoked (without interference or contribution at this level by the user). </p>
+
+<p>In pursuing our aims we have developed a hierarchy of object-oriented
+ programming classes available to the modeler.  These classes provide a 
+means for “data abstraction”, that is, to provide the user with 
+intuitive “objects” that encapsulate common data structures and methods 
+for manipulating that data through a well-defined interface. These 
+classes naturally make the software highly modular, and they range from 
+defining hybrid model simulators, to individual data points, to symbolic
+ mathematical expressions, to bifurcation analyzers. Some of these 
+classes are built over classes exported by SciPy. We believe that many of these classes have wider scientific utility. </p>
+<p><strong>Disclaimer:</strong> The PyDSTool software is "research code" in a Beta stage of 
+development, and should not be treated as a complete or comprehensive 
+dynamical systems package, with the associated expectation that its 
+design and implementation have thoroughly stabilized and have been well 
+tested. We have added features as and when we have had a use for them in
+ our own research, and have omitted many important features that we 
+would love to add if time permits us, or if our research so demands. </p>
+<p>You might like to submit feature requests, or you may also like to 
+contribute to the code yourself. We are also interested to hear your 
+opinions about the possibility of adding some of our classes to SciPy (perhaps in modified form). Please contact us at the <a class="external" href="http://sourceforge.net/forum/?group_id=140858">SourceForge open discussion forum</a> or via email. </p>
+
+<h2 id="head-427383ec25a31e0aab787f6ca439ef7ab18cb25c">2. Motivation</h2>
+
+<p>A <a class="external" href="http://en.wikipedia.org/wiki/Dynamical_system">dynamical system</a>
+ is defined by a set of rules or transformations for determining how 
+points in a multidimensional space move in time. Time may be either 
+discrete or continuous. The traces of the points as they move in time 
+are called <em>trajectories</em>. The goal of Dynamical Systems Theory 
+is to provide a comprehensive description of the geometric structures 
+arising from these trajectories. In addition to elucidating the dynamics
+ associated with an individual dynamical ssystem, bifurcation theory may
+ be used to describe how the dynamics of a system varies with changes in
+ parameter values. </p>
+ 
+<p>Interactive numerical and graphical exploration are important tools in dynamical systems research for several reasons: </p>
+<ul>
+<li>There is generally no way to obtain trajectory information other than by iteration or numerical integration.
+</li>
+<li>The geometric structures of a dynamical system are 
+often intricate and extremely sensitive to changes in the system 
+parameters, so that interactive computation and graphics are useful in 
+interpreting their meaning.
+</li>
+<li>Exploration of a dynamical system often involves the
+ generation of large quantities of data. Usually, only a small portion 
+of data needs to be saved in order to concisely record the pertinent 
+features of the dynamics. In general it is only through interactive 
+exploration of the dynamics that the most compact and efficient 
+representations of the a system's dynamics can be determined.
+</li>
+</ul>
+
+<p>Consequently, there is a critical need for computational environments
+ that provide effective tools for exploring dynamical systems with 
+minimial effort on the part of the user. The PyDSTool project attempts 
+to provide such an environment for use by both casual and advanced 
+practitioners of Dynamical Systems Theory. We consider only finite dimensional systems (Ordinary Differential Equations, Differential-Algebraic Equations, mappings) and some forms of infinite dimensional delay systems (also see <a href="http://pydelay.sourceforge.net">pydelay</a>). We do not consider spatially-extended infinite dimensional systems such as Partial Differential Equations, for which other packages exist. We also do not focus on the kinds of heterogeneous "hybrid" systems that are primarily defined by discrete event simulation, as used extensively in process control and engineering applications (for instance see <a href="http://simpy.sourceforge.net/index.html">SimPy</a>).</p>
+
+
+<h2 id="head-820367a4c8c5636f4667d361fcfe8e574f35b6b2">3. Features implemented</h2>
+
+<p>A summary of the main features and application areas of the toolboxes is given in the diagram below.<center><img src="images/PyDSTool_overview.jpg" width="550" alt="PyDSTool-overview"></center></p>
+
+<p>Our package incorporates: </p>
+
+<ul>
+<li><p> Efficient and state-of-the-art ODE / DAE / discrete map 
+simulation tools (using dynamically-linked and automatically generated C
+ code, if external compiler available) (see <a href="./Generators.html">Generators</a>) </p>
+</li>
+<li><p> Hybrid model and event-driven simulation support (see <a href="./HybridSystems.html">HybridSystems</a>) </p>
+</li>
+<li><p> Simulations and analysis can be forced to be "bounds safe", e.g. for "non-negativity preservation" (see <a href="./BoundsSafety.html">BoundsSafety</a>) </p>
+</li>
+<li><p> Bifurcation analysis and continuation tools in-built, via <a href="./PyCont.html">PyCont with AUTO</a> </p>
+</li>
+<li><p> Interactive command-line / script-based interface </p>
+</li>
+<li><p> "Index-free" and context-heavy data structures, including an enhanced version of arrays (see <a href="./Pointsets.html">Pointsets</a>) </p>
+</li>
+<li><p> Symbolic expression utilities (including evaluation, substitution, derivatives, some simplification) (see <a href="./Symbolic.html">Symbolic</a>) </p>
+</li>
+<li><p> Easy to build complex models using hierarchical object-oriented 
+data structures that contain composable model specifications (see <a href="./ModelSpec.html">ModelSpec</a>) </p>
+</li>
+<li>
+  <p> Memory management utilities, data import and export (including <a class="external" href="http://sbml.org/">SBML</a> conversion and LaTeX markup via the <a href="http://sloppycell.sourceforge.net/">SloppyCell</a> package, see Section 10 of the user documentation) </p>
+</li>
+<li><p> Modular code design allows easy expansion to support other algorithms (contributions welcome) </p>
+</li>
+<li>
+  <p> Data structures and toolkits for parameter estimation / model
+fitting (&quot;constraint based modeling&quot;) and other time-series and data-driven problems (see <a
+href="./ParamEst.html">Parameter Estimation</a>)</p>
+</li>
+<li><p> Seamless use with tools in <a href="http://www.scipy.org">SciPy</a>, NumPy, etc. through dynamic typing </p>
+</li>
+<li><p> Additional toolboxes for specific applications, including 
+biomechanical modeling, computational neuroscience, and systems biology 
+(see <a href="./ToolboxDocumentation.html">ToolboxDocumentation</a>) </p>
+</li>
+</ul>
+
+
+<p><em>Most of these features are simply not available in the native SciPy ODE integrators or in application-specific solvers.</em></p>
+
+
+<h2 id="head-815e9fc65f67d9a4027299cb950891ed4a3beb72">4. User interface</h2>
+
+<p>Users of PyDSTool need to be familiar with working in interactive, 
+command-line environments such as UNIX or Matlab, including the writing
+ of command scripts.  There is presently no graphical interface 
+for PyDSTool.  Our emphasis is on the interactivity of a command-line 
+and the rapid prototyping possibilities of script-based computing and a programmatic interface. Although there is an initial learning curve, the opportunities for sophisticated calculations are much greater with a programmatic interface than a graphical one.</p>
+
+<p>In building a core library of Python classes, supporting many 
+fundamental concepts in dynamical systems modeling, we provide more than
+ just a glue with which to interface multiple tools. Our basic object classes store rich "context" that carries a lot of useful 
+mathematical baggage.  Through interaction with our Python environment 
+at the script level, users can build complex models in a structured way,
+ and have access to mathematically intuitive information about the 
+models, using the intrinsic context of all the Python objects at the 
+heart of their computations. Thus, our user interface model is based on users interactively "querying" (a.k.a. &quot;introspecting&quot;) objects for their attributes and properties. The layers of class abstractions in PyDSTool frees users from dealing with the usual low-level coding details of simulation and data manipulation, and empowers them with mathematically intuitive tools to express their specifications and design their computations in high level, intuitive terms. This also eases the overhead in interfacing the basic numeric classes and simulators with tools 
+and utilities such as  parameter estimators or data analyzers. </p>
+<p>We believe it is crucial for users to be able to combine the 
+  application of tools in a nested or interleaved fashion, in order to 
+  make the most flexible and dynamic manipulations of a model.  Such rich 
+  combinations may be difficult or imporssible in disjointed software 
+  environments, and we believe our community is eager to be able to 
+  smoothly set-up and maintain such situations for their own modeling 
+  projects. It is a challenge to cleanly and efficiently interface 
+  different legacy algorithms with the core Python code in order to 
+  maximize the use and re-use of the context associated with the core 
+objects. </p>
+
+<p>Users are provided with an interface for the specification of both 
+simple and complex dynamical systems models, using minimal programming 
+syntax, and a range of options in converting these abstract 
+specifications into instantiated numerical solvers for a specific 
+system.  Within the same interactive session, users have immediate 
+access to analysis tools for continuation, parameter estimation, 
+optimization, and so on.  These tools are each tailored for use with the
+ core PyDSTool structures to ensure the user has to write as little 
+additional computer code as possible.  Extensive documentation for the 
+project has been provided online on this wiki. </p>
+<p>A key aspect in the design of PyDSTool is the provision of adequate 
+diagnostic information and querying utilities for data structures and 
+computations.  Users can expect helpful information regarding the status
+ of their model development and computations beyond the guidance of the 
+online documentation, through in-built querying commands and detailed 
+error messages.  The object-oriented nature of the software also 
+provides inherent protection of the users’ conceptualization of 
+data-flow and control in their PyDSTool scripts. See the <a
+href="./UserDocumentation.html">UserDocumentation</a> for more details.</p>
+
+<br>
+
+<h2 id="head-a4c77d1abf45a3b886eaf377a14deb255dba388c">5. Why Python?</h2>
+
+<p>Python has several benefits as a platform for our package.  It is an 
+open-source language, enthusiastically developed by a large community of
+ people drawn from both academic and commercial backgrounds.  The 
+powerful object-oriented and dynamic typing features of the language 
+greatly aid in the development of flexible and intuitive data structures
+ and user interface (UI) elements.  Being a high level language its 
+interactive mode of UI, via a prompt, follows the same principle as that
+ of Matlab, and shares the same advantages for quick prototyping, 
+querying and scripting of complex object manipulations and computations.
+</p>
+<p>For more about what Python has to offer in scientific computing see the <a href="./PythonResources.html">PythonResources</a> page
+ or a page at the <a class="external" href="http://wiki.python.org/moin/PythonAdvocacyInScientificComputation">python wiki</a>. </p>
+ 
+ <br>
+
+<h2 id="head-2a6c7c8ad1fbf266ad78ffb151fc64cd081a0e9a">6. Design philosophy</h2>
+
+<p>In our design we have emphasized modularized data structures and 
+interface design that facilitates data-driven approaches to the modeling
+ of physical processes, and we have built upon standard numerical, 
+scientific and graphics libraries for Python (for instance, SciPy
+ and MatPlotLib).  These, in turn, make use of well-established and 
+efficient legacy codes for numerical integration of ODEs, and for 
+dealing with linear algebra, optimization, and root solving (for 
+instance, the LAPACK and MINPACK Fortran libraries). These legacy codes 
+are typically interfaced using <a href="http://www.swig.org/">SWIG</a>.  The low-level languages of these 
+codes provide the computational speed that Python itself lacks, in the 
+places for which computation is most intensive. </p>
+
+<p>All of the code involved in the PyDSTool project is open source, and 
+we have aimed to create as few dependencies on external software 
+packages as possible.  In particular, the package can be used with 
+Microsoft Windows, Mac OS X and Linux machines. </p>
+
+<p>On top of the third-party libraries we have added several new tools 
+and capabilities. We have enhanced legacy numerical integration code for
+ ordinary differential equations to perform various additional tasks of 
+use in hybrid systems modeling, implemented at the C-code level for 
+maximal efficiency.  This includes supporting discrete event detection 
+during dynamical evolution.  Adding arbitrary user-specified event 
+detection to a model permits ODEs and maps to be used in combination as 
+"hybrid" dynamical systems. Also, the inclusion of data-based time 
+series inputs to a dynamical system’s evolution equations is a feature 
+that aids data-driven modeling. </p>
+
+<p>Utilities have been added that allow the movement of data and model 
+specifications both in and out of PyDSTool, for sharing in other 
+software environments.  As well as basic importing and exporting of 
+numerical data as text files, this also includes more systems-level 
+interfacing.  For instance, a user can export a dynamical model’s 
+definition to a Matlab environment in which Automatic Differentiation is
+ available for parameter sensitivity calculations (via the package 
+ADMC++).  Also, PyDSTool can be interfaced with the systems biology 
+modeling package SloppyCell, through which PyDSTool inherits access to an interface with the Systems
+ Biology Markup Language (SBML) for model specification, and the LaTeX 
+mathematical markup language.  Further interfaces to packages are in 
+active development, such as to the original DsTool and to other simulation tools such as XPP or NEURON. </p>
+
+<h2 id="head-e351142e211032d03807a4fd2b25f23a650f86d3">7. Coming attractions</h2>
+
+<p>Support for the CUDA Graphics Processing Unit parallel computing system is nearly complete (March 2012). Also, there will be better support for interfacing with the SBML model markup language (soon, via PySCes) and the NineML neural system markup language (less soon). More details when they come!</p>
+
+<p>Support for delayed systems is currently limited to dirac delta function pulses, as part of a hybrid system (see <a href="./HybridSystems.html">HybridSystems</a>).
+ DDE integrators written by Hairer and Wanner follow the same 
+interfacing pattern as our existing integrators and will be added later. </p>
+<p>Automatic differentiation and Taylor-series integration capabilities 
+will be added once we can get a working interface to an open-source AD 
+package such as ADOL-C. In the meantime, we provide a model export tool 
+to interface PyDSTool models to work with the ADMC++ environment in 
+Matlab, a package that was also developed at Cornell (by Eric Phipps). 
+See <a class="external" href="http://www.math.cornell.edu/%7Egucken/PDF/phipps.pdf">this paper</a> about ADMC++ and its application to parameter estimation for periodic orbits. </p>
+
+<p>Although adequately supported in the underlying numerics of Python and SciPy,
+ PyDSTool does not presently support dynamical systems having phase 
+spaces ranging over the complex numbers. The application of PyDSTool to 
+date has been to certain types of model in the physical sciences which 
+have not required expressions of complex dynamics. It is hoped that at 
+some point this can be redressed with explicitly complex dynamical 
+systems. In the meantime, complex dynamics must be represented using 
+two-dimensional real number phase spaces, and complex arithmetic 
+implemented using auxiliary user-defined functions on 2D reals. </p>
+<p>We have successfully tested an update of our automatic generation and
+ compilation of C-code, although it does not yet avoid Python's <tt>distutils</tt> package by using <tt>Scons</tt> or <tt>autoconf</tt> / <tt>automake</tt>.
+ This updated improves the efficiency of C-based vector field support 
+and will make them more easily configured in new installations of 
+Python/NumPy/SciPy/Matplotlib/PyDSTool. </p>
+<p>We look forward to adding a range of other standard tools that are 
+available in other packages for dynamical systems, Poincare maps, support for 
+symbolic dynamics and complex dynamics, BVP solvers, averaging tools, 
+invariant manifold computations, and so on. </p>
+
+<br>
+
+<h2 id="head-04ffa54d412e4fab86eebdeeeb8accf60dae8b55">8. Historical context (DsTool)</h2>
+
+<p>The <a class="external" href="http://www.cam.cornell.edu/guckenheimer/dstool.html">DsTool</a>
+ package was written at Cornell University in the early 1990s under the direction of Prof. John Guckenheimer, and has provided many years of 
+functionality to the applied mathematics community. In about 2005, a group of us at Cornell led by Prof. Guckenheimer decided to 
+write a new package from the ground up, as our concept of what is needed
+ in our community has evolved. Our new project is different from 
+existing approaches because it  attempts to combine a large array of 
+tools under one, centralized umbrella.  We wish to support both 
+straightforward simulation tools, such as numerical integrators of 
+differential equations, and sophisticated analysis tools such as 
+continuators and parameter estimation / sensitivity tools. </p>
+<p>Individually, several examples of the software tools to implement 
+these algorithms exist in the world of scientific computing.  However, 
+there has not yet been a one-stop solution to providing mathematically 
+sophisticated users with a <em>combined</em> suite of such tools that 
+are highly integrated and interactively operated.  For instance, Matlab 
+is geared much less towards applied mathematicians in this regard as it 
+is to physicists and engineers.  It is still typical for applied 
+scientists to need to use a variety of separate programs to achieve 
+their dynamical systems modeling goals, but increasingly sophisticated 
+questions are being asked of the models, which are ever-harder to answer
+ when the tools are not integrated.  Example domains that will benefit 
+from PyDSTool are computational neuroscience, biomechanics and robotics,
+ and advanced engineering projects. </p>
+
+<h2 id="head-3cb0ad73514d814637d7490bc4f1be8404b30f4e">9. Comparison to other packages</h2>
+
+<p>In broad terms, PyDSTool combines or extends a 
+range of features from existing packages into an integrated and open environment for<em> modeling complex dynamical systems in scientific applications</em>. There are several existing software packages for working with dynamical systems. There are a variety of features to compare packages by. Some of the major ones are:</p>
+<ul>
+  <li> user interface</li>
+  <li>availability</li>
+  <li>efficiency of numerical solving</li>
+  <li>types of models that can be simulated</li>
+  <li>model building tools and templates</li>
+  <li>model analysis tools</li>
+  <li>extensibility and inter-operability</li>
+</ul>
+
+<p>PyDSTool fills a clear niche in the space of features compared to all existing packages known at the time of writing. This is summarized in the following chart, which is compiled to the best of the author's knowledge and in places may be somewhat subjective (please send any corrections to me by email). An &quot;X&quot; means the feature is supported. The abbreviation &quot;CLI&quot; means Command Line Interface (interactive), &quot;GUI&quot; means Graphical User Interface, and "DIY" means Do It Yourself! Some of the packages in the table are discussed below.</p>
+
+<p><center>
+  <img src="images/PyDSTool_comparison_matrix.png" width="1200" alt="Comparison matrix">
+</center></p>
+
+<h3 id="head-4fcdedcc35572206e2a4ad8223ed223d780cfefb">9.1. General packages</h3>
+
+
+<h4 id="head-97e5b7eea1ee46f5c6da3511bb7cdacb4d1df67b">9.1.1. Matlab / Simulink</h4>
+
+<p><a class="external" href="http://www.mathworks.com/">Matlab and Simulink</a>. </p>
+<ul>
+<li><p> PyDSTool provides dynamical systems-specific tools that Matlab does not. </p>
+</li>
+<li><p> Other science and data analysis tools are present in the working
+ environment of PyDSTool through access to Scipy, Numeric, and Pylab. 
+Many of these are ultimately imported from the same standard C or 
+Fortran libraries that Matlab uses. </p>
+</li>
+<li><p> PyDSTool retains many of the advantages of the interactive environment that is Matlab's shell. </p>
+</li>
+<li>
+  <p> PyDSTool's numerical integrators are <em>much</em> faster and more 
+richly-featured than Matlab's and support a wider range of ODE, DAE, DDE
+ and discrete map models. </p>
+</li>
+<li><p> PyDSTool model building scripting language and "index free" data structures make simulations and model exploration easy. </p>
+</li>
+<li><p> PyDSTool provides no graphical interface to its data structures. </p>
+</li>
+</ul>
+<p>See also <a class="external" href="http://www.scipy.org/NumPy_for_Matlab_Users">this</a> comparison of the NumPy library to Matlab. </p>
+
+
+<h4 id="head-702b485f9c8e1152ee4a6cd65f2cc5974da6a8ea">9.1.2. XPP</h4>
+
+<p><a class="external" href="http://www.math.pitt.edu/%7Ebard/xpp/xpp.html">XPP</a> (X-PhasePlane) </p>
+<ul>
+<li><p> PyDSTool supports arbitrarily large systems, and supports a 
+representation of their inherent structure through our compositional 
+model-building scripting language. This facilitates building such large 
+models. </p>
+</li>
+<li>
+  <p> PyDSTool supports a wider range of differential equation right-hand side expressions, except for stochastic systems. </p>
+</li>
+<li><p> PyDSTool supports long names (more than 9 characters). </p>
+</li>
+<li>
+  <p> PyDSTool's continuation and bifurcation analysis is more closely integrated with core PyDSTool tools and data structures, and is scriptable. </p>
+</li>
+<li>
+  <p> PyDSTool's simulations and analysis can be embedded inside other 
+algorithms, and automated using interactive or "intelligent" scripts. 
+This is because PyDSTool is an open and programmatically-based environment. </p>
+</li>
+<li><p> XPP supports general delay-differential systems, a wider variety of ODE integrators, and a BVP solver. </p>
+</li>
+<li>
+  <p> XPP provides a fully-graphical user interface, postscript 
+output, visualization tools for arrays, a GUI 
+for a subset of AUTO, and a lot of other good stuff. </p>
+</li>
+</ul>
+
+<h4 id="head-ee5611ea633e4f3a59f4c91311fe58da4ab9f72d">9.1.3. AUTO and MATCONT</h4>
+
+<p><a class="external" href="http://cmvl.cs.concordia.ca/auto/">AUTO</a>, <a class="external" href="http://www.matcont.ugent.be/">Matcont</a>. </p>
+<ul>
+<li><p> PyDSTool offers a suite of common continuation tools (via <a href="./PyCont.html">PyCont</a>), but cannot yet be considered comprehensive. </p>
+</li>
+<li><p> PyDSTool/<a href="./PyCont.html">PyCont</a> is an "open environment", like Matcont. This facilitates data exchange between different packages. </p>
+</li>
+<li><p> PyDSTool offers closer integration of continuation with the rest of the working environment. </p>
+</li>
+<li><p> <a href="./PyCont.html">PyCont</a>
+ is written in pure Python (except for the interface to AUTO), and is 
+unlikely to work as fast as AUTO, although it is competitive with 
+Matcont. The dynamically-linked C code for periodic orbit continuation 
+re-uses components of AUTO directly. Because we create a C-code version 
+of a vector field, <a href="./PyCont.html">PyCont</a>+AUTO
+ is technically a little faster than the most recent full native release
+ of AUTO for continuation of periodic orbits, which uses Python 
+callbacks to evaluate user-supplied functions. </p>
+</li>
+</ul>
+
+<h4 id="head-1527acaee7a1ac313890e023243f0b2775e75ab1">9.1.4. Custom code in other languages</h4>
+
+<ul>
+<li><p> PyDSTool provides a centralized, general purpose environment. </p>
+</li>
+<li><p> Python has a strong object-oriented capability. </p>
+</li>
+<li><p> PyDSTool utilizes automatically-generated and dynamically-linked
+ C code for fast execution of user-defined vector fields. Hand-written 
+modifications to this C code, or externally written DLL code can also be
+ utilized. </p>
+</li>
+<li><p> Python's dynamic typing makes embedding PyDSTool objects inside other Python computations very simple to set up. </p>
+</li>
+<li><p> Python's interactive environment (i.e. interpreted language) is 
+excellent for exploration of a mathematical system, and introspection of
+ the associated PyDSTool objects. </p>
+</li>
+</ul>
+
+<h4 id="Sundials">9.1.5. SUNDIALS and PySUNDIALS, odeint, etc.</h4>
+
+<p><a href="https://computation.llnl.gov/casc/sundials/main.html">SUNDIALS</a>, <a href="pysundials.sourceforge.net/">PySUNDIALS</a>, <a href="http://headmyshoulder.github.com/odeint-v2/">odeint</a>.
+These are low level codes for solving ODEs, DAEs, etc. </p>
+
+<ul>
+  <li>They require a high level of knowledge both of programming languages such as C++, but also how to install large packages from source.</li>
+  <li>They do not have a suite of tools associated with them for doing analysis of other kinds other than integrating the differential equations.</li>
+</ul>
+  
+
+<h4 id="CAS">9.1.6. Maple, Sage, and other computer algebra systems</h4>
+
+<p><a href="www.sagemath.org/">Sage</a> is an open-source and free mathematics system for Python, styled somewhat like <a href="http://www.maplesoft.com/">Maple</a>. Along with Mathematica, and others, these are Computer Algebra Systems (CAS) primarily.</p>
+
+<ul>
+  <li>CAS environments do not focus on the practical side of applied mathematics. They do not provide &quot;in the field&quot; tools for math modeling, especially with regard to applications of dynamical systems.
+  <li>They have some solvers for differential equations, but they are not efficient for large systems, nor are they designed for building, managing, or optimizing complex models.
+</ul>
+<h3 id="head-3130b8037aeabac71c8713c0de4e5104f8a10156">9.2. Application-specific packages</h3>
+
+
+<h4 id="head-552e2a6102ddd8c39d3994eecb9c50f1eedcbf33">9.2.1. NEURON, GENESIS, Brian, and other neural simulators</h4>
+
+<p><a class="external" href="http://neuron.duke.edu/">Neuron at Duke</a>, <a class="external" href="http://www.neuron.yale.edu/">Neuron at Yale</a>, <a class="external" href="http://www.genesis-sim.org/GENESIS/">Genesis</a>, and <a href="http://www.briansimulator.org">Brian</a>. These are biophysical neural network simulators.</p>
+
+<ul>
+<li><p> A PyDSTool toolkit for compartmental modeling provide templates 
+of data structures and utilities for sophisticated hierarchical and 
+composable model building, using a modern object-oriented model 
+specification language built in to PyDSTool (including symbolic 
+expression handling). </p>
+</li>
+<li>
+  <p> The PyDSTool templates are not comprehensive, and are not as 
+fully-featured as some of those designed for use with Neuron or Genesis.
+  We are working to broaden the support for different types of model. A <a href="./Tutorial/Tutorial_compneuro.html">tutorial</a> is available for PyDSTool's computational neuroscience templates.</p>
+</li>
+<li>Python interfaces to Neuron and Genesis now exist, but these are add-ons that do not make the underlying systems inherently open to performing dynamical systems analysis.</li>
+<li>Brian's simulator is primarily in pure python, although there are speed-ups for larger networks through vectorized calculations. Also, models can be transformed into C and connected to the solvers using weave.</li>
+</ul>
+
+
+<h4 id="SysBio">9.2.2. PySces and other systems biology packages</h4>
+
+<p><a href="http://pysces.sourceforge.net/">PySCes</a> simulator for cellular systems is an open source package.</p>
+<ul>
+  <li>PySCes does provide some basic tools for dynamical systems analysis of models for systems biology applications.</li>
+  <li>PySCes does support a partial interface with SBML.</li>
+  <li>PySCes does not support bifurcation analysis and continuation of oscillations.</li>
+</ul>
+<hr>
+
+<p>PyDSTool source code is hosted by SourceForge: </p>
+<a href="http://sourceforge.net/projects/pydstool"><img src="./sflogo.png" alt="Get PyDSTool at SourceForge.net. Fast, secure and Free Open Source software downloads" border="0" height="40" width="150"></a></div>
+
+</div> <!-- end page -->
+
+
+</div></body></html>

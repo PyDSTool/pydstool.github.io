@@ -1,0 +1,739 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><title>CodeTopics - PyDSTool</title></head>
+<body dir="ltr" lang="en">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1>Code Topics</h1>
+
+<div id="page" dir="ltr" lang="en"><!-- start page -->
+
+<hr>
+<p> </p>
+<p><big><strong>Contents</strong></big> </p>
+<ol>
+
+<li>
+<a href="#head-d0675c841a69d36b6fbc1c6f9b6f7b634f43638f">Project source code</a>
+<ol>
+
+<li>
+<a href="#head-7391ac19add3ce8f44269b252f10d037bae3fd39">Disclaimer</a>
+</li>
+
+<li>
+<a href="#head-c6770c78499d3aba73838d78d7efa9423f75d30d">Download options</a>
+</li>
+
+<li>
+<a href="#head-9f281779fc3ad57966043cdf4aaf942e60562674">What's new?</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-1205fc34c795e39d11cac666f5063a16dbb06517">BSD License</a>
+</li>
+
+<li>
+<a href="#head-1a96c83cf6f3eb009d3d5c945bd5fa7347130772">Version numbering</a>
+</li>
+
+<li>
+<a href="#head-7e55917982ddf9c3ef0513872982069de14287fa">Code conventions</a>
+</li>
+
+<li>
+<a href="#head-eaf1deb39093370bc650995a02839ec3e3bf1344">Available PyDSTool utilities</a>
+</li>
+
+<li>
+<a href="#head-b1d1593ba5d3ba94564064886c768fa6eb006775">Exception conventions</a>
+</li>
+
+<li>
+<a href="#head-51f931def964771c5c26a9c1556e2430b57c3c43">Testing</a><a href="#head-8ac33d546c713259a03608aa3c77a5fe2c7531c1"></a>
+</li>
+
+</ol>
+<p> </p>
+
+<h2 id="head-d0675c841a69d36b6fbc1c6f9b6f7b634f43638f">1. Project source code</h2>
+
+
+<h3 id="head-7391ac19add3ce8f44269b252f10d037bae3fd39">1.1. Disclaimer</h3>
+
+<p>The PyDSTool
+ project has grown rapidly from simple prototypes at the beginning of 
+2005. The package remains at the Beta stage of development partly 
+because it contains so much legacy code from its prototype stage, and 
+because many parts of it have not been rigorously tested. Technically 
+the package is "research code" and should not yet be treated with 
+expectations typical of a distributable package. </p>
+<p>As research code, the approach taken so far has been to get the code <em>working</em> in the applications that we have been writing it for, in favour of aiming to make it optimally <em>efficient</em>.
+ You are likely to find bugs and limitations in using our package, which
+ you are encouraged to report to us so that we can address them. If you 
+look at the code you may well find some "interesting" implementations of
+ the algorithms, which may not be the cleanest, most efficient, or most 
+Pythonic approach to have taken. We try to address these issues when we 
+come across them and when our needs or conscience forces us to. </p>
+<p>PyDSTool is compatible with Python 2.6, SciPy v0.7.0, Numpy 1.3, and MatPlotLib 0.98, as well as previous versions. Version 0.83.3 of PyDSTool
+ is the last to be compatible with "old SciPy" (v0.3.2), and will no 
+longer be maintained. All versions will continue to be available at the 
+SourceForge repository. </p>
+
+<h3 id="head-c6770c78499d3aba73838d78d7efa9423f75d30d">1.2. Download options</h3>
+
+
+<h4 id="head-e730cd2c4b820b0f57a7fed373c9f1a46a9fdfa4">1.2.1. Sourceforge releases</h4>
+
+<p>The latest version available is <strong>0.88</strong>. The current
+sub-release is Feb 18th, 2011 (0.88.110218).</p>
+
+<p>Normally, the latest stable version is to be found as an archival image at the project files page on <a class="external" href="http://www.sourceforge.net/projects/pydstool/"> SourceForge</a>. Release notes are provided at SourceForge: </p>
+<center><a href="http://sourceforge.net/"><img src="./sflogo.png" alt="SourceForge.net Logo" border="0" height="62" width="210"></a></center><p> </p>
+<p>It is recommended to delete a prior version before unzipping a new one. There is no installer for PyDSTool at this time, you simply unzip the files and follow the simple steps on the <a href="./GettingStarted.html">GettingStarted</a> page. </p>
+
+<h4 id="head-8f9b0b7d6c27a0a1cc9cc1bd8c2a1368e7d815e6">1.2.2. Bazaar repository ("bleeding edge")</h4>
+
+<p>The latest (possibly unstable) version can always be found at our <a class="external" href="http://sourceforge.net/scm/?type=bzr&group_id=140858">bazaar repository</a></p>
+<p>Read-only command is: <tt>bzr://pydstool.bzr.sourceforge.net/bzrroot/pydstool</tt> </p>
+<p>It is likely to contain many minor fixes and 
+improvements over the latest Sourceforge release. You can see the recent
+ changes at the <a class="external" href="http://pydstool.bzr.sourceforge.net/bzr/pydstool/changes"> repository</a>.</p>
+
+
+
+<h3 id="head-9f281779fc3ad57966043cdf4aaf942e60562674">1.3. What's new?</h3>
+
+<p>For a complete change log for recent versions (2010 and later), see the <a class="external"
+href=http://pydstool.bzr.sourceforge.net/bzr/pydstool/changes"> bzr changelog</a> and the <a href="http://sourceforge.net/projects/pydstool/files/pydstool/0.88/ReleaseNotes-0.88.rtf/download">release notes</a> for each release on Sourceforge. Highlights of new features in past versions of PyDSTool: </p>
+
+<p><strong>v 0.88, 11 Dec 2009</strong> </p>
+<ul>
+<li><p> New numeric_to_traj and pointset_to_traj utility functions </p>
+</li>
+<li><p> Major improvements to intelligent expr2func (symbolic -&gt; python function conversion) </p>
+</li>
+<li><p> Cleanup of global imports, especially: entire numpy.random and linalg namespaces no longer imported by default </p>
+</li>
+<li><p> Added support for 'min' and 'max' keywords in functional specifications (for ODE right-hand sides, for instance) </p>
+</li>
+<li class="gap"><p> Optimization tools from third-party genericOpt (included with permission) - improved parameter estimation examples </p>
+</li>
+<li><p> Numerical phase-response calculations now possible in PRC toolbox (see <a href="./ToolboxDocumentation.html">ToolboxDocumentation</a>) </p>
+</li>
+<li><p> Fully-fledged DSSRT toolbox for neural modeling (see <a href="./ToolboxDocumentation.html">ToolboxDocumentation</a>) </p>
+</li>
+<li>
+  <p> New tests and demonstrations in PyDSTool/tests </p>
+</li>
+<li><p> Improved compatibility with cross-platform use and with recent python versions and associated libraries </p>
+</li>
+</li>
+</ul>
+<p><strong>v 0.87, 13 Nov 2008</strong> </p>
+<ul>
+<li><p> ModelInterface class and new-style Models - major restructure of </p>
+<ul>
+<li style="list-style-type: none;"><p>how Models are organized and can be hierarchically embedded in each other </p>
+</li>
+</ul>
+</li>
+<li><p> Feature &amp; condition classes with >ModelInterface ease specification </p>
+<ul>
+<li style="list-style-type: none;"><p>of hybrid models and complex parameter estimation &amp; model inference problems </p>
+</li>
+</ul>
+</li>
+<li><p> Support for 2nd order interpolated polynomial representation of </p>
+<ul>
+<li style="list-style-type: none;"><p>Trajectory objects (using Anne 
+Archibald's poly_int classes): These are off by default as they require a
+ large amount of time to compute. See tests/poly_interp_test.py 
+(Auxiliary variables cannot be included in this, and remain linearly 
+interpolated, as their derivatives are not generally available.) </p>
+</li>
+</ul>
+</li>
+<li><p> Descriptors, Transform classes for automated model building and </p>
+<ul>
+<li style="list-style-type: none;"><p>manipulation of specifications </p>
+</li>
+</ul>
+</li>
+<li><p> MProject sub-package for managing model estimation/inference </p>
+<ul>
+<li style="list-style-type: none;"><p>projects </p>
+</li>
+</ul>
+</li>
+<li><p> All generators now return trajectories that only continue until </p>
+<ul>
+<li style="list-style-type: none;"><p>any user-defined state bounds are 
+reached. The state bounds are not found with the same accuracy as 
+terminal events defined to trap these bounds errors, which is the 
+recommended way to implement this (e.g., through ModelConstructor options). </p>
+</li>
+</ul>
+</li>
+<li><p> Default interval checking is now off (use 'checklevel' option 1 </p>
+<ul>
+<li style="list-style-type: none;"><p>or 2 to return to consistency checking with warnings) to improve speed of ODE solving </p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>v 0.86, 01 June 2008</strong> </p>
+<ul>
+<li><p> Now compatible with Python 2.5 and Numpy 1.0.4 / Scipy 0.6.0 </p>
+</li>
+<li><p> Decreased overhead for simulating hybrid models </p>
+</li>
+<li><p> Improved efficiency of VODE Generator in computing trajectories </p>
+</li>
+<li><p> Interval class now supports discrete valued intervals </p>
+</li>
+<li><p> Improved diagnostic reporting structure in Generator and Model classes </p>
+</li>
+<li><p> Inclusion of intuitive arithmetic operations for Point and Pointset classes </p>
+</li>
+<li><p> Various bug fixes and other API tidying </p>
+</li>
+</ul>
+<p><strong>v 0.85, 11 July 2007</strong> </p>
+<p>* PyCont can now perform continuation according to the zeros of user-defined </p>
+<ul>
+<li style="list-style-type: none;"><p>functions or bounds (see example tests/PyCont_vanDerPol.py and PyCont_Hopfield.py) </p>
+</li>
+</ul>
+<ul>
+<li><p> Support for scipy.special functions in Generator definitions (Python targets </p>
+<ul>
+<li style="list-style-type: none;"><p>only. C targets with a more limited range of functions will be supported soon) </p>
+</li>
+</ul>
+</li>
+<li><p> A few phase plane analysis tools have been added to Toolbox/phaseplane.py </p>
+<ul>
+<li style="list-style-type: none;"><p>-- in particular, the finding of fixed points, nullclines, and some simple code to compute saddle manifolds in planar systems </p>
+</li>
+</ul>
+</li>
+<li><p> Phase response curves can now be calculated for limit cycles using the adjoint </p>
+<ul>
+<li style="list-style-type: none;"><p>method (see tests/ML_adjointPRC.py and HH_adjointPRC.py for examples) </p>
+</li>
+</ul>
+</li>
+<li><p> Generators now include auxiliary variable data in recorded event data </p>
+</li>
+<li><p> Pointset comparisons using arithmetic operators now consistent with the </p>
+<ul>
+<li style="list-style-type: none;"><p>norm-based comparisons used by Points </p>
+</li>
+</ul>
+</li>
+<li><p> Time mesh points for external inputs to integrators now forced to be integration </p>
+<ul>
+<li style="list-style-type: none;"><p>mesh points for greater numerical accuracy and stability </p>
+</li>
+</ul>
+</li>
+<li><p> VODE now supports 'use_special' for forcing values of output trajectory mesh </p>
+</li>
+</ul>
+<p><strong>Patch 1, 13 Mar 2007</strong> </p>
+<p>Unzip outside PyDSTool directory to overwrite necessary files. </p>
+<p><strong>v 0.84, 20 Feb 2007</strong> </p>
+<p>This is primarily a release to bring PyDSTool
+ up to date with numpy 1.0, "new SciPy" and Python versions later than 
+2.4. Major code improvements are still in development and will be 
+released in a 0.90 version as soon as we can. </p>
+<ul>
+<li><p> Compatible with Scipy 0.5.1 and Python 2.4 onwards. </p>
+</li>
+<li><p> 64-bit CPU compatible. </p>
+</li>
+<li><p> New ModelSpec building functionality, in particular "standard events" </p>
+<ul>
+<li style="list-style-type: none;"><p>for threshold crossings and turning points in every variable are automatically generated (but detection turned off by default). </p>
+</li>
+</ul>
+</li>
+<li><p> Improved symbolic evaluation behavior (but in this pre-0.90 version </p>
+<ul>
+<li style="list-style-type: none;"><p>we have switched off some of the advanced simplification code as there is a bug in it which we haven't yet traced). </p>
+</li>
+</ul>
+</li>
+<li><p> <a href="http://www.cam.cornell.edu/%7Erclewley/cgi-bin/moin.cgi/PyCont">PyCont</a> functionality improved and interface cleaned up. </p>
+</li>
+<li><p> ExtrapolateTable Generator class added </p>
+</li>
+<li><p> Various other minor fixes and improvements. </p>
+</li>
+</ul>
+<p><strong>v 0.83.3, 20 Sep 2006</strong> </p>
+<p><em>General</em>: </p>
+<ul>
+<li><p> Point and Pointset behaviour modified to make access to values or arrays </p>
+<ul>
+<li style="list-style-type: none;"><p>of values (respectively) easier. 
+Now, a Point pt['x'] is not the same as pt[['x']]. The former now 
+returns the numeric value, the latter a new Point containing only the 
+coordinate 'x'. Behaviour with a Pointset pts is altered similarly, 
+except pts['x'] would be an array of numeric values. </p>
+</li>
+</ul>
+</li>
+<li><p> Pointsets can now be initialized with independent variable arrays in </p>
+<ul>
+<li style="list-style-type: none;"><p>reverse order (e.g., from a 
+backwards integration). The initializer method now automatically detects
+ the reverse order and reverses both the independent and dependent 
+variable arrays before creating the Pointset. </p>
+</li>
+</ul>
+</li>
+<li><p> Updated <a class="nonexistent" href="http://www.cam.cornell.edu/%7Erclewley/cgi-bin/moin.cgi/FuncSpec">FuncSpec</a> and Generators to allow specs to be provided by lists </p>
+<ul>
+<li style="list-style-type: none;"><p>of symbolic quantities, </p>
+</li>
+</ul>
+</li>
+<li><p> Provided better support for bounds events in C and Python specifications. </p>
+<ul>
+<li style="list-style-type: none;"><p>See tests/HH_model_testbounds.py and HH_model_Cintegrator_testbounds.py </p>
+</li>
+</ul>
+</li>
+<li><p> Provided helper functions to automatically create turning-point and zero </p>
+<ul>
+<li style="list-style-type: none;"><p>crossing events for oDE right-hand sides and other auxiliary functions from <a href="./ModelSpec.html">ModelSpec</a> definitions, </p>
+</li>
+</ul>
+</li>
+<li><p> Fixed symbolic.py to properly process string literals. </p>
+</li>
+<li><p> Fixed bugs in defining Jacobian with respect to parameters. </p>
+</li>
+<li><p> Other bug fixes for ModelConstructor, ModelSpec, Symbolic. </p>
+</li>
+<li><p> Fixed bugs in Model/Trajectory sample methods to properly use tlo and thi </p>
+<ul>
+<li style="list-style-type: none;"><p>limits with precise=False option and eventdata option turned off. </p>
+</li>
+</ul>
+</li>
+<li><p> Added data analysis toolbox for use in data-driven dynamical systems </p>
+<ul>
+<li style="list-style-type: none;"><p>modelling. Moved some functions over from fracdim.py toolbox. </p>
+</li>
+</ul>
+</li>
+<li><p> Fixed bug in using global time with hybrid systems that have external </p>
+<ul>
+<li style="list-style-type: none;"><p>inputs. </p>
+</li>
+</ul>
+</li>
+<li><p> Event definitions now support external inputs. </p>
+</li>
+<li><p> Suppressed messages to stdout from compilers and calls to minpack </p>
+<ul>
+<li style="list-style-type: none;"><p>optimizers. </p>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>PyCont 0.3.1</em>: </p>
+<ul>
+<li><p> Two plotting methods were added to plot_cycles:  'stack' and 'highlight'. </p>
+</li>
+<li><p> Added continuation argument 'StopAtPoints', allowing computation to stop </p>
+<ul>
+<li style="list-style-type: none;"><p>at specified special points. </p>
+</li>
+</ul>
+</li>
+<li><p> Added domain checking through introduction of a new special point labeled </p>
+<ul>
+<li style="list-style-type: none;"><p>'B' for 'Boundary'. Note that if 'B' is active (through specification in </p>
+<ul>
+<li style="list-style-type: none;"><p>LocBifPoints), domain information is saved along the curve with the labels 'inside' and 'outside'. </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p> Added continuation argument 'description' allowing the user to give details </p>
+<ul>
+<li style="list-style-type: none;"><p>on the specific curve computation.  When the info() method is called from the curve class, the description will be displayed. </p>
+</li>
+</ul>
+</li>
+<li><p> Added argument SPOut to the LimitCycle class, allowing the user to stop at </p>
+<ul>
+<li style="list-style-type: none;"><p>specified values of variables or parameters. </p>
+</li>
+</ul>
+</li>
+<li><p> Jacobians with respect to variables is now implemented in AUTO interface. </p>
+<ul>
+<li style="list-style-type: none;"><p>Jacobians with respect to parameters is currently not working, but will be added very soon in a minor release. </p>
+</li>
+</ul>
+</li>
+<li><p> Added get() method to plot class. </p>
+</li>
+<li><p> Bug fixes (see PyCont/README for details). </p>
+</li>
+</ul>
+<p><strong>Patch 1, 15 Jun 2006</strong> </p>
+<p>(Unzip to PyDSTool\ directory to update files) </p>
+<ul>
+<li><p> Fixed AUTO compilation bug on Linux </p>
+</li>
+<li><p> Fixed data file reference in tests\PyCont_Lorentz.py </p>
+</li>
+<li><p> Minor updates to toolbox utilities </p>
+</li>
+<li><p> Minor changes to common functions </p>
+</li>
+</ul>
+<p><strong>v0.83.2, 05 Jun 2006</strong> </p>
+<p><em>General</em>: </p>
+<ul>
+<li><p> Provided support for 1D Jacobians for generators (only multi-D </p>
+<ul>
+<li style="list-style-type: none;"><p>were previously supported). </p>
+</li>
+</ul>
+</li>
+<li><p> Fixed bug with symbolic differentiation and simplification of expressions </p>
+<ul>
+<li style="list-style-type: none;"><p>involving parsing of division of compound expressions, where braces are not explicitly given. </p>
+</li>
+</ul>
+</li>
+<li><p> Points, pointsets, and parameter estimation objects are initialized </p>
+<ul>
+<li style="list-style-type: none;"><p>with keywords now, not dictionaries (although points and pointsets retain dictionary backwards compatibility ... for now). </p>
+</li>
+</ul>
+</li>
+<li><p> Parameterized pointsets now have the option to be referenced by values </p>
+<ul>
+<li style="list-style-type: none;"><p>that are within a small tolerance of the defined independent variable values. </p>
+</li>
+</ul>
+</li>
+<li><p> Improved syntax for common object methods: 'computeTraj' is now 'compute', </p>
+<ul>
+<li style="list-style-type: none;"><p>'sampleTraj' is now 'sample', 
+'setPars' for generators is now 'set', 'setParsModel' for models is now 
+'set'. Previous method names are still valid for now. </p>
+</li>
+</ul>
+</li>
+<li><p> Allowed C-target FuncSpec objects to use multi-references in definitions </p>
+</li>
+<li><p> Model trajectories can now be referenced and deleted using the </p>
+<ul>
+<li style="list-style-type: none;"><p>m[traj_name] notation, where m is a Model object. </p>
+</li>
+</ul>
+</li>
+<li><p> Fixed EventMappings bug for multiple assignments specified by dictionary. </p>
+</li>
+<li><p> Other minor bug fixes. </p>
+</li>
+</ul>
+<p><em>PyCont</em>: </p>
+<ul>
+<li><p> Overhaul of plotting so that bifurcation diagrams can be adjusted </p>
+<ul>
+<li style="list-style-type: none;"><p>through a curve's 'plot' attribute. </p>
+</li>
+</ul>
+</li>
+<li><p> AUTO is interfaced for limit cycle continuation. Requires external </p>
+<ul>
+<li style="list-style-type: none;"><p>C compiler access in the same way as the Dopri and Radau integrators. </p>
+</li>
+</ul>
+</li>
+<li><p> Improvements to the PyCont API. </p>
+</li>
+<li><p> Support for bifurcations of discrete maps. </p>
+</li>
+</ul>
+<p><strong>v0.83.1, 12 Mar 2006</strong> </p>
+<p><em>PyCont continuation</em>: </p>
+<ul>
+<li><p> More bifurcations can be detected </p>
+</li>
+<li><p> Improved user interface / graphing capabilities </p>
+</li>
+<li><p> Exporting data to Pointsets now possible </p>
+</li>
+</ul>
+<p><em>Pointsets and Points</em>: </p>
+<ul>
+<li><p> Arithmetic and comparison operations now supported </p>
+</li>
+<li><p> Both classes now have an associated norm (defaults </p>
+<ul>
+<li style="list-style-type: none;"><p>to the 2-norm) in order to implement point-wise comparison </p>
+</li>
+</ul>
+</li>
+<li><p> Labelling of points better implemented </p>
+</li>
+<li><p> Calling Pointsets now only applies if they are </p>
+<ul>
+<li style="list-style-type: none;"><p>parameterized, when argument must 
+be an independent variable value. Other functionality previously 
+associated with calling has been moved to [] referencing. Calling is now
+ more efficient for its original intended purpose </p>
+</li>
+</ul>
+</li>
+<li><p> Setitem for Pointsets now allows setting of entire </p>
+<ul>
+<li style="list-style-type: none;"><p>coordinate or independent variable array </p>
+</li>
+</ul>
+</li>
+<li><p> Full support for Points to be used as dictionaries </p>
+</li>
+<li><p> Better support for Pointsets to be used like arrays </p>
+</li>
+</ul>
+<p><em>Symbolic</em>: </p>
+<ul>
+<li><p> Fixed handling of functions under differentiation to </p>
+<ul>
+<li style="list-style-type: none;"><p>make more sense </p>
+</li>
+</ul>
+</li>
+<li><p> Can now declare symbolic functions without defining them, </p>
+<ul>
+<li style="list-style-type: none;"><p>and can differentiate them symbolically </p>
+</li>
+</ul>
+</li>
+<li><p> Introduction of symbolic vectors and vector functions </p>
+</li>
+<li><p> Symbolic eval() more efficient, more intelligent </p>
+</li>
+<li><p> Fixed minor bugs and added many minor features </p>
+</li>
+</ul>
+<p><em>Generators</em>: </p>
+<ul>
+<li><p> Definition can now be done using Quantity objects as well </p>
+<ul>
+<li style="list-style-type: none;"><p>as strings </p>
+</li>
+</ul>
+</li>
+<li><p> Initialization keyword syntax simplified, partly to reflect </p>
+<ul>
+<li style="list-style-type: none;"><p>the fact that instances of class args() can be provided instead of dictionaries </p>
+</li>
+</ul>
+<ul>
+<li><p> 'specstrdict' -&gt; 'varspecs' </p>
+</li>
+<li><p> 'auxfndict'   -&gt; 'fnspecs' </p>
+</li>
+<li><p> 'xdatadict'   -&gt; 'ics' </p>
+</li>
+<li><p> 'parameters'  -&gt; 'pars' </p>
+</li>
+</ul>
+</li>
+<li><p> External input signals (as arrays) can now be passed to </p>
+<ul>
+<li style="list-style-type: none;"><p>the vector field in Dopri and Radau integrators </p>
+</li>
+</ul>
+</li>
+<li><p> New ADMC++ target for ODETools (to facilitate automatic differentiation </p>
+<ul>
+<li style="list-style-type: none;"><p>and parameter sensitivity calculations) </p>
+</li>
+</ul>
+</li>
+<li><p> Fixed some Radau compilation issues on non-Windows platforms </p>
+</li>
+<li><p> Added 'method' key to InterpTable to allow piecewise-constant </p>
+<ul>
+<li style="list-style-type: none;"><p>interpolation of data (key value = 'constant' or 'linear') </p>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>Tests</em>: </p>
+<ul>
+<li><p> Added a couple of new test and example scripts, e.g. for </p>
+<ul>
+<li style="list-style-type: none;"><p>a SloppyCell model, and for symbolic differentiation and manipulation. </p>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>Memory management</em>: </p>
+<ul>
+<li><p> Used cPickle on non-Windows platforms to improve </p>
+<ul>
+<li style="list-style-type: none;"><p>efficiency of object <tt>__copy__</tt> methods </p>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>Models</em>: </p>
+<ul>
+<li><p> No longer need to provide initial condition to </p>
+<ul>
+<li style="list-style-type: none;"><p>computeTraj call for single vector field model </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<h2 id="head-1205fc34c795e39d11cac666f5063a16dbb06517">2. BSD License</h2>
+
+<p>Copyright (C) 2008-2012, Department of Mathematics and Statistics, Georgia
+ State University. All rights reserved. The following BSD license 
+applies to versions released 2008-2012.</p>
+<p> [<em>Previously:</em> Copyright (C) 2005-2007, Department of Mathematics, Cornell University. All rights reserved. ]</p>
+<p>Parts of this distribution that originate from different authors are 
+  individually marked as such. Copyright and licensing of those parts 
+  remains with the original authors. </p>
+<p>Redistribution and use in source and binary forms, with or without 
+modification, are permitted provided that the following conditions are 
+met: </p>
+<ol type="1">
+<li><p>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. </p>
+</li>
+<li class="gap"><p>Redistributions in binary form must reproduce the 
+above copyright notice, this list of conditions and the following 
+disclaimer in the <b style="color: black; background-color: rgb(160, 255, 255);">documentation</b> and/or other materials provided with the distribution. </p>
+</li>
+<li class="gap"><p>The name of Georgia State University and its 
+representatives may not be used to endorse or promote products derived 
+from this software without specific prior written permission. </p>
+</li>
+</ol>
+<p>THIS SOFTWARE IS PROVIDED BY GEORGIA STATE UNIVERSITY "AS IS" AND ANY 
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL CORNELL UNIVERSITY BE LIABLE 
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+THE POSSIBILITY OF SUCH DAMAGE. </p>
+
+<h2 id="head-1a96c83cf6f3eb009d3d5c945bd5fa7347130772">3. Version numbering</h2>
+
+<p>We use a form of the standard GNU version numbering system of major.minor.patch for each module -- see <a class="external" href="http://www.panix.com/%7Ezackw/exbib/2002/June/20">this rant</a> about good version numbering practice. PyDSTool
+ as a whole can have its own version number based on the incremental 
+changes in its constituent modules. At "alpha"-release of a well-tested 
+core, for the purposes of wider testing and external feedback, We have 
+started at a global version below 1.0. Version 1.0 will be reserved for 
+the first "beta"-type general release that has been tested in new SciPy. </p>
+<p>For the PyDSTool
+ package's version numbering, we use a major.minor number followed by a 
+patch level made up of a YYMMDD date. Note the ordering, which makes the
+ numbering sort helpfully! For example, a package version before alpha 
+release would look like <tt>0.5.050628</tt>. As of June 28th 2005 this scheme will also be adopted for backup directory names. </p>
+
+<h2 id="head-7e55917982ddf9c3ef0513872982069de14287fa">4. Code conventions</h2>
+
+<p>Before contributing code to the project, please read Guido van Rossum's Style Guide on the <a href="./PythonResources.html">PythonResources</a> page.</p>
+<h2 id="head-eaf1deb39093370bc650995a02839ec3e3bf1344">5. Available PyDSTool utilities</h2>
+
+<p>There are many common utilities available in the common.py and 
+utils.py modules, which you are encouraged to make use of in order to 
+re-use existing code, and make the internal interfaces more consistent. 
+The common.py module contains many utilities, some of which are of 
+little relevance to casual end-users. These include functions to help deal with
+ string parsing of user specifications, "sorting" dictionaries, 
+verification of object properties (such as that a list of numbers is 
+increasing, or that it only contains unique items), and a host of useful
+ name mappings (such as NumArray type names to type codes). </p>
+<p>Dozens of other utilities are also provided by SciPy and NumPy, and these two modules should be imported by every major PyDSTool module. It is worth a browse through these modules' API documentation to see what can be utilized before you re-invent the wheel. Particularly useful functions are: </p>
+<ul>
+<li>
+<p> scipy: </p>
+<ul>
+<li><p> <tt>mgrid</tt> </p>
+</li>
+<li><p> <tt>linspace</tt> </p>
+</li>
+<li><p> <tt>logspace</tt> </p>
+</li>
+</ul>
+</li>
+<li>
+<p> numpy.io: </p>
+<ul>
+<li>
+  <p> <tt>array_import</tt>, <tt>loadtxt</tt> and <tt>savetxt</tt></p>
+</li>
+</ul>
+</li>
+<li><p> numpy: </p>
+<ul>
+<li><p> <tt>allclose(x,y,rtol=1e-5,atol=1e-8)</tt> =&gt; <tt>|x-y|&nbsp;&lt;&nbsp;atol+rtol*|y|,&nbsp;fromfunction</tt> </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<h2 id="head-b1d1593ba5d3ba94564064886c768fa6eb006775">6. Exception conventions</h2>
+ 
+<p>There are a set of PyDSTool-specific
+ exceptions listed in the errors.py module. These are generally close 
+counterparts of standard Python exceptions. For instance, the 
+PyDSTool_KeyError should be raised when an end-user provides an 
+incorrect dictionary key in the initialisation of a PyDSTool
+ object, whereas a standard KeyError should be raised when there are 
+inconsistencies in the dictionaries passed internally between objects 
+(i.e. because of an intrinsic programming error). </p>
+
+<h2 id="head-51f931def964771c5c26a9c1556e2430b57c3c43">7. Testing</h2>
+
+<p>All module .py files should include some basic test code for all of 
+the major features implemented in that module. This code goes in the <tt>__main__</tt>
+ block at the end of the file. Look at the existing code for examples. 
+Whenever changes are made to a module, the module should be re-run to 
+check that these tests are still met. This is a simplified form of "unit
+ testing" (see the link on the <a href="./PythonResources.html">PythonResources</a> page), known as "regression testing". </p>
+<p>Additionally, more sophisticated example scripts are in the 
+sub-directory /tests/. These test multiple features simultaneously. 
+Please feel free to add to these.</p>
+</div>
+
+<div id="pagebottom"></div>
+</div> <!-- end page -->
+
+
+</div></body></html>

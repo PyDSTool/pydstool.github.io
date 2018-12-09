@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>ParamEst</title></head>
+
+<body  lang="en" dir="ltr">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+
+<hr>
+
+<h1>Parameter and model estimation tools</h1>
+
+<div class="table-of-contents"><p class="table-of-contents-heading">Contents
+<ol><li>
+<a href="#Parameter_Estimation">Parameter Estimation</a><ol><li>
+<a href="#Basic_usage">Basic usage</a></li><li>
+<a href="#Algorithms_available">Algorithms available</a><ol><li>
+<a href="#Levenberg-Marquardt_least_squares_.28class_LMpest.29">Levenberg-Marquardt least squares (class LMpest)</a></li><li>
+<a href="#Bounded_minimization_.28class_BoundMin.29">Bounded minimization (class BoundMin)</a></li></ol></li><li>
+  <a href="#Qualitative_fitting">Qualitative fitting</a></li>
+</ol>
+</li>
+    <li><a href="#ModelEst">Model Estimation</a></li>
+</ol>
+</div></p>
+
+<br><hr><br>
+
+<h1 id="Parameter_Estimation">1. Parameter Estimation</h1>
+
+<p>PyDSTool provides a thin wrapper around the SciPy versions of the Levenberg-Marquardt least squares optimizer and the one-parameter BoundMin bounded minimizer, under a unifying class type ParamEst, which is implemented in <tt>PyDSTool/Toolbox/ParamEst.py</tt>. This class provides basic features such as a default residual function that is compatible with PyDSTool Model objects, easing the changing of model parameter values, computation of trajectories, and setting of additional parameters for each call to the function.
+
+<h2 id="Basic_usage">1.1. Basic usage</h2>
+
+<span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line862">The user begins by creating and initializing a Param<tt class="backtick"></tt>Est class instance with a <tt>Model</tt> system, the number of free parameters in the model to be fitted, the dependent variables names to use, and the residual function to use. <em>Either integration initial conditions or model parameters can be used as the free parameters.</em> <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line862">Residual functions must have a signature of the form <tt>(s,&nbsp;p,&nbsp;tmesh&nbsp;[,&nbsp;&lt;optional&nbsp;additional&nbsp;argument&nbsp;sequence&gt;])</tt>. The first argument <tt>s</tt> refers to the Param<tt class="backtick"></tt>Est class instance initialized by the user, which provides the function access to the model and other user-specified settings. The <tt>p</tt> argument will be an array of new parameter values, <em>given in the same order as</em> <tt>s.freeParNames</tt>. <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line874">An explicit Jacobian defined in a model system (such as that calculated using the <a href="./Symbolic.html">Symbolic</a> toolbox differentiation functions) will automatically be used by the class. <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><p class="line862">Once the Param<tt class="backtick"></tt>Est object has been created, its <tt>run</tt> method can be called in order to execute the actual optimization algorithm. Arguments to this call allow additional arguments to be sent to the residual function, and algorithmic tolerances to be set. By default, the Param<tt class="backtick"></tt>Est class calls the optimizers with their 'full output' options set, and stores the results in the dictionary <tt>s.pestResult</tt>, as well as returning a <em>copy</em> of that dictionary. Note that this dictionary will be overwritten on the next call to <tt>run</tt>. <span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line862">One benefit of organizing a parameter estimation problem inside a class such as Param<tt class="backtick"></tt>Est is that it gives the residual function greater power to store state inside its associated class instance. <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><p class="line862">For further information see examples in <tt>PyDSTool/tests</tt> such as <tt>pest_test1.py</tt> for initialization of ParamEst class instances, overriding of default residual functions, and running of the optimizers. <span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><p class="line867">
+
+
+<h2 id="Algorithms_available">1.2. Algorithms available</h2>
+
+<h3 id="Levenberg-Marquardt_least_squares_.28class_LMpest.29">1.2.1. Levenberg-Marquardt least squares (class LMpest)</h3>
+
+<span class="anchor" id="line-33"></span><span class="anchor" id="line-34"></span><p class="line862">This works in an N-dimensional parameter space on an n-dimensional model trajectory. This sub-class wraps the <tt>leastsq</tt> function from <tt>scipy.minpack</tt>. This algorithm is inherently unconstrained, but can be adapted to incorporate <em>soft</em> constraints in the residual function (see the provided example scripts). <span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><p class="line862">The class attribute <tt>_memory</tt>, which is pre-declared and provided as a memory for the residual functions between calls. It is declared to be the array <tt>zeros(self._tmesh_len*self._depvar_len,&nbsp;dtype=float64)</tt>, to provide temporary storage while building the return array of residuals (see <tt>residual_fn_LMpest_default_Ndim</tt> for an example). <span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><p class="line867">
+<h3 id="Bounded_minimization_.28class_BoundMin.29">1.2.2. Bounded minimization (class BoundMin)</h3>
+<span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><p class="line862">This works only in a one-dimensional parameter space for a one-dimensional model trajectory. This sub-class wraps <tt>fminbound</tt> from <tt>scipy.optimize</tt>. It minimizes subject to bound constraints. <span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><p class="line867">
+
+<h2 id="Qualitative_fitting">1.3. Qualitative fitting</h2>
+
+<p class="line874">You can  fit user-defined qualitative &quot;features&quot; of a trajectory to those of experimental data or to predefined ideals using conventional optimization algorithms, such as least squares. This approach is under development but appears to work well in instances where standard approaches for which the fitting problem is ill-conditioned by virtue of having a "fitness landscape" that is too flat or too irregular near typical initial conditions.
+
+<h3 class="line862">Example</h3>
+<p class="line862">A robust way to fit trajectory extrema in a given coordinate is to define events in the test model to find them accurately. The tools provided here assume that you have added appropriate events to your model to do this. This is described further in the following docstring for the example residual function <tt>residual_fn_LMpest_extrema(s,&nbsp;p,&nbsp;tmesh)</tt> exported from <tt>ParamEst.py</tt>: <span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span>
+<ul><li style="list-style-type:none">Example residual function for the qualitative fitting of local <span class="anchor" id="line-51"></span><ul><li style="list-style-type:none">extrema locations in model trajectory to those of data, using <span class="anchor" id="line-52"></span>least squares. This assumes that dictionaries containing the <span class="anchor" id="line-53"></span>extrema data have been pre-computed and placed in alg_params, as <span class="anchor" id="line-54"></span>under keys 'data_mins_t', 'data_mins_v', 'data_maxs_t', <span class="anchor" id="line-55"></span>'data_maxs_v', for the time and variable value locations of the <span class="anchor" id="line-56"></span>maxima and minima. Each dictionary of extrema data is expected to <span class="anchor" id="line-57"></span>be an array of values keyed by coordinate name. <span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span>The generator specified by gen_name should exist in the model <span class="anchor" id="line-60"></span><p class="line862">s.testModel given to the ParamEst object at creation. This <span class="anchor" id="line-61"></span>generator should contain separate events for detecting maxima and <span class="anchor" id="line-62"></span>minima in each coordinate being fitted (e.g. zero crossing of <span class="anchor" id="line-63"></span>first derivative of a coordinate, in appropriate direction). For a <span class="anchor" id="line-64"></span>coordinate named 'x' these events are expected to have the names <span class="anchor" id="line-65"></span>'min_ev_x' and 'max_ev_x'. <span class="anchor" id="line-66"></span><span class="anchor" id="line-67"></span>num_expected_mins and num_expected_maxs is per variable. <span class="anchor" id="line-68"></span></li></ul></ul><span class="anchor" id="bottom"></span>
+
+<h2 id="ModelEst">2. Model estimation tools</h2>
+<p>In addition to parameter estimation, one may use an algorithm to systematically alter a model in order to achieve a fit of its performance to given criteria. This may be called model estimation, a.k.a. model inference. To support this, a number of tools are provided for manipulating model descriptions (using ModelSpec), via a class of model Transforms. One may also take advantage of a library (class ModelLibrary) of model description primitives, from which to base a systematic search of a "model space" suitable to the model estimation problem.</p>
+
+<p>A ModelManager instance is a repository for all models related by a class of transformations. In order to build model instantiations that are ready to simulate, the GDescriptor and MDescriptor classes are used to hold all the specific details of how to instantiate a model once it is mathematically specified. Upon demand, these are then fed by the model manager into a ModelConstructor object to build a new model. The model manager is also the access point for creating transformations of a model into another. </p>
+
+<div id="pagebottom"></div>
+</body>
+</html>
+

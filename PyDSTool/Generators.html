@@ -1,0 +1,545 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Generators - PyDSTool</title>
+<body dir="ltr" lang="en">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+
+<h1>Generators</h1>
+
+<div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Overview">Overview</a></li>
+<li>
+<a href="#Generator_basics">Generator and Trajectory basics</a>
+<ol>
+  <li><a href="#Traj_API">Trajectory API</a></li>
+  <ol>
+    <li><a href="#Introspect">Introspection and use of a Trajectory object</a></li>
+  </ol>
+  <li><a href="#Traj_funcs">Trajectory utility functions</a></li>
+  <li><a href="#Gen_API">Generator API</a></li>
+  <li>
+<a href="#Exposing_the_RHS_specification.2C_Jacobian.2C_and_user-defined_auxiliary_functions">Exposing the RHS specification, Jacobian, and user-defined auxiliary functions</a></li>
+  <li><a href="#Diagnostics">Diagnostics after trajectory computation</a></li>
+</ol>
+</li><li>
+<a href="#The_ODE_.2BAC8_DAE_integrators">The ODE / DAE integrators</a><ol><li>
+<a href="#Integrators_using_Python_code_vector_fields">Integrators using Python code vector fields</a><ol><li>
+<a href="#VODE_integrator">VODE integrator</a></li><li>
+<a href="#Making_changes_to_the_Python_code_through_the_API">Making changes to the Python code through the API</a></li></ol></li><li>
+<a href="#Integrators_using_C_code_vector_fields">Integrators using C code vector fields</a><ol><li>
+<a href="#Compiler_messages">Compiler messages</a></li><li>
+<a href="#When_is_the_DLL_imported.3F">When is the DLL imported?</a></li><li>
+<a href="#Memory_vs._speed_efficiency">Memory vs. speed efficiency</a></li><li>
+<a href="#Making_changes_to_the_C_code_through_the_API">Making changes to the C code through the API</a></li><li>
+<a href="#Making_changes_to_the_C_code_by_hand">Making changes to the C code by hand</a></li><li>
+<a href="#Making_changes_to_the_C_code_after_initial_trajectory_computed">Making changes to the C code after initial trajectory computed</a></li><li>
+<a href="#Dopri_integrator">Dopri integrator</a></li><li>
+<a href="#Radau_integrator">Radau integrator</a></li><li>
+<a href="#Preset_integration_time-steps">Preset integration time-steps</a></li><li>
+<a href="#Backwards_integration">Backwards integration</a></li></ol></li><li>
+<a href="#Taylor-series_integration">Taylor-series integration (ADMC++)</a></li><li>
+<a href="#CUDA GPU">CUDA GPU cards (parallel)</a></li></ol></li><li>
+<a href="#Difference_equations_and_maps">Difference equations and maps</a></li>
+<li>
+<a href="#Time-series_trajectories_and_lookup_tables">Time-series, discrete trajectories and lookup tables</a></li>
+<li>
+<a href="#Trajectories_or_array_data_as_external_inputs_to_Generators">Trajectories or array data as external inputs to Generators</a></li></ol></div> <span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><p class="line867">
+
+<hr><br>
+
+<h1 id="Overview">1. Overview</h1>
+<p class="line874">In the very clear dynamical systems and application-oriented setting of PyDSTool, we believe there is no inappropriate clash of terminology in naming the class Generator. The core of the Python language also contains a special class known as a generator, and we trust that no-one finds this confusing. 
+
+<br>
+
+<h1 id="Generator_basics">2. Generator and Trajectory basics</h1>
+
+<p class="line862">Generator objects compute multi-dimensional trajectories for the primary system state variables they define. Additional <em>auxiliary</em> variables may be specified that can be explicit functions of the system state. The values of auxiliary variables are also stored in the computed Trajectory object. 
+The Trajectory class implements parameterized and non-parameterized trajectories and curves. Instantiated Trajectory objects that are parameterized are callable with independent variable values in a defined range. Trajectories are constructed by Generators, either explicitly or implicitly via a function, or by interpolating a mesh of points. When called like a function, Trajectory objects return a state value, using interpolation between mesh points if necessary. Currently only linear and quadratic interpolation is supported.
+
+<p class="line862">Generators come in two principal sub-classes, depending on the representation of the independent variable. This variable may either be represented in a continuous domain or a discrete domain. All Generator instances are sub-typed from one of these super classes, <tt>ctsGen</tt> or <tt>discGen</tt>. The most common Generators, of sub-classes ODEsystem and MapSystem, are for solving initial value problems (marked in bold in the chart below). There are presently no solvers for boundary value problems, although there are a few Python-based solvers available elsewhere The following chart shows the class hierarchy of <tt>Generator</tt>.
+
+<p><center><img src="images/Generator-classes.jpg" width="640" alt="Generator classes"><br><br><font size=-2>* = forthcoming</font></center></p>
+
+<p>Depending on the type of Generator, the user may need to specify parameter values and initial conditions that uniquely determine the Trajectory that will be created when the Generator's <tt>compute</tt> method is called. Generators can contain a specification for <a href="./Events.html">events</a> that can be detected during the computation of a trajectory. These events are specified as zero crossings of functions in the state variables or of the independent variable. Some forms of Generator also permit autonomous external inputs to be supplied in the form of a Trajectory object (see below).</p>
+
+<p class="line874">After computation of a Trajectory, any errors or warnings produced during the computation are recorded in the Generator object's <a href="#Diagnostics">Diagnostics</a> attribute, and can be queried or reset.</p>
+
+<p class="line862">The "right-hand side" function specifications for Generators are not provided by hand-written code, which would be inconvenient and would burden the user with too much book-keeping with array indices, etc. Instead, the user specifies a dictionary of definitions for these functions, keyed by the variable names (see <a href="./FunctionalSpec.html">FunctionalSpec</a>). In turn, these dictionaries can be created automatically using the <a href="./ModelSpec.html">ModelSpec</a> and Model<tt class="backtick"></tt>Constructor class utilities for PyDSTool symbolic expressions, described elsewhere. The <tt>ModelSpec.Quantity</tt> classes can also be used in place of string definitions (see the example <tt>tests/Tutorial_SymbolicJac.py</tt>).</p>
+
+<p class="line874">Preset sub-domains of the real numbers can be specified for each state variable, for the independent variable of the system ("time"), and for the parameters. These bounds can help with error checking and validation of a model, and can be crucial for setting up some types of hybrid system. The Generator initialization keys for these bounds are 'xdomain', 'tdomain', and 'pdomain', respectively.</p>
+
+<p class="line862">The arguments to the Generator's initialization call can be made most easily by first assembling them in an argument structure. See the <a href="./GettingStarted.html">GettingStarted</a> page for examples.</p>
+
+<h2 id="Traj_API">2.1. Trajectory API</h2>
+
+<h4>Attributes:</h4>
+<ul>
+  <li>depdomain  (tight bounds on each of the coordinates for this trajectory, if known: otherwise, the general bounds. Dictionary of <a href="./Intervals.html">Intervals</a> keyed by variable name)
+  <li>coordtype  (numeric type, float or int)
+  <li>variables  (dictionary of Variable objects) 	
+  <li>varnames 	(list of string names)	
+  <li>dimension (integer)
+  <li>indepdomain  (tight bounds on the independent variable for this trajectory, if known: otherwise, the general bounds, Interval)
+  <li>indepvarname 	(str)
+  <li>indepvartype 	(numeric type, float or int)
+  <li>globalt0 	 (global time reference, default 0)
+  <li>parameterized (Boolean)	
+  <li>checklevel  (integer >= 0: internal level of consistency checking when computing trajectories)
+</ul>
+
+<h4>Methods:</h4>
+<ul>
+ <li><strong>__call__<br>
+ </strong>Calling a trajectory can be done in two ways. Either a single 
+   independent variable value can be passed as the first argument, or a 
+   list (or tuple or array) of such values, which will result in the return
+   of a <tt>Point</tt> or <tt>Pointset</tt> object (respectively) - see <a href="./Pointsets.html">Pointsets</a>. 
+   Optionally, a list of coordinate names may be specified in the second 
+   argument, the order and content of which determine the fields of the <tt>Point</tt> of <tt>Pointset</tt> returned (and their order). Passing multiple values of the independent 
+   variable in the call ("vectorizing" the call) is much more efficient 
+  than repeatedly calling a <tt>Trajectory</tt> object at single values.<br>
+  <br>
+ </li>
+ <li><strong>sample</strong> (coords=None, dt=None, tlo=None, thi=None,
+   doEvents=True, precise=False, asGlobalTime=True):</li>
+
+        <p>Uniformly sample the named trajectory over range indicated.
+        Returns a Pointset. If doEvents=True (default), the event points for the trajectory
+          are included in the output, regardless of the dt sampling rate.
+        The order of variable names given in the 'coords' argument is ignored.</p>
+        
+        <p>precise=True causes the trajectory position to be evaluated precisely
+          at the t values specified, which will invoke slow interpolation
+          (requires dt to be set otherwise an exception will be raised).</p>
+
+        <p>precise=False (default) causes the nearest underlying mesh positions
+          to be used, if available (otherwise the behaviour is the same as
+          precise=True provided dt has been set, otherwise an exception will be
+          raised).</p>
+
+        <p>If dt is not given, the underlying time mesh is used, if available.</p>
+        
+ <li><strong>info</strong>(verboselevel=1)</li>
+ <li><strong>getEvents</strong>(evnames=None) [see <a href="./Events.html">Events</a>]</li>
+ <li><strong>getEventTimes</strong>(evnames=None)<br>
+   If evnames list is not provided, a dictionary keyed by all event names is returned.
+ </li>
+ <li><strong>delete_variables</strong>(coords)<br>
+   coords is a list of coordinate names to remove from the Trajectory
+ </li>
+ <li><strong>mapNames</strong>(themap)<br>
+  themap is a symbolMapClass mapping object for remapping coordinate names</li><br>
+ <li><strong>underlyingMesh</strong>(self, coords=None, FScompat=True):<br>
+  <p>Return a dictionary of the underlying independent variables` meshes, where they exist. (Dictionary contains references to the meshes,
+     not copies of the meshes.) Always returns data in local time frame.</p>
+  <p> [FScompat option selects whether to use FuncSpec compatible
+    naming for variables (mainly for internal use).]</p>
+
+</ul>
+
+<h3 id="Introspect">2.1.1 Introspection and use of a Trajectory object</h3>
+
+<p>We may now introspect the 'traj' object to investigate its properties, using the object's <tt>info()</tt> method and the inbuilt function <tt>dir()</tt>. For <em>attributes</em> only, <tt>info()</tt> gives much more useful output than the basic inbuilt call to <tt>dir()</tt>, but does not indicate the object's available <em>methods</em>. Better still is to call <tt>print API(traj)</tt>, but the output will be extensive! </p>
+
+<pre>
+>>> print traj.info(1) # i.e., verbose level 1
+ Trajectory test of variables: ['y', 'w']
+ over domains: {'y': Interval traj_dep_bd, 'w': Interval traj_dep_bd}
+</pre>
+
+The 'indepdomain' attribute is an Interval object. The 'depdomain' attribute is a dictionary of Interval objects, one for each dependent variable. 
+
+<pre>
+>>> print traj.indepdomain.info()
+Interval traj_indep_bd
+  float: traj_indep_bd = [0,10.0] @ eps = 1e-014
+>>> print testtraj.depdomain['w'].info()
+Interval traj_dep_bd
+  float: traj_dep_bd = [30.0,315.701094773] @ eps = 1e-014
+</pre>
+
+
+The <tt>@ eps = 1e-14</tt> information is not usually significant to casual users. It denotes the error tolerance with which interval endpoints are resolved, when issues of arithmetic precision impede on the comparison of interval endpoints. 
+
+Now, we look turning the Trajectory object into a form that can be displayed in a plot. We use the sample() method of the trajectory to extract values at a desired resolution. The result of this call is a Pointset object (which is essentially a context-laden and index-free array of time and variable values). For more details of this, see the <a href="./Tutorial.html">Tutorial</a>.
+
+<pre>
+pts = traj.sample(dt=0.1)  # Pointset sampled at intervals of 0.1
+</pre>
+
+
+<h2 id="Traj_funcs">2.2. Trajectory utility functions</h2>
+
+<ul>
+  <li>numeric_to_traj (vals, trajname, coordnames, indepvar=None, indepvarname='t',
+                    indepdomain=None, all_types_float=True, discrete=True):</li>
+    <p>Utility function to convert one or more numeric type to a Trajectory.
+    Option to make the trajectory parameterized or not, by pasing an indepvar
+    value. To use integer types for trajectory coordinates unset the default
+    all_types_float=True argument. To create interpolated (continuously defined) trajectories, set
+    discrete=False, otherwise leave at its default value of True.</p>
+  
+  <li>pointset_to_traj (pts):</li>
+
+    <p>Convert a pointset into a trajectory using linear interpolation, retaining
+    parameterization by an independent variable if present.</p>
+</ul>
+
+<h2 id="Gen_API">2.3. Generator API</h2>
+
+<p><b>Attributes</b> (followed by description and type)</p>
+<ul>
+  <li> name (The name of the Generator, str)
+  <li> time (The specification of the time domain, i.e. independent variable, <a href="./Intervals.html">Interval</a>)
+  <li> dimension (The dimension of the coordinate space, int)
+  <li> variables (A dictionary of dependent variables, i.e. the coordinates, of form {var-name: Variable})
+  <li> initialconditions (A dictionary of initial values for the coordinate variables, of form {var-name: float})
+  <li>xdomain (A dictionary of {var-name: interval-defining pair for valid domain} for variables)
+  <li>pdomain    (A dictionary of {par-name: interval-defining pair for valid domain} for parameters)
+  <li> funcspec (The specification of how to generate a trajectory, <a href="./FunctionalSpec.html">FuncSpec</a> type)
+  <li> pars (A dictionary of parameter names mapping to their current values, of form {par-name: float})
+  <li> inputs (Autonomous external inputs (if any) as a dictionary of Variable objects keyed by input name)
+  <li> globalt0 (A global time reference (defaults to 0) when used by a Model object, float)
+  <li> diagnostics (A Diagnostics class object, permitting warnings and errors to be recorded and shown)
+  <li> eventstruct (An EventStruct class object, for holding the current state of any non-integration post-processed events associated with this Generator)
+  <li> trajevents (An EventStruct class object, for holding the current state of any integration events from the latest computation)
+  <li> _abseps (Endpoint absolute tolerance, used by all <a href="./Intervals.html">Intervals</a> internally to the Generator, defaults to 10E-13)  
+  <li>_paramInfo (Information about algorithmic parameter settings)  
+  <li>_querykeys (available keys for the query method)</li>
+      <p>The basic query keys always available are:<br>
+      'pars' <em>or</em> 'parameters', 'events', 'abseps',
+                  'ics' <em>or</em> 'initialconditions', 'vars' <em>or</em> 'variables',
+                  'auxvariables' <em>or</em> 'auxvars', 'vardomains', 'pardomains'</p>
+</ul>
+
+<p>The variables attribute will include any auxiliary variables. These
+may be used for monitoring functions of the variables (e.g. for
+plotting purposes), or they may be true variables of the system that
+are defined as algebraic functions of the dynamic variables.</p>
+
+<p><b>Methods</b></p>
+
+<p>The major methods for Generators are:</p>
+
+<ul>
+ <li> <strong>set</strong> (basic valid keys are 'globalt0', 'checklevel', 'abseps')<br>
+ (Other Generators may permit 
+ 'pars', 'ics', 'tdata', 'tdomain', 'xdomain', 'pdomain', 'inputs', 'inputs_t0', and 'algparams', where applicable) 
+ <li><strong>compute</strong>(trajname, dirn='f')<br>
+  Provide the trajectory name for the Trajectoty to be returned.
+  Direction of integration given by 'f' (forward) or 'b' (backward, where supported), or 'c' (continued from last computed point, where supported)
+ <li> <strong>get</strong> (return a named attribute of the generator filtered by the Model-compatible naming scheme: mostly for use at the level of <a href="./ModelInterfaces.html">ModelInterfaces</a>, otherwise use query)
+ <li> <strong>query</strong> (see gen._querykeys above)
+ <li><strong> info</strong>(verbose=1)
+</ul>
+
+<p>For Generators that support events (most of them), there are special set methods for control event parameters.</p>
+<ul>
+  <li><strong>setEventICs</strong> (mostly for internal use)</li>
+  <li><strong>eventstruct.setEventX</strong> where X = Delay, Interval, Tol, Dir, ICs (a copy of the Generator method)</li>
+     <p> Each of these methods takes an event name and a new value as arguments</p>
+</ul>
+
+<p>For many types of Generator, especially MapSystem and ODEsystem types (for initial value problems), other special methods are now discussed.</p>
+
+<br>
+
+<h2 id="Exposing_the_RHS_specification.2C_Jacobian.2C_and_user-defined_auxiliary_functions">2.4. Exposing the RHS specification, Jacobian, and user-defined auxiliary functions</h2>
+<span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span>
+<p class="line862">The RHS vector field function, any Jacobians, auxiliary variables, and all user-defined auxiliary functions are exposed to the user of the generator as python functions, and are called using the same calling sequence as they were defined. For a generator <tt>g</tt>, these are respectively defined as the methods <tt>Rhs</tt>, <tt>Jacobian</tt>, <tt>JacobianP</tt> (for Jac with respect to parameters), <tt>AuxVars</tt>, and <tt>auxfns.&lt;aux_func_name&gt;</tt>. Internal references to parameter names are mapped dynamically to the current values of the parameters in the generator's <tt>pars</tt> dictionary. <span class="anchor" id="line-41"></span>If external inputs are defined then the system is non-autonomous, and the first 't' argument is used to fetch a value of the inputs internally to these methods.</p>
+
+<h2 id="Diagnostics">2.5. Diagnostics after trajectory computation</h2>
+
+<p>Each Generator contains a Diagnostics object which can report errors and warnings found during a Trajectory computation. For a generator <tt>g</tt>, after such a computation you may call <tt>g.diagnostics.showWarnings()</tt> or <tt>g.diagnostics.showErrors()</tt> and to see information printed to the terminal. Alternatively, string versions can be returned from the 'getWarnings' and 'getErrors' methods. Any logged entries are cleared when the 'compute' method is next called. Codes and accompanying logged data correspond to information the following table:</p>
+
+<pre>
+errmessages = {E_NONUNIQUETERM: 'More than one terminal event found',
+               E_COMPUTFAIL: 'Computation of trajectory failed'}
+
+errorfields = {E_NONUNIQUETERM: ['t', 'event list'],
+               E_COMPUTFAIL: ['t', 'error info']}
+
+warnmessages = {W_UNCERTVAL: 'Uncertain value computed',
+                W_TERMEVENT: 'Terminal event(s) found',
+                W_NONTERMEVENT: 'Non-terminal event(s) found',
+                W_TERMSTATEBD: 'State variable reached bounds (terminal)',
+                W_BISECTLIMIT: 'Bisection limit reached for event',
+                W_NONTERMSTATEBD: 'State or input variable reached bounds (non-terminal)'}
+
+warnfields = {W_UNCERTVAL: ['value', 'interval'],
+              W_TERMEVENT: ['t', 'event list'],
+              W_BISECTLIMIT: ['t', 'event list'],
+              W_NONTERMEVENT: ['t', 'event list'],
+              W_TERMSTATEBD: ['t', 'var name', 'var value',
+                              'value interval'],
+              W_NONTERMSTATEBD: ['t', 'var name', 'var value',
+                               'value interval']}
+</pre>
+
+<br><hr><br>
+
+<p class="line874">In sections 3-5 the various forms of Generator and their usage are now described in detail, based on the contents of the chart shown earlier.</p>
+
+
+<h1 id="The_ODE_.2BAC8_DAE_integrators">3. The ODE / DAE integrators</h1>
+<span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span>
+
+<p>Examples of use are given in the <a href="./Tutorial.html">Tutorial</a> pages. We provide some notes about the workings of these integrators here.</p>
+
+<h2 id="Integrators_using_Python_code_vector_fields">3.1. Integrators using Python code vector fields</h2>
+<p class="line862">The two Generator classes of this kind are the simple <strong>Euler</strong> integrator and the <strong>VODE</strong> integrator. They do not support backward integration. Continued integration (from the last computed point) is available by the 'c' option to the <tt>compute</tt> call.
+<p class="line862">Event detection for these Generators are provided at the Python level. This is not an efficient situation by any means, but it is a simple and somewhat reliable method for both stiff and non-stiff systems with events, and there is a small setup time. These Generators also do not require 'external' configuration and installation -- they only rely on Sci<tt class="backtick"></tt>Py. For instance, there is no need for an external compiler that would include installation of SWIG, gcc, etc.. On a fast computer, non-stiff and low-dimensional vector fields integrate surprisingly quickly with them, given the overheads involved! <span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span>
+<p class="line862">These Generator classes can handle terminal and non-terminal events, which are known as "high-level" events (a sub-class of the <tt>Event</tt> class) because they are specified directly as Python functions. The event checking for this integrator takes place after the calculation of each time step at the Python level. The Generator adapts the time step used by the integrator code when events are found in order to resolve their position accurately (if this option is selected). <span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span>
+<p class="line867"><strong>Important</strong>: Unfortunately, non-terminal event points are not resolved to the same accuracy as for the C-based integrators (see below). They are only <em>linearly interpolated</em> to the required 'precision' between data points separated by the chosen time-step. The resulting event points are still added to the underlying time mesh. This limitation does not affect the treatment of terminal events. Thus we suggest running the Python-based integrators at a sufficiently small time-step to ensure non-terminal event accuracy.<span class="anchor" id="line-63"></span><span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span>
+<h3 id="VODE_integrator">3.1.1. VODE integrator</h3>
+<span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span>
+<p class="line862">The VODE integrator is used by the <tt>Generator.Vode_ODEsystem</tt> class. This class is a wrapper <em>around the SciPy wrapper</em> of the CVODE solver, and the specification of vector fields is done using Python functions. These are defined dynamically from the user specifications at the Generator's initialization, and are called from the C code to evaluate the RHS at each time step (hence they are known as call-back functions). The SciPy wrapper is an elementary interface to CVODE. See <a class="external" href="http://www.llnl.gov/CASC/sundials/documentation/cvs_guide/node4.html#s:math">here</a> for its implementation details. 
+<p class="line862">Note that the only control over the time mesh that will form the basis of the computed Trajectory object is the parameter <tt>init_step</tt>. Although the CVODE method internally uses an adaptive time-step, the limited SciPy interface makes this Generator's output resemble that of a fixed time-step integrator. Using the 'stiff' algparams option,  CVODE is quite efficient for stiff systems. The limitation of the SciPy interface to CVODE is such that at the Python level only state values at every <tt>init_step</tt> time points are available for later use in a Trajectory. The <tt>max_step</tt> and <tt>min_step</tt> parameters will still be used <em>internally</em> by CVODE to control its adaptive step-size between the output steps that are of size <tt>init_step</tt>. The initial <em>internal</em> step size of CVODE will also be set at <tt>init_step</tt>. <span class="anchor" id="line-57"></span><span class="anchor" id="line-58"></span>Note that you can still control the error tolerances on CVODE's internal step size using 'algparams'.
+
+<p>Algorithmic parameter defaults for the VODE Generator are:</p>
+
+<pre>
+algparams   =   {'poly_interp': False,
+                 'rtol': 1e-9,  ## NOT SUPPORTED!
+                 'atol': [1e-12 for dimix in xrange(self.dimension)],
+                 'stiff': False,
+                 'max_step': 0.0,
+                 'min_step': 0.0,
+                 'init_step': 0.01,
+                 'max_pts': 1000000,
+                 'strictdt': False,
+                 'use_special': False,
+                 'specialtimes': []
+                 }
+</pre>
+
+<h3 id="Making_changes_to_the_Python_code_through_the_API">3.1.2. Making changes to the Python code through the API</h3>
+<span class="anchor" id="line-66"></span><span class="anchor" id="line-67"></span><p class="line862">Arbitrary Python code can also be added to the very beginning and end of the vector field specification function, using the Generator initialization option keys <tt>vfcodeinsert_start</tt> and <tt>vfcodeinsert_end</tt>. Note that these string literals must contain appropriate indentation ("top level" in the function is a four space indentation). Care must be taken to make any temporary variable declarations have names that will not clash with other, automatically-generated, local names. For the most part this will just be a case of not using the state, parameter, or input names. No warnings will be given if you mess this up! <span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span><p class="line862">The pseudo-parser that converts the specifications into actual Python functions makes various changes associated with proper library naming for math calls, and renames certain internal function calls to avoid name clashes that would occur with multiple instances of the same Generator. However, the parser does not currently process any code inserted using the above options. Thus, references to auxiliary functions will fail because their unique name has not yet been created. Also, math references in the inserted code should follow the usual Python naming scheme, i.e. <tt>sin(t)</tt> should be entered as <tt>math.sin(t)</tt>. <span class="anchor" id="line-70"></span><span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span><p class="line867">
+
+<h2 id="Integrators_using_C_code_vector_fields">3.2. Integrators using C code vector fields</h2>
+<span class="anchor" id="line-73"></span><span class="anchor" id="line-74"></span>
+<p class="line874">PyDSTool supports ODE integrators that compile C code specifications of the vector field, in such a way that it can dynamically load a library containing the integration solver after compilation. Presently Hairer and Wanner's  <strong>Dopri</strong> and <strong>Radau</strong> methods are implemented, as well as a parallel RK4 solver for <strong>CUDA</strong> Graphics Processor Unit cards. A Taylor series method (using automatic differentiation), delay DEs, and others, will appear in the future when time and resources permit.
+<p class="line862">On Win32 platforms, MinGW's gcc is assumed to be the default compiler. If you use Cygwin's instead, you must add the keyword option <tt>compiler="cygwin"</tt> to all initializations of C-based Generators. <span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span>
+<p class="line867">All platforms are currently assumed to be running a 32-bit operating system and Python implementation, regardless of the hardware. <strong>If you have successfully set up a 64-bit based Python, then you will need to remove the '-m32' compiler directives that appear in three PyDSTool source files.</strong>
+<h3 id="Compiler_messages">3.2.1. Compiler messages</h3>
+<span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span><p class="line862">In old versions of PyDSTool the user <em>may</em> observe that the compiler displays a series of messages about the compilation. This is because compilation is done using utilities imported from the <tt>distutils</tt> package. In future versions of PyDSTool we hope to be able to control <span class="anchor" id="line-82"></span>the unwanted output so that only error messages will appear (this is partly a problem with the <tt>distutils</tt> package). Compiler messages may be invisible on Win32 platforms using IDLE, which does not echo from <tt>stderr</tt>. This means that important compiler error messages may <em>not</em> be seen unless python is run from a different shell system (e.g. Windows command prompt or IPython). <span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span><p class="line874">Note: You may get an error message saying that SWIG failed during compilation of your vector field if your PyDSTool directory structure contains directory names that include spaces.
+<h3 id="When_is_the_DLL_imported.3F">3.2.2. When is the DLL imported?</h3>
+<span class="anchor" id="line-87"></span><span class="anchor" id="line-88"></span>
+<p class="line862">Once compilation is done, the resulting Dynamic Link Library is not imported into PyDSTool until the <tt>compute</tt> method is invoked. At that point, the integrator becomes available to the class. <span class="anchor" id="line-89"></span><span class="anchor" id="line-90"></span>See 3.2.6.
+
+<h3 id="Memory_vs._speed_efficiency">3.2.3. Memory vs. speed efficiency</h3>
+
+<p class="line862">The implementation of the interface to the C code requires that the user sets a maximum on the number of points that can be computed by the integrator at any one time, before it is reset. The algorithmic parameter <tt>max_pts</tt> defaults to 10000, but may be set to up to over 100 times this amount, if long runs for large systems are necessary. The reason that this parameter should be set as small as possible is to minimize dynamic memory allocation, which in turn will keep the memory allocation time overheads to a minimum (they are substantial for large allocations). <span class="anchor" id="line-93"></span><span class="anchor" id="line-94"></span><p class="line862">If memory runs out during an integration, and you have not reached the "hard" upper limit imposed by the system, then you will get an error report that will include an estimate the new value of <tt>max_pts</tt> necessary to complete the current integration. After changing this value using one of the parameter-setting methods, you options for recovery depend on your situation. If you are running the integrator directly from a Generator, the Generator method <tt>compute</tt> can be used with the "continue integration" option 'c' in order to pick up from where the memory ran out. However, if memory ran out from an integration made via a Model object (for hybrid systems) then there is presently no alternative but to restart the entire calculation afresh. <span class="anchor" id="line-95"></span><span class="anchor" id="line-96"></span><p class="line874">For integration runs that are expected to be large and take a long time, it helps to have an estimate of the average step-size. From this the expected number of points for storage can be estimated before integration begins.</p>
+
+<p class="line867">
+
+<h3 id="Making_changes_to_the_C_code_through_the_API">3.2.4. Making changes to the C code through the API</h3>
+
+<p class="line862">Arbitrary C code can be added to the very beginning and end of the vector field specification function, prior to DLL building, using the Generator initialization option keys <tt>vfcodeinsert_start</tt> and <tt>vfcodeinsert_end</tt>. Note that unless triple-quotes are used, these string literals must use <tt>\\n</tt> rather than <tt>\n</tt> in order to put the symbols '\n' into the C code, rather than an <em>actual</em> newline. <span class="anchor" id="line-101"></span><span class="anchor" id="line-102"></span><p class="line874">User-supplied C code is not checked for syntactic correctness until compile time. <span class="anchor" id="line-103"></span><span class="anchor" id="line-104"></span><p class="line862">By default, only the standard libraries <tt>stdio,&nbsp;stdlib,&nbsp;string,&nbsp;math</tt> are imported to the vector field file for use by code added through the API. For additional library access, use the <tt>include</tt> keyword option when calling <tt>makeLib</tt> or <tt>makeLibSource</tt> to specify a list of local .h files to include, or see the next section on adding code by hand. To use a library held either in the local project directory <em>or</em> in a standard library, simplify specify file's name as usual, i.e. <span class="anchor" id="line-105"></span><span class="anchor" id="line-106"></span><span class="anchor" id="line-107"></span><pre><span class="anchor" id="line-1"></span>myDopriGen.makeLib(include=['mysourcelib.h','anotherlib.h'])</pre><span class="anchor" id="line-108"></span><span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span><p class="line867">
+<h3 id="Making_changes_to_the_C_code_by_hand">3.2.5. Making changes to the C code by hand</h3>
+<span class="anchor" id="line-111"></span><span class="anchor" id="line-112"></span><p class="line862">Alterations can be made to the C code specifying the vector field, etc., before compilation, if the <tt>nobuild</tt> option is set to True in the keywords of the Generator's initialization call. The partially-defined Generator object will be returned from the initialization, but the DLL will need to be built, either using the <tt>makeLib</tt> method or by the individual <tt>makeLibSource</tt> and <tt>compileLib</tt> methods. <span class="anchor" id="line-113"></span><span class="anchor" id="line-114"></span><p class="line874">User-supplied C code is not checked for syntactic correctness until compile time. <span class="anchor" id="line-115"></span><span class="anchor" id="line-116"></span><span class="anchor" id="line-117"></span><p class="line867">
+<h3 id="Making_changes_to_the_C_code_after_initial_trajectory_computed">3.2.6. Making changes to the C code after initial trajectory computed</h3>
+<span class="anchor" id="line-118"></span><span class="anchor" id="line-119"></span>
+<p class="line862">Once <tt>compute</tt> has been called, the present inability of Python to properly <em>un-</em>load DLL modules means that the user will <em>not</em> be able to make changes to the vector field specification,  or the auxiliary variable or function definitions, without restarting the session <em>and</em> deleting the old .so (.pyd on Win32 platforms) library in the local directory. <span class="anchor" id="line-120"></span><span class="anchor" id="line-121"></span><p class="line862">Interactive changes <em>can</em> be made to parameters specified through the API to the Generator object, however. <span class="anchor" id="line-122"></span><span class="anchor" id="line-123"></span><span class="anchor" id="line-124"></span><p class="line867">
+<h3 id="Dopri_integrator">3.2.7. Dopri integrator</h3>
+<span class="anchor" id="line-125"></span><span class="anchor" id="line-126"></span>
+<p class="line862">The Dopri integrator is used by the <tt>Generator.Dopri_ODEsystem</tt> class. It is based in C, as a wrapper around the original C code implementation by Hairer and Wanner of a Dormand-Prince algorithm (related to a Runge-Kutta method)for Initial Value Problems.  This method has order 8(5, 
+3) and dense output of order 7. <a class="external" href="ftp://elib.zib.de/pub/elib/hwlib/">FTP for dopri code</a>
+<p class="line862">Events, auxiliary functions / variables, and so forth are handled in the C interface to this code. The Dopri Generator class sets up the integrator from the same specifications as the VODE integrator, but converts them into C routines. These routines contribute to a C file containing code for the vector field, auxiliary functions / variables, and so forth, which is compiled and linked to the integrator automatically (by default) by the Dopri_ODEsystem class at runtime. <span class="anchor" id="line-127"></span><span class="anchor" id="line-128"></span>
+<p class="line862">The Dopri integrator supports backward integration - simply call <tt>compute</tt> with the second argument 'b'. Continuing a previous integration is also supported using the 'c' option.</p>
+<p>These are the valid keys for the 'algparams' dictionary (used in the set method or at initialization) with associated descriptions:</p>
+
+<pre>
+_paraminfo = {'rtol': 'Relative error tolerance.',
+              'atol': 'Absolute error tolerance.',
+              'safety': 'Safety factor in the step size prediction, default 0.9.',
+              'fac1': 'Parameter for step size selection; the new step size is chosen subject to the restriction  fac1 <= new_step/old_step <= fac2. Default value is 0.333.',
+              'fac2': 'Parameter for step size selection; the new step size is chosen subject to the restriction  fac1 <= new_step/old_step <= fac2. Default value is 6.0.',
+              'beta': 'The "beta" for stabilized step size control. Larger values for beta ( <= 0.1 ) make the step size control more stable. Negative initial value provoke beta=0; default beta=0.04',
+              'max_step': 'Maximal step size, default tend-tstart.',
+              'init_step': 'Initial step size, default is a guess computed by the function init_step.',
+              'refine': 'Refine output by adding points interpolated using the RK4 polynomial (0, 1 or 2).',
+              'use_special': "Switch for using special times",
+              'specialtimes': "List of special times to use during integration",
+              'check_aux': "Switch",
+              'extraspace': "",
+              'magBound': "The largest variable magnitude before a bounds error flags (if checkBound > 0). Defaults to 1e7",
+              'checkBounds': "Switch to check variable bounds: 0 = no check, 1 = check up to 'boundsCheckMaxSteps', 2 = check for every point",
+              'boundsCheckMaxSteps': "Last step to bounds check if checkBound==1. Defaults to 1000."
+              }
+</pre>
+
+<p>Defaults for 'algparams' algorithmic parameters dictionary:</p>
+
+<pre>
+algparams   =   {'poly_interp': False,
+                'init_step': 0,
+                'max_step': 0,
+                'rtol': [1e-9 for i in range(self.dimension)],
+                'atol': [1e-12 for i in range(self.dimension)],
+                'fac1': 0.2,
+                'fac2': 10.0,
+                'safety': 0.9,
+                'beta': 0.04,
+                'max_pts': 10000,
+                'refine': 0,
+                'maxbisect': [], # for events
+                'maxevtpts': 1000, # for events
+                'eventInt': [], # set using setEventInterval only
+                'eventDelay': [], # set using setEventDelay only
+                'eventTol': [], # set using setEventTol only
+                'use_special': 0,
+                'specialtimes': [],
+                'check_aux': 1,
+                'extraspace': 100,
+                'verbose': 0,
+                'hasJac': 0,
+                'hasJacP': 0,
+                'magBound': 1e7,
+                'boundsCheckMaxSteps': 1000,
+                'checkBounds': self.checklevel
+                }
+</pre>
+
+<h3 id="Radau_integrator">3.2.8. Radau integrator</h3>
+<span class="anchor" id="line-132"></span><span class="anchor" id="line-133"></span>
+<p class="line862">The Radau stiff integrator is available in the class <tt>Generator.Radau_ODEsystem</tt>. The integrator uses embedded C code in much the same way as Dopri: only a few algorithmic options are different. See the <tt>/tests</tt> directory for examples. <span class="gap">This is also Hairer and Wanner's code (with minor tweaks), and is efficient for stiff systems and supports mass-matrix and DAE formalisms. </span>
+<p class="line862">At present, the automatic code generation may leave a messy trail of temporary directories starting in the source code directory, and will almost certainly produce an uncontrolled stream of log messages on <tt>stdio</tt>. If the building of the extension DLL fails please let me know the error and I'll try to help patch it up. <span class="anchor" id="line-136"></span><span class="anchor" id="line-137"></span><p class="line862">The control of target file placement in the directory structure through options to <tt>numpy_distutils</tt> calls appears to contain bugs. You may find that on your platform the compilation process for Radau results in an error whereby PyDSTool cannot find a compiled library target. In this case you can try to locate the .pyd, .so or .py file yourself deep inside the temporary directory structure, and copy it back to the directory containing your original PyDSTool model script. You should then be able to continue executing your script. <span class="anchor" id="line-138"></span><em>We aim to change the manner by which we generate DLLs in version 0.90.</em> <span class="anchor" id="line-139"></span><span class="anchor" id="line-140"></span><span class="anchor" id="line-141"></span>
+
+<p class="line867">These are the valid keys for 'algparams' and their descriptions:</p>
+
+<pre>
+_paraminfo = {'rtol': 'Relative error tolerance.',
+              'atol': 'Absolute error tolerance.',
+              'safety': 'Safety factor in the step size prediction, default 0.9.',
+              'max_step': 'Maximal step size, default tend-tstart.',
+              'init_step': 'Initial step size, default is a guess computed by the function init_step.',
+              'fac1': 'Parameter for step size selection; the new step size is chosen subject to the restriction  fac1 <= new_step/old_step <= fac2. Default value is 1.0.',
+              'fac2': 'Parameter for step size selection; the new step size is chosen subject to the restriction  fac1 <= new_step/old_step <= fac2. Default value is 1.2.',
+              'stepLB': '',
+              'stepUB': '',
+              'refine': 'Refine output by adding points interpolated using the RK4 polynomial (0, 1 or 2).',
+              'step_strategy': """Switch for step size strategy;
+If step_strategy=1  mod. predictive controller (Gustafsson).
+If step_strategy=2  classical step size control.
+The default value (for step_strategy=0) is step_strategy=1.
+the choice step_strategy=1 seems to produce safer results;
+for simple problems, the choice step_strategy=2 produces
+often slightly faster runs.""",
+              'jac_recompute': """Decides whether the Jacobian should be recomputed;
+increase jac_recompute to 0.1 say, when Jacobian evaluations
+are costly. for small systems jac_recompute should be smaller
+(0.001, say). negative jac_recompute forces the code to
+compute the Jacobian after every accepted step.
+Default 0.001.""",
+              'newton_start': "",
+              'newton_stop': "",
+              'max_newton': "Maximum number of Newton iterations to take in solving the implicit system at each step (default 7)",
+              'DAEstructureM1': "",
+              'DAEstructureM2': "",
+              'hessenberg': "",
+              'index1dim': "",
+              'index2dim': "",
+              'index3dim': "",
+              'use_special': "Switch for using special times",
+              'specialtimes': "List of special times to use during integration",
+              'check_aux': "Switch",
+              'extraspace': ""
+              }
+</pre>
+
+<p>For more information about the keys without information here, see the original Radau docstring in the code, and <a href="./TechDocumentation.html#head-1f331cf99ab0251292916a88295422570a69e666">here</a>.</p>
+
+<p>Defaults for 'algparams' algorithmic parameters dictionary:</p>
+
+<pre>
+algparams  =   {'poly_interp': False,
+                'init_step': 0,
+                'max_step': 0,
+                'rtol': [1e-9 for i in range(self.dimension)],
+                'atol': [1e-12 for i in range(self.dimension)],
+                'fac1': 1.0,
+                'fac2': 1.2,
+                'stepLB': 0.2,
+                'stepUB': 8.0,
+                'safety': 0.9,
+                'max_pts': 10000,
+                'refine': 0,
+                'maxbisect': [],
+                'maxevtpts': 1000,
+                'eventInt': [],  # set using setEventInterval only
+                'eventDelay': [], # set using setEventDelay only
+                'eventTol': [], # set using setEventTol only
+                'use_special': 0,
+                'specialtimes': [],
+                'check_aux': 1,
+                'extraspace': 100,
+                'verbose': 0,
+                'jac_recompute': 0.001,
+                'step_strategy': 1,
+                'index1dim': -1,
+                'index2dim': 0,
+                'index3dim': 0,
+                'DAEstructureM1': 0,
+                'DAEstructureM2': 0,
+                'hessenberg': 0,
+                'newton_start': 0,
+                'newton_stop': -1,
+                'max_newton': 7,
+                'hasJac': 0,
+                'hasJacP': 0,
+                'checkBounds': self.checklevel
+                }
+</pre>
+
+
+<h4 id="Mass-matrix_systems_and_DAEs">3.2.8.1. Mass-matrix systems and DAEs</h4>
+<span class="anchor" id="line-142"></span><span class="anchor" id="line-143"></span><p class="line862">Differential-algebraic systems are supported by Radau, when the mass-matrix for the system is made singular. The mass matrix is assumed to be the identity unless provided explicitly when a Radau generator is created. Two examples are provided in the <tt>/tests/</tt> directory: <tt>DAE_example.py</tt> and <tt>freefinger_noforce_radau.py</tt>. <span class="anchor" id="line-144"></span><span class="anchor" id="line-145"></span><p class="line862">An important extension to Radau was made by Erik Sherwood in allowing the underlying Fortran code to support <em>non-constant</em> mass matrices, without resorting to an entirely separate (and much more sophisticated) integrator. <span class="anchor" id="line-146"></span><span class="anchor" id="line-147"></span><span class="anchor" id="line-148"></span><p class="line867">
+<h3 id="Preset_integration_time-steps">3.2.9. Preset integration time-steps</h3>
+<span class="anchor" id="line-149"></span><span class="anchor" id="line-150"></span>
+<p class="line874">All the integrators have been interfaced to PyDSTool in a way that supports the specification of explicit time points at which integration is forced to occur. <span class="anchor" id="line-151"></span>This feature can be of use when repeating trajectory computations for different parameters using an adaptive time-step solver, but when comparison of numerically-computed trajectories is only truly fair when the time meshes for the trajectories are identical. (For instance, this feature is useful to systems biology simulators such as SloppyCell.) <span class="anchor" id="line-152"></span><span class="anchor" id="line-153"></span>
+<p class="line862">Selection of preset times is done by specifying the <tt>specialtimes</tt> array and the <tt>use_special</tt> Boolean switch when creating a Generator object. Note that if event detection is set to be 'precise' then event times will appear in the time mesh of the output trajectory regardless of the setting of <tt>specialtimes</tt>. <span class="anchor" id="line-154"></span><span class="anchor" id="line-155"></span><p class="line867">
+<h3 id="Backwards_integration">3.2.10. Backwards integration</h3>
+<span class="anchor" id="line-156"></span><span class="anchor" id="line-157"></span><p class="line862">The Dopri and Radau integrators both support backwards integration. When calling <tt>compute</tt>, an optional argument 'b' can be provided. Erik Sherwood has tweaked the initial step size selection algorithm for backwards integration, to prevent it from choosing initial steps larger than the user-specified maximum time step. <span class="anchor" id="line-158"></span><span class="anchor" id="line-159"></span><span class="anchor" id="line-160"></span><p class="line867">
+
+<h2 id="Taylor-series_integration">3.3. Taylor-series integration (ADMC++)</h2>
+<span class="anchor" id="line-161"></span><span class="anchor" id="line-162"></span>
+<p class="line862">This is not yet implemented as we have not been able to get an automatic differentiation package to work with SciPy data structures. We hope to resolve this in the future. In the meantime, Erik Sherwood has implemented a model export utility from PyDSTool to the Matlab-based specification necessary to use ADMC++ as part of the old, Matlab-based ODETools package that he helped to develop. <span class="anchor" id="line-163"></span><span class="anchor" id="line-164"></span><span class="anchor" id="line-165"></span><p class="line867">
+
+
+<h2 id="CUDA GPU">3.4. CUDA GPU cards (parallel)</h2>
+<span class="anchor" id="line-161"></span><span class="anchor" id="line-162"></span>
+
+<p>Support for Runge Kutta 4 (fixed step) ODE integration in parallel using a CUDA Graphics Processing Unit card is nearly complete will be available in mid 2012. It will work natively on Linux only but can be tweaked to work on other platforms with some technical knowledge of the 'make' utility. Event detection at the C level will be supported using quadratic interpolation. Documentation will follow shortly.</p>
+
+<p class="line867">
+
+<h1 id="Difference_equations_and_maps">4. Difference equations and maps</h1>
+<span class="anchor" id="line-166"></span><span class="anchor" id="line-167"></span><p class="line862">These are implemented in pure Python in the <tt>MapSystem</tt> sub-class of Generator. <span class="anchor" id="line-168"></span><span class="anchor" id="line-169"></span><span class="anchor" id="line-170"></span><p class="line867">
+<h1 id="Time-series_trajectories_and_lookup_tables">5. Time-series, discrete trajectories and lookup tables</h1>
+<span class="anchor" id="line-171"></span><span class="anchor" id="line-172"></span><p class="line862">Discrete data points from time-series can be treated as "discretized curves", or as discretely sampled trajectories from a dynamical system source. The <tt>InterpolateTable</tt> class provides simple linear interpolation over an ordered set of datapoints in order to be able to treat a time-series as a Trajectory in the context of other PyDSTool algorithms. Non-interpolated trajectories are supported using the <tt>LookupTable</tt> class. <span class="anchor" id="line-173"></span><span class="anchor" id="line-174"></span><span class="anchor" id="line-175"></span><p class="line867">
+<h1 id="Trajectories_or_array_data_as_external_inputs_to_Generators">6. Trajectories or array data as external inputs to Generators</h1>
+<span class="anchor" id="line-176"></span><span class="anchor" id="line-177"></span>
+<p class="line862">Both the Python-based and C-based Generators support the inclusion of 'external inputs'. This means that a previously-computed trajectory (including from time-series data generated by a physical experiment) can be used as an autonomous input to an ODE/DAE/difference equation right-hand side. This is a powerful tool for data-driven modeling. See this example: <a href="http://pydstool.bzr.sourceforge.net/bzr/pydstool/annotate/head%3A/tests/test_hybrid_extinputs.py"><tt>tests/test_hybrid_extinputs.py</tt></a>.
+
+<span class="anchor" id="line-178"></span><span class="anchor" id="bottom"></span></div>
+
+
+<div id="pagebottom"></div>
+</div>
+</body>
+</html>
+

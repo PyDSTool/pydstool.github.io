@@ -1,0 +1,2249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><title>PyCont - PyDSTool</title></head><body
+dir="ltr" lang="en">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+
+
+<hr>
+<h2>PyCont</h2>
+
+
+<div id="page" dir="ltr" lang="en"><!-- start page -->
+
+<ol>
+
+<li>
+<a href="#head-80e716dddbabca5f9aabaacdbdefd5d2eeeb6f47">Overview</a>
+</li>
+
+<li>
+<a href="#head-197768a63f5a42016cd1d85b754bf8b31029f477">Types of curves, points and bifurcations supported</a>
+<ol>
+
+<li>
+<a href="#head-c04a398150df0133bf9dc7a256399ba8f658b30d">Limitations</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-bad6c2499c5b4d33a183b7da2fad1e1e1e728791">A first look at PyCont</a>
+<ol>
+
+<li>
+<a href="#head-91834752aca35bfa85699632766237579362e1d0">Level sets of functions</a>
+</li>
+
+<li>
+<a href="#head-e94262827456e4f24e9e49e8d560d5f398baca3d">For initial value problems</a>
+</li>
+
+<li>
+<a href="#head-1b646604928cce961e298f57b612df5b60a729d5">Screenshots</a>
+<ol>
+
+<li>
+<a href="#head-22bd61a88066a950687a7e6a7aec9f4ad5ae9717">A--&gt;B Reaction</a>
+</li>
+
+<li>
+<a href="#head-84c3a041708c3217acc89c311470715fc4fa7249">Lorenz System</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-2cb4f14e3a78d53d0dcd6365326106e0314344cf">Examples</a>
+<ol>
+
+<li>
+<a href="#head-1f446b2c91f29a961110905b9bcd330d417a6eeb">Worked example: Catalytic Oscillator</a>
+</li>
+
+<li>
+<a href="#head-78b82bd274679c2246d1d76bf2a8bbfae5f7e5ab">Respecting user-defined bounds on the parameters</a>
+</li>
+
+<li>
+<a href="#head-d7d971489a31018c5de2dd58c9867a863f0c6149">Note about user-defined functions for continuation</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-6e2e7af30666b408eedda596d2f8e3ea8131a441">Classes and methods</a>
+<ol>
+
+<li>
+<a href="#head-e32b10d42d528010d1eeb12f9ff48e45e98b44e7">ContClass</a>
+<ol>
+
+<li>
+<a href="#head-31e62327ec2a77841ca5a96e023be3061138d957">Attributes/Parameters</a>
+</li>
+
+<li>
+<a href="#head-6520698df6d39b4463d3ffb3e4402533d62d40cc">Methods</a>
+<ol>
+
+<li>
+<a href="#head-d2b933d5cb5e378ac1b13609f0f278492a03e477">newCurve()</a>
+</li>
+
+<li>
+<a href="#head-f8e0ef198c73bfdf2e4542ef64c3a44dc3b10c88">update()</a>
+</li>
+
+<li>
+<a href="#head-eaea871beb399e99a3648f076a9558a0d5e20f16">display()</a>
+</li>
+
+<li>
+<a href="#head-89a76888d4f8168634f41f1939a25677e7af33e1">info()</a>
+</li>
+
+<li>
+<a href="#head-f3245b1990d89962fe3f44c276deecc34d7b80bf">computeEigen()</a>
+</li>
+
+<li>
+<a href="#head-219acfa90e2cd0125a5156e2a791c5d788e17828">exportGeomview()</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-aba5d2b0f08788d3fdfe090a2241d990976e22d4">Curve classes (EP-C, LP-C, H-C1, H-C2, FP-C, LC-C)</a>
+<ol>
+
+<li>
+<a href="#head-31e62327ec2a77841ca5a96e023be3061138d957-2">Attributes/Parameters</a>
+<ol>
+
+<li>
+<a href="#head-a27c89e33e4722a350f5e7ea25cd080a3d297467">MaxNumPoints</a>
+</li>
+
+<li>
+<a href="#head-f87fc728770a4b9bd7148fd824ba50deb7e06ace">MaxCorrIters</a>
+</li>
+
+<li>
+<a href="#head-032b86d2daba207d8b1f03f593bb1503998f7e7a">MaxTestIters</a>
+</li>
+
+<li>
+<a href="#head-5900a290b423b2546bab25a96638848e485f95b0">MaxStepSize</a>
+</li>
+
+<li>
+<a href="#head-4be651432267d098367fdb0ddc4d0cf97a2d148c">MinStepSize</a>
+</li>
+
+<li>
+<a href="#head-b5312ec7a749756ce313a3d4babc69aa8069e4e1">StepSize</a>
+</li>
+
+<li>
+<a href="#head-19cd776572f6b5d770922aae0967b7ba52a7a6a4">VarTol</a>
+</li>
+
+<li>
+<a href="#head-a9c9bdaefe8259f4d09d12a63f3553b66a54aac0">FuncTol</a>
+</li>
+
+<li>
+<a href="#head-b9ba230110030df0dbc17dec75ed099d330917d4">TestTol</a>
+</li>
+
+<li>
+<a href="#head-e1b2b9ab9e4dd3332f188d71138effdf7b7187c5">ClosedCurve</a>
+</li>
+
+<li>
+<a href="#head-73bad243148b2e50bc0f9bcea1a9d1f3f0daa49d">LocBifPoints</a>
+</li>
+
+<li>
+<a href="#head-3b6173dfbd43cddf32e16d12332a48b6b37da29c">StopAtPoints</a>
+</li>
+
+<li>
+<a href="#head-879349f55016245835f45ac20379844fa7b276c5">SaveJacobian</a>
+</li>
+
+<li>
+<a href="#head-739eccd6e39c64cc4a62c0e5a6659436ff4de769">SaveEigen</a>
+</li>
+
+<li>
+<a href="#head-7380f8256fc569aa5be691494777c9aaec67e31e">verbosity</a>
+</li>
+
+<li>
+<a href="#head-a334355354a6e852606ba73605c9900e366834f3">period [FP-C]</a>
+</li>
+
+<li>
+<a href="#head-39e8393e48b4eb480f048dde68e17b4edb7f4199">SolutionMeasures [LC-C]</a>
+</li>
+
+<li>
+<a href="#head-b759f2bd70ced2e2ac661d9d62962324b5bce46c">NumSPOut [LC-C]</a>
+</li>
+
+<li>
+<a href="#head-34201d03530b9e1c2801ce983c88f700685f1f1c">NumIntervals [LC-C]</a>
+</li>
+
+<li>
+<a href="#head-e22fd91556f6602ba204f98f2612c3b27d5f3616">NumCollocation [LC-C]</a>
+</li>
+
+<li>
+<a href="#head-8007eebfaf766d8b6a108b79618f90928246b8e0">AdaptMesh [LC-C]</a>
+</li>
+
+<li>
+<a href="#head-171c125dc7b947799a2fb550d6557cee04ca5250">DiagVerbosity [LC-C]</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-6520698df6d39b4463d3ffb3e4402533d62d40cc-2">Methods</a>
+<ol>
+
+<li>
+<a href="#head-f8e0ef198c73bfdf2e4542ef64c3a44dc3b10c88-2">update()</a>
+</li>
+
+<li>
+<a href="#head-ed1664116d18dbe051fcddc2fd8d69bd0c4abfc6">reset()</a>
+</li>
+
+<li>
+<a href="#head-eaea871beb399e99a3648f076a9558a0d5e20f16-2">display()</a>
+</li>
+
+<li>
+<a href="#head-f4a13339d5cdfe5fa157ad7e30c72961f9dfef49">plot_cycles()  [LC-C]</a>
+</li>
+
+<li>
+<a href="#head-808055a59528994036a5e24f68a45e6c7762ec06">cleanLabels()</a>
+</li>
+
+<li>
+<a href="#head-65fb2cd1ee6dd41588855213b1bf58177dbe7fee">forward()</a>
+</li>
+
+<li>
+<a href="#head-a2e9bdd124e41970cb748e89ff29e5246f3f7aaa">backward()</a>
+</li>
+
+<li>
+<a href="#head-3bae617c5dfe47f7a14f499ece196c2729b03f45">getSpecialPoint()</a>
+</li>
+
+<li>
+<a href="#head-89a76888d4f8168634f41f1939a25677e7af33e1-2">info()</a>
+</li>
+
+<li>
+<a href="#head-f3245b1990d89962fe3f44c276deecc34d7b80bf-2">computeEigen()</a>
+</li>
+
+<li>
+<a href="#head-219acfa90e2cd0125a5156e2a791c5d788e17828-2">exportGeomview()</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-02adc8e1f50100e61e228102f288fdf98c957b2d">Plotting</a>
+<ol>
+
+<li>
+<a href="#head-a2e9346d97102d10a4cf13899f4bc03841c6d9d3">pargs class</a>
+<ol>
+
+<li>
+<a href="#head-ed55c096786f1a6118bb3d997a70b3e75d851600">Attributes</a>
+<ol>
+
+<li>
+<a href="#head-be8e672137dcb2f1106f1143bf59d9e7dc490962">plot</a>
+</li>
+
+<li>
+<a href="#head-6a574e5e0a0ffa3a9d26ec71f02e3f96d45d8c00">figures</a>
+</li>
+
+<li>
+<a href="#head-33755862f138ed650c52e7a1668b3dffa584a5a8">axes</a>
+</li>
+
+<li>
+<a href="#head-8cb0957c297801849d39709a904b498fe9bf3dd3">curve</a>
+</li>
+
+<li>
+<a href="#head-223d9fe118e8f8bd309dd753143e12caa363ee9d">cycle</a>
+</li>
+
+<li>
+<a href="#head-9a1cf30f02d30c69209b8482fabbfabadadb4252">point</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-6520698df6d39b4463d3ffb3e4402533d62d40cc-3">Methods</a>
+<ol>
+
+<li>
+<a href="#head-89a76888d4f8168634f41f1939a25677e7af33e1-3">info()</a>
+</li>
+
+<li>
+<a href="#head-aaa0175ca2dc8970a6aba0423ce14b328afc133c">toggleLabels()</a>
+</li>
+
+<li>
+<a href="#head-b7e6ee8497da5be407891b9d67f79d7242e03acb">togglePoints()</a>
+</li>
+
+<li>
+<a href="#head-6dc8aa2e1404aa3ffb6471a33aad8bc5d1d099a9">toggleCurves()</a>
+</li>
+
+<li>
+<a href="#head-eed20a2fca5446382e9fe100cb780f8e1f274c8c">toggleCycles()</a>
+</li>
+
+<li>
+<a href="#head-b6f08bde56f349672cfd3c1ef5e715591f2c66ef">toggleAll()</a>
+</li>
+
+<li>
+<a href="#head-b5b51e1a3f433a3c8d752c7821e5a4064f1d7d47">setLabels()</a>
+</li>
+
+<li>
+<a href="#head-f6f48b769774b970a6fa0c54d3b8c54b10d61d85">setLegends()</a>
+</li>
+
+<li>
+<a href="#head-822da286d0497f46f241e50d5032bccd4ff70565">clear()</a>
+</li>
+
+<li>
+<a href="#head-c662a3d7528b536d6294f1223a4d581841bc49bc">clearall()</a>
+</li>
+
+<li>
+<a href="#head-e40f90734eaffc961d94cb833ff936cf57747709">delete()</a>
+</li>
+
+<li>
+<a href="#head-3a97bc38ab73e3e6ae357d45d973904c56c19375">deleteall()</a>
+</li>
+
+<li>
+<a href="#head-cc932ff7487bf2e505db2f1b08276441e16587ed">refresh()</a>
+</li>
+
+<li>
+<a href="#head-2f0cec9f91e7caf682607b3be64070302b0b90d1">clean()</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-50bb2933e52d0ee24c416ae73353e39bbeef8d16">Details of algorithmic implementation</a>
+<ol>
+
+<li>
+<a href="#head-cdfb438eedc6090dea7b6760fe638751d210a394">Equilibrium point curve (EP-C)</a>
+<ol>
+
+<li>
+<a href="#head-6dd50eb67fc177a2954d4fdd335812e6b91f52e1">Limit Point (LP)</a>
+</li>
+
+<li>
+<a href="#head-83526682d105f84a3797765e8fa56b0e939be5b9">Hopf Point (H)</a>
+</li>
+
+<li>
+<a href="#head-364404f4b39d69de1015cb7d0b7ca2c6992be09f">Branch Point (BP)</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-1d4d62dfb541c6117d53033a87c250f2f583af7f">Limit point curve (LP-C)</a>
+<ol>
+
+<li>
+<a href="#head-58b3f40b90988f737153b536a4a65c7be5ff4643">Cusp Point (CP)</a>
+</li>
+
+<li>
+<a href="#head-c7f171731d2c602223476288887c94c716ef8dd7">Bogdanov-Takens Point (BT)</a>
+</li>
+
+<li>
+<a href="#head-05ec2ead21f3f0cf1aefe48590e98d81f89ed3d6">Zero-Hopf Point (ZH)</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-09a6def9c681c8100fb4ba6ea9f6b908e01ec1c5">Hopf point curve, method 1 (H-C1)</a>
+<ol>
+
+<li>
+<a href="#head-c7f171731d2c602223476288887c94c716ef8dd7-2">Bogdanov-Takens Point (BT)</a>
+</li>
+
+<li>
+<a href="#head-05ec2ead21f3f0cf1aefe48590e98d81f89ed3d6-2">Zero-Hopf Point (ZH)</a>
+</li>
+
+<li>
+<a href="#head-832516e8404fea2ad237189bfd68802db16d270a">Generalized-Hopf Point (GH)</a>
+</li>
+
+<li>
+<a href="#head-1f27ff31d3942d33d2c7d45aa77f07eeb4665f17">Double-Hopf Point (DH)</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-5037fed41e3a710146f635742cedd820bef8b96a">Hopf point curve, method 2 (H-C2)</a>
+<ol>
+
+<li>
+<a href="#head-c7f171731d2c602223476288887c94c716ef8dd7-3">Bogdanov-Takens Point (BT)</a>
+</li>
+
+<li>
+<a href="#head-05ec2ead21f3f0cf1aefe48590e98d81f89ed3d6-3">Zero-Hopf Point (ZH)</a>
+</li>
+
+<li>
+<a href="#head-832516e8404fea2ad237189bfd68802db16d270a-2">Generalized-Hopf Point (GH)</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-90d34c384f6dc901aead0729a92828bf17f37b6c">Fixed point curve (FP-C)</a>
+<ol>
+
+<li>
+<a href="#head-bf0231844eef6623ae571b9ec240604a8938f55e">Limit point of cycles (LPC)</a>
+</li>
+
+<li>
+<a href="#head-a4c14eb318408bbd871dea8c2917bbb77bb0155e">Period doubling (PD)</a>
+</li>
+
+<li>
+<a href="#head-85d37b55c388aec65d97f949c810ba5148f2624b">Neimark-Sacker (NS)</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-59ac30bfe3f0c7769415ebbe7fdb1ef499262694">Limit cycle curve (LC-C)</a>
+<ol>
+
+<li>
+<a href="#head-bf0231844eef6623ae571b9ec240604a8938f55e-2">Limit point of cycles (LPC)</a>
+</li>
+
+<li>
+<a href="#head-a4c14eb318408bbd871dea8c2917bbb77bb0155e-2">Period doubling (PD)</a>
+</li>
+
+<li>
+<a href="#head-85d37b55c388aec65d97f949c810ba5148f2624b-2">Neimark-Sacker (NS)</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+<p> </p>
+<hr>
+<p> </p>
+
+<h2 id="head-80e716dddbabca5f9aabaacdbdefd5d2eeeb6f47">1. Overview</h2>
+
+<p>PyCont was originally written and maintained by Drew LaMar at Cornell
+ University as part of John Guckenheimer's research group (Drew is now working at <a href="http://www.people.wm.edu/~mdlama/">The College of William and Mary</a>).
+ PyCont is a  sub-package of PyDSTool that provides tools for numerical continuation 
+(a.k.a. path following) for solutions to initial value problems (IVPs, 
+in the form of ODEs and discrete maps) and level curves of nonlinear 
+functions. It also detects bifurcation points. For an introduction to 
+bifurcations see this page on <a class="external" href="http://www.scholarpedia.org/article/Bifurcations">Scholarpedia</a>. </p>
+<p>The principal elements of performing continuation using PyCont are 
+the specification of a system, determination of the type of continuation
+ problem to study with that system, and finally the choice of methods to
+ study that problem. </p>
+ 
+<p>PyCont is currently implemented in pure Python (except the interface to <a class="external" href="http://cmvl.cs.concordia.ca/auto/">AUTO</a>),
+ although it relies on user-specified "call-back" functions that are 
+provided by Model or Generator objects. Thus, functions for vector 
+fields and maps may be specified by C code as part of a Generator that 
+is present as a dynamically-linked library. This can provide a 
+substantial improvement to the efficiency of loops involving heavy use 
+of these call-back functions. </p>
+
+<h2 id="head-197768a63f5a42016cd1d85b754bf8b31029f477">2. Types of curves, points and bifurcations supported</h2>
+
+<p>The following curve types are handled by PyCont: </p>
+<ul>
+<li><p> EP-C    Equilibrium point curve </p>
+</li>
+<li><p> LP-C    Limit point curve/Fold curve/Saddle-node curve </p>
+</li>
+<li><p> H-C1    Hopf point curve (method 1) </p>
+</li>
+<li><p> H-C2    Hopf point curve (method 2) </p>
+</li>
+<li><p> FP-C    Fixed point curve (discrete systems) </p>
+</li>
+<li><p> LC-C    Limit cycle curve (interface to AUTO) </p>
+</li>
+</ul>
+<p>as well as detection of the following bifurcations associated with one or more of the curves above: </p>
+<ul>
+<li><p> LP      Limit Point/Fold point/Saddle-node (EP-C) </p>
+</li>
+<li><p> H       Hopf Point (EP-C) </p>
+</li>
+<li><p> BP      Branch Point (EP-C) </p>
+</li>
+<li><p> CP      Cusp Point (LP-C) </p>
+</li>
+<li><p> BT      Bogdanov-Takens Point (LP-C, H-C1, H-C2) </p>
+</li>
+<li><p> ZH      Zero-Hopf Point (LP-C, H-C1, H-C2)  </p>
+</li>
+<li><p> GH      Generalized-Hopf Point (H-C1, H-C2) </p>
+</li>
+<li><p> DH      Double-Hopf Point (H-C1) </p>
+</li>
+<li><p> LPC     Limit point of cycles (FP-C, LC-C) </p>
+</li>
+<li><p> PD      Period doubling (FP-C, LC-C) </p>
+</li>
+<li><p> NS      Neimark-Sacker/Torus bifurcation (FP-C, LC-C) </p>
+</li>
+</ul>
+<p>There are also the following point types for all curves (except RG) not associated with bifurcations: </p>
+<ul>
+<li><p> P       Endpoint </p>
+</li>
+<li><p> RG      Regular point (LC-C) </p>
+</li>
+<li><p> MX      Termination point </p>
+</li>
+<li><p> B       Boundary point of computational domain </p>
+</li>
+</ul>
+<p>The point type RG is created based on the parameter NumSPOut. The 
+point type MX is associated with some type of computational difficulty. 
+ It usually represents non-convergence based on our tolerances, but for 
+many different reasons (e.g. initial point is too far from the requested
+ curve type, too close to a homoclinic (large period), ...) The point 
+type B indicates that a continuation parameter reached a boundary 
+specified by <tt>pdomain</tt> to the dynamical system. </p>
+<p>Support for continuation of periodic orbits is available via a low-level interface to the <a class="external" href="http://cmvl.cs.concordia.ca/auto/">AUTO</a> package. This requires an external C compiler to be accessible to Python via <tt>distutils</tt>, in the same way as is needed for the ODE integrators Radau and Dopri (see the <a href="./GettingStarted.html">GettingStarted</a> page for set-up help). </p>
+
+<h3 id="head-c04a398150df0133bf9dc7a256399ba8f658b30d">2.1. Limitations</h3>
+
+<p>Bifurcations of ODEs with mass-matrix specifications and 
+continuous-valued hybrid systems (not those that can be expressed as 
+maps) are not yet supported. </p>
+<p>Boundary value problems are not yet supported. </p>
+
+<h2 id="head-bad6c2499c5b4d33a183b7da2fad1e1e1e728791">3. A first look at PyCont</h2>
+
+
+<h3 id="head-91834752aca35bfa85699632766237579362e1d0">3.1. Level sets of functions</h3>
+
+<p>PyCont can be used to find zero level sets of nonlinear functions. 
+All that has to be done is to select a coordinate to use as a parameter,
+ and specify the function <em>as if it was the right hand side of an ODE</em>. In other words, to find a solution <tt>(x(s),&nbsp;y(s))</tt> parameterized by <tt>s</tt> of <tt>f(x,y)&nbsp;=&nbsp;C</tt> we treat <tt>x</tt> (say) as a parameter and study the one dimensional IVP <tt>&nbsp;y'&nbsp;=&nbsp;f(x,&nbsp;y)&nbsp;-&nbsp;C&nbsp;</tt>. </p>
+<p>This representation enables the standard syntax for defining a 
+differential equation in PyDSTool, but is only a way to provide PyCont 
+with the function whose zero value in <tt>(x,y)</tt> space must be followed. The initial condition to the system can be any value of <tt>y</tt>
+ that is close to a solution of the problem (PyCont will improve this 
+point if it's not close enough before starting continuation). This 
+should correspond to the initial value for the parameter <tt>x</tt> chosen. </p>
+<p>Here is the example <tt>PyCont_LevelCurve.py</tt>: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/JavaScript">
+function isnumbered(obj) {
+  return obj.childNodes.length && obj.firstChild.childNodes.length && obj.firstChild.firstChild.className == 'LineNumber';
+}
+function nformat(num,chrs,add) {
+  var nlen = Math.max(0,chrs-(''+num).length), res = '';
+  while (nlen>0) { res += ' '; nlen-- }
+  return res+num+add;
+}
+function addnumber(did, nstart, nstep) {
+  var c = document.getElementById(did), l = c.firstChild, n = 1;
+  if (!isnumbered(c))
+    if (typeof nstart == 'undefined') nstart = 1;
+    if (typeof nstep  == 'undefined') nstep = 1;
+    n = nstart;
+    while (l != null) {
+      if (l.tagName == 'SPAN') {
+        var s = document.createElement('SPAN');
+        s.className = 'LineNumber'
+        s.appendChild(document.createTextNode(nformat(n,4,' ')));
+        n += nstep;
+        if (l.childNodes.length)
+          l.insertBefore(s, l.firstChild)
+        else
+          l.appendChild(s)
+      }
+      l = l.nextSibling;
+    }
+  return false;
+}
+function remnumber(did) {
+  var c = document.getElementById(did), l = c.firstChild;
+  if (isnumbered(c))
+    while (l != null) {
+      if (l.tagName == 'SPAN' && l.firstChild.className == 'LineNumber') l.removeChild(l.firstChild);
+      l = l.nextSibling;
+    }
+  return false;
+}
+function togglenumber(did, nstart, nstep) {
+  var c = document.getElementById(did);
+  if (isnumbered(c)) {
+    remnumber(did);
+  } else {
+    addnumber(did,nstart,nstep);
+  }
+  return false;
+}
+</script>
+
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-5845dd531d176dfec72758bc7f594f2ff1eae637_000\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-5845dd531d176dfec72758bc7f594f2ff1eae637_000', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-5845dd531d176dfec72758bc7f594f2ff1eae637_000" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="String">"""Using PyCont to do path following to find a zero level set of a nonlinear</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="String">function. Example is an ellipse.</span></span>
+<span class="line"><span class="LineNumber">   3 </span><span class="String"></span></span>
+<span class="line"><span class="LineNumber">   4 </span><span class="String">Robert Clewley, August 2008.</span></span>
+<span class="line"><span class="LineNumber">   5 </span><span class="String">"""</span></span>
+<span class="line"><span class="LineNumber">   6 </span></span>
+<span class="line"><span class="LineNumber">   7 </span><span class="ResWord">from</span> <span class="ID">PyDSTool</span> <span class="ResWord">import</span> <span class="Operator">*</span></span>
+<span class="line"><span class="LineNumber">   8 </span></span>
+<span class="line"><span class="LineNumber">   9 </span><span class="Comment"># f(y) = 0 is the required form</span></span>
+<span class="line"><span class="LineNumber">  10 </span><span class="Comment"></span><span class="Comment"># where f(y) = x^2 /2 + y^2 - 1</span></span>
+<span class="line"><span class="LineNumber">  11 </span><span class="Comment"></span><span class="ID">DSargs</span> <span class="Operator">=</span> <span class="ID">args</span><span class="Operator">(</span><span class="ID">name</span><span class="Operator">=</span><span class="String">'ellipse'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">  12 </span></span>
+<span class="line"><span class="LineNumber">  13 </span><span class="Comment"># treat one of the coordinates as a parameter for PyCont to use</span></span>
+<span class="line"><span class="LineNumber">  14 </span><span class="Comment"></span><span class="ID">DSargs</span><span class="Operator">.</span><span class="ID">pars</span> <span class="Operator">=</span> <span class="Operator">{</span><span class="String">'x'</span><span class="Operator">:</span> <span class="Number">0</span><span class="Operator">}</span></span>
+<span class="line"><span class="LineNumber">  15 </span></span>
+<span class="line"><span class="LineNumber">  16 </span><span class="Comment"># the other coordinate is a 'variable'</span></span>
+<span class="line"><span class="LineNumber">  17 </span><span class="Comment"></span><span class="ID">DSargs</span><span class="Operator">.</span><span class="ID">varspecs</span> <span class="Operator">=</span> <span class="Operator">{</span><span class="String">'y'</span><span class="Operator">:</span> <span class="String">'x*x/2.+y*y-1'</span><span class="Operator">}</span></span>
+<span class="line"><span class="LineNumber">  18 </span></span>
+<span class="line"><span class="LineNumber">  19 </span><span class="Comment"># A starting point on the ellipse, if known. Let's pretend it's a tougher</span></span>
+<span class="line"><span class="LineNumber">  20 </span><span class="Comment"></span><span class="Comment"># problem and we only know a point that's close to it: (x,y) = (0, 1.1)</span></span>
+<span class="line"><span class="LineNumber">  21 </span><span class="Comment"></span><span class="Comment"># PyCont will find the closest point that's actually on the curve before</span></span>
+<span class="line"><span class="LineNumber">  22 </span><span class="Comment"></span><span class="Comment"># doing the path following</span></span>
+<span class="line"><span class="LineNumber">  23 </span><span class="Comment"></span><span class="ID">DSargs</span><span class="Operator">.</span><span class="ID">ics</span> <span class="Operator">=</span> <span class="Operator">{</span><span class="String">'y'</span><span class="Operator">:</span> <span class="Number">1.1</span><span class="Operator">}</span></span>
+<span class="line"><span class="LineNumber">  24 </span></span>
+<span class="line"><span class="LineNumber">  25 </span><span class="Comment"># Define an initial value problem (ODE) with f(x) as the right hand side.</span></span>
+<span class="line"><span class="LineNumber">  26 </span><span class="Comment"></span><span class="Comment"># For this example, it is just a formality to present PyCont with f(x).</span></span>
+<span class="line"><span class="LineNumber">  27 </span><span class="Comment"></span><span class="Comment"># In examples involving fixed points or limit cycles of dynamical systems,</span></span>
+<span class="line"><span class="LineNumber">  28 </span><span class="Comment"></span><span class="Comment"># this ODE will have a practical meaning.</span></span>
+<span class="line"><span class="LineNumber">  29 </span><span class="Comment"></span><span class="ID">testODE</span> <span class="Operator">=</span> <span class="ID">Vode_ODEsystem</span><span class="Operator">(</span><span class="ID">DSargs</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">  30 </span></span>
+<span class="line"><span class="LineNumber">  31 </span><span class="Comment"># Create an instance of PyCont</span></span>
+<span class="line"><span class="LineNumber">  32 </span><span class="Comment"></span><span class="ID">P</span> <span class="Operator">=</span> <span class="ID">ContClass</span><span class="Operator">(</span><span class="ID">testODE</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">  33 </span></span>
+<span class="line"><span class="LineNumber">  34 </span><span class="Comment"># EP-C = equilibrium point curve</span></span>
+<span class="line"><span class="LineNumber">  35 </span><span class="Comment"></span><span class="ID">PCargs</span> <span class="Operator">=</span> <span class="ID">args</span><span class="Operator">(</span><span class="ID">name</span><span class="Operator">=</span><span class="String">'test'</span><span class="Operator">,</span> <span class="ID">type</span><span class="Operator">=</span><span class="String">'EP-C'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">  36 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">freepars</span> <span class="Operator">=</span> <span class="Operator">[</span><span class="String">'x'</span><span class="Operator">]</span></span>
+<span class="line"><span class="LineNumber">  37 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">StepSize</span> <span class="Operator">=</span> <span class="Number">1e-3</span></span>
+<span class="line"><span class="LineNumber">  38 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">MaxNumPoints</span> <span class="Operator">=</span> <span class="Number">800</span></span>
+<span class="line"><span class="LineNumber">  39 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">MaxStepSize</span> <span class="Operator">=</span> <span class="Number">1e-2</span></span>
+<span class="line"><span class="LineNumber">  40 </span></span>
+<span class="line"><span class="LineNumber">  41 </span><span class="Comment"># Declare a new curve based on the above criteria</span></span>
+<span class="line"><span class="LineNumber">  42 </span><span class="Comment"></span><span class="ID">P</span><span class="Operator">.</span><span class="ID">newCurve</span><span class="Operator">(</span><span class="ID">PCargs</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">  43 </span></span>
+<span class="line"><span class="LineNumber">  44 </span><span class="Comment"># Do path following in the 'forward' direction. Max points is large enough</span></span>
+<span class="line"><span class="LineNumber">  45 </span><span class="Comment"></span><span class="Comment"># to ensure we go right around the ellipse (PyCont automatically stops when</span></span>
+<span class="line"><span class="LineNumber">  46 </span><span class="Comment"></span><span class="Comment"># we return to the initial point - unless MaxNumPoints is reached first.)</span></span>
+<span class="line"><span class="LineNumber">  47 </span><span class="Comment"></span><span class="ID">P</span><span class="Operator">[</span><span class="String">'test'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">forward</span><span class="Operator">(</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">  48 </span></span>
+<span class="line"><span class="LineNumber">  49 </span><span class="ID">sol</span> <span class="Operator">=</span> <span class="ID">P</span><span class="Operator">[</span><span class="String">'test'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">sol</span></span>
+<span class="line"><span class="LineNumber">  50 </span></span>
+<span class="line"><span class="LineNumber">  51 </span><span class="ResWord">print</span> <span class="String">"There were %i points computed"</span> <span class="Operator">%</span> <span class="ID">len</span><span class="Operator">(</span><span class="ID">sol</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">  52 </span><span class="Comment"># solution points:</span></span>
+<span class="line"><span class="LineNumber">  53 </span><span class="Comment"></span><span class="ResWord">print</span> <span class="ID">sol</span></span>
+<span class="line"><span class="LineNumber">  54 </span></span>
+<span class="line"><span class="LineNumber">  55 </span><span class="ResWord">print</span> <span class="String">"\nLabels for each point in sol pointset give diagnostic information about"</span></span>
+<span class="line"><span class="LineNumber">  56 </span><span class="ResWord">print</span> <span class="String">"first derivative of the point along the curve ('V' entry) and the arc "</span></span>
+<span class="line"><span class="LineNumber">  57 </span><span class="ResWord">print</span> <span class="String">"length parameter shows distance along the curve so far ('ds' entry)."</span></span>
+<span class="line"><span class="LineNumber">  58 </span></span>
+<span class="line"><span class="LineNumber">  59 </span><span class="ResWord">print</span> <span class="String">"\nVelocity around curve is always 1, e.g. look at 100th point"</span></span>
+<span class="line"><span class="LineNumber">  60 </span><span class="ResWord">print</span> <span class="String">"norm(Point(sol[100].labels['EP']['data'].V)) ="</span><span class="Operator">,</span> \
+      <span class="ID">norm</span><span class="Operator">(</span><span class="ID">Point</span><span class="Operator">(</span><span class="ID">sol</span><span class="Operator">[</span><span class="Number">100</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">labels</span><span class="Operator">[</span><span class="String">'EP'</span><span class="Operator">]</span><span class="Operator">[</span><span class="String">'data'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">V</span><span class="Operator">)</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">  61 </span></span>
+<span class="line"><span class="LineNumber">  62 </span><span class="ResWord">print</span> <span class="String">"... at which we have travelled distance ds ="</span><span class="Operator">,</span> \
+      <span class="ID">sol</span><span class="Operator">[</span><span class="Number">100</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">labels</span><span class="Operator">[</span><span class="String">'EP'</span><span class="Operator">]</span><span class="Operator">[</span><span class="String">'data'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">ds</span></span>
+<span class="line"><span class="LineNumber">  63 </span></span>
+<span class="line"><span class="LineNumber">  64 </span><span class="ResWord">print</span> <span class="String">"\nThis distance is equal to 100 * the max step size (0.01) which PyCont"</span></span>
+<span class="line"><span class="LineNumber">  65 </span><span class="ResWord">print</span> <span class="String">"deemed sufficient for the desired accuracy."</span></span>
+<span class="line"><span class="LineNumber">  66 </span></span>
+<span class="line"><span class="LineNumber">  67 </span><span class="Comment"># easy way to plot the result</span></span>
+<span class="line"><span class="LineNumber">  68 </span><span class="Comment"></span><span class="ID">P</span><span class="Operator">.</span><span class="ID">display</span><span class="Operator">(</span><span class="ID">curves</span><span class="Operator">=</span><span class="Operator">[</span><span class="String">'test'</span><span class="Operator">]</span><span class="Operator">,</span> <span class="ID">coords</span><span class="Operator">=</span><span class="Operator">(</span><span class="String">'x'</span><span class="Operator">,</span><span class="String">'y'</span><span class="Operator">)</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+
+<h3 id="head-e94262827456e4f24e9e49e8d560d5f398baca3d">3.2. For initial value problems</h3>
+
+<p>In the simplest terms, an instance of the PyCont continuation class 
+is created for a given model object that defines an ODE or a map system,
+ and a selection of algorithmic parameters. These parameters determine 
+the type of continuation desired for the system, and the free 
+parameter(s) to be used. The PyCont instance contains any number of 
+curves associated with the same system. </p>
+<p>The PyCont instance may then continue from an initial state (a point or a cycle) for a particular solution curve, using the <tt>forward</tt> or <tt>backward</tt>
+ class methods. Computation ends when continuation fails or the maximum 
+number of steps is reached. Repeated calls to these methods will extend 
+the computed solution curve. </p>
+<p>If a PyCont instance named <tt>pc</tt> contains a curve named <tt>'EQ'</tt> then the labelled solution curve is saved as a Pointset object, in the attribute <tt>pc['EQ'].sol</tt>. </p>
+<p>Solution curves can be plotted using calls such as <tt>pc['EQ'].display()</tt> for specific curves, or <tt>pc.display()</tt> for all curves on the same diagram. </p>
+
+<h3 id="head-1b646604928cce961e298f57b612df5b60a729d5">3.3. Screenshots</h3>
+
+
+<h4 id="head-22bd61a88066a950687a7e6a7aec9f4ad5ae9717">3.3.1. A--&gt;B Reaction</h4>
+
+<p>
+<ul>
+<li style="list-style-type: none;"><img src="PyCont_files/AB_bif.png" width="500" height="300"> <a class="external" href="http://pydstool.bzr.sourceforge.net/bzr/pydstool/annotate/head%3A/tests/PyCont_ABReaction.py">Download Python script</a></li>
+</ul>
+</p>
+
+<h4 id="head-84c3a041708c3217acc89c311470715fc4fa7249">3.3.2. Lorenz System</h4>
+
+<p>
+<ul>
+<li style="list-style-type: none;"><img src="PyCont_files/Lor_bif.png" width="500" height="300"> <a class="external" href="http://pydstool.bzr.sourceforge.net/bzr/pydstool/annotate/head%3A/tests/PyCont_Lorenz.py">Download Python script</a></li>
+</ul>
+</p>
+
+<h2 id="head-2cb4f14e3a78d53d0dcd6365326106e0314344cf">4. Examples</h2>
+
+<p>There are many examples provided in the <tt>PyDSTool/tests/</tt> 
+directory. Each one starts with "PyCont_". The docstring and comments in
+ each file provide more information. Currently, there are demo scripts 
+for: </p>
+<ul>
+<li><p> a simple saddle node bifurcation demo </p>
+</li>
+<li><p> computing level sets of functions </p>
+</li>
+<li><p> chemical reaction kinetic equations (ABC, AB, Brusselator, Catalytic) </p>
+</li>
+<li><p> discrete and continuous predator prey models </p>
+</li>
+<li><p> the Lorenz system </p>
+</li>
+<li><p> a Hamiltonian system </p>
+</li>
+<li><p> the Logistic model </p>
+</li>
+<li><p> the Hopfield model (courtesy of David Sterratt) </p>
+</li>
+<li><p> the van der Pol relaxation oscillator </p>
+</li>
+<li><p> Various biophysical neuron models (Hindmarsh Rose, Morris Lecar, and a Lateral Pyloric neuron) </p>
+</li>
+</ul>
+
+<h3 id="head-1f446b2c91f29a961110905b9bcd330d417a6eeb">4.1. Worked example: Catalytic Oscillator</h3>
+
+<p>It's easiest to illustrate the usage of PyCont by working through one of the examples in the <tt>PyDSTool/tests</tt> directory.  Let's look closely at the example <tt>PyCont_Catalytic_demo.py</tt>.
+  The following block of code initializes the model using PyDSTool 
+conventions.  The last line creates an instance of the class ContClass 
+tied to the model just created using PyDSTool: 
+</p>
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-e357161b7340b7d7fc308f46b8a20c0521c4d7ce_001\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-e357161b7340b7d7fc308f46b8a20c0521c4d7ce_001', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-e357161b7340b7d7fc308f46b8a20c0521c4d7ce_001" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ResWord">from</span> <span class="ID">PyDSTool</span> <span class="ResWord">import</span> <span class="Operator">*</span></span>
+<span class="line"><span class="LineNumber">   2 </span></span>
+<span class="line"><span class="LineNumber">   3 </span><span class="ID">pars</span> <span class="Operator">=</span> <span class="Operator">{</span><span class="String">'q1'</span><span class="Operator">:</span> <span class="Number">2.5</span><span class="Operator">,</span> <span class="String">'q2'</span><span class="Operator">:</span> <span class="Number">1.92373</span><span class="Operator">,</span> <span class="String">'q3'</span><span class="Operator">:</span> <span class="Number">10</span><span class="Operator">,</span> <span class="String">'q4'</span><span class="Operator">:</span> <span class="Number">0.0675</span><span class="Operator">,</span> <span class="String">'q5'</span><span class="Operator">:</span> <span class="Number">1</span><span class="Operator">,</span> <span class="String">'q6'</span><span class="Operator">:</span> <span class="Number">0.1</span><span class="Operator">,</span> <span class="String">'k'</span><span class="Operator">:</span> <span class="Number">0.4</span><span class="Operator">}</span></span>
+<span class="line"><span class="LineNumber">   4 </span></span>
+<span class="line"><span class="LineNumber">   5 </span><span class="ID">icdict</span> <span class="Operator">=</span> <span class="Operator">{</span><span class="String">'x'</span><span class="Operator">:</span> <span class="Number">0.0014673</span><span class="Operator">,</span> <span class="String">'y'</span><span class="Operator">:</span> <span class="Number">0.826167</span><span class="Operator">,</span> <span class="String">'s'</span><span class="Operator">:</span> <span class="Number">0.123119</span><span class="Operator">}</span></span>
+<span class="line"><span class="LineNumber">   6 </span></span>
+<span class="line"><span class="LineNumber">   7 </span><span class="ID">auxfndict</span> <span class="Operator">=</span> <span class="Operator">{</span><span class="String">'z'</span><span class="Operator">:</span> <span class="Operator">(</span><span class="Operator">[</span><span class="String">'x'</span><span class="Operator">,</span> <span class="String">'y'</span><span class="Operator">,</span> <span class="String">'s'</span><span class="Operator">]</span><span class="Operator">,</span> <span class="String">'1 - x - y - s'</span><span class="Operator">)</span><span class="Operator">}</span></span>
+<span class="line"><span class="LineNumber">   8 </span></span>
+<span class="line"><span class="LineNumber">   9 </span><span class="ID">xstr</span> <span class="Operator">=</span> <span class="String">'2*q1*z(x,y,s)*z(x,y,s) - 2*q5*x*x - q3*x*y'</span></span>
+<span class="line"><span class="LineNumber">  10 </span><span class="ID">ystr</span> <span class="Operator">=</span> <span class="String">'q2*z(x,y,s) - q6*y - q3*x*y'</span></span>
+<span class="line"><span class="LineNumber">  11 </span><span class="ID">sstr</span> <span class="Operator">=</span> <span class="String">'q4*z(x,y,s) - k*q4*s'</span></span>
+<span class="line"><span class="LineNumber">  12 </span></span>
+<span class="line"><span class="LineNumber">  13 </span><span class="ID">DSargs</span> <span class="Operator">=</span> <span class="ID">args</span><span class="Operator">(</span><span class="ID">name</span><span class="Operator">=</span><span class="String">'CatalyticOscillator'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">  14 </span><span class="ID">DSargs</span><span class="Operator">.</span><span class="ID">pars</span> <span class="Operator">=</span> <span class="ID">pars</span></span>
+<span class="line"><span class="LineNumber">  15 </span><span class="ID">DSargs</span><span class="Operator">.</span><span class="ID">varspecs</span> <span class="Operator">=</span> <span class="Operator">{</span><span class="String">'x'</span><span class="Operator">:</span> <span class="ID">xstr</span><span class="Operator">,</span> <span class="String">'y'</span><span class="Operator">:</span> <span class="ID">ystr</span><span class="Operator">,</span> <span class="String">'s'</span><span class="Operator">:</span> <span class="ID">sstr</span><span class="Operator">}</span></span>
+<span class="line"><span class="LineNumber">  16 </span><span class="ID">DSargs</span><span class="Operator">.</span><span class="ID">fnspecs</span> <span class="Operator">=</span> <span class="ID">auxfndict</span></span>
+<span class="line"><span class="LineNumber">  17 </span><span class="ID">DSargs</span><span class="Operator">.</span><span class="ID">ics</span> <span class="Operator">=</span> <span class="ID">icdict</span></span>
+<span class="line"><span class="LineNumber">  18 </span></span>
+<span class="line"><span class="LineNumber">  19 </span><span class="ID">testDS</span> <span class="Operator">=</span> <span class="ID">Generator</span><span class="Operator">.</span><span class="ID">Dopri_ODEsystem</span><span class="Operator">(</span><span class="ID">DSargs</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">  20 </span><span class="ID">PyCont</span> <span class="Operator">=</span> <span class="ID">ContClass</span><span class="Operator">(</span><span class="ID">testDS</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>We are now ready to create continuation curves for this model.  The 
+next block of code creates a "struct"-like data type of parameters (that
+ can also be treated like a dictionary), which specifies an equilibrium 
+curve: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-c29d68a06916384e9008469968f3146a5b9fb6f1_002\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-c29d68a06916384e9008469968f3146a5b9fb6f1_002', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-c29d68a06916384e9008469968f3146a5b9fb6f1_002" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PCargs</span> <span class="Operator">=</span> <span class="ID">args</span><span class="Operator">(</span><span class="ID">name</span><span class="Operator">=</span><span class="String">'EQ1'</span><span class="Operator">,</span> <span class="ID">type</span><span class="Operator">=</span><span class="String">'EP-C'</span><span class="Operator">)</span>   <span class="Comment"># as many arguments can be supplied here as desired</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">freepars</span> <span class="Operator">=</span> <span class="Operator">[</span><span class="String">'q2'</span><span class="Operator">]</span>   <span class="Comment"># rest of the arguments created like a struct</span></span>
+<span class="line"><span class="LineNumber">   3 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">StepSize</span> <span class="Operator">=</span> <span class="Number">1e-3</span></span>
+<span class="line"><span class="LineNumber">   4 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">MaxNumPoints</span> <span class="Operator">=</span> <span class="Number">175</span></span>
+<span class="line"><span class="LineNumber">   5 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">MaxStepSize</span> <span class="Operator">=</span> <span class="Number">1e-2</span></span>
+<span class="line"><span class="LineNumber">   6 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">LocBifPoints</span> <span class="Operator">=</span> <span class="Operator">[</span><span class="String">'LP'</span><span class="Operator">,</span><span class="String">'H'</span><span class="Operator">]</span></span>
+<span class="line"><span class="LineNumber">   7 </span></span>
+<span class="line"><span class="LineNumber">   8 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">newCurve</span><span class="Operator">(</span><span class="ID">PCargs</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   9 </span><span class="ID">PyCont</span><span class="Operator">[</span><span class="String">'EQ1'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">forward</span><span class="Operator">(</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>The <tt>type</tt> parameter is labeled EP-C, which stands for an 
+Equilibrium Point Curve.  Note that there is only one free parameter for
+ this type of curve.  <tt>LocBifPoints</tt> specifies which types of 
+bifurcation points to detect.  In this case, we are detecting limit 
+points (LP) and hopf points (H).  We then call the <tt>newCurve()</tt> 
+method of the PyCont instance, passing the parameter dictionary as an 
+argument.  Once it is created, we refer to it by name and call its <tt>forward()</tt>
+ method to compute the curve.  There will be output stating that two 
+limit points and two hopf points were detected.  At this point, once 
+computation has finished, we can view the results two ways, given by the
+ following code: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-e74037b740460bc975dd456ed2c592ac27e7dad2_003\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-e74037b740460bc975dd456ed2c592ac27e7dad2_003', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-e74037b740460bc975dd456ed2c592ac27e7dad2_003" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">[</span><span class="String">'EQ1'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">info</span><span class="Operator">(</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>The first method <tt>info()</tt> will spit out various information 
+about the curve, such as continuation parameters and special points that
+ were detected.  Under the special points, you will see P1, P2, LP1, 
+LP2, H1, H2 denoting the two limit points and two hopf points that were 
+detected.  P1 is a label for the starting point and P2 a label for the 
+ending point.  You can access these points from the curve by the 
+following: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-677c45de426b8bef8e15a8bd2cbb4c2cf53ee8c3_004\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-677c45de426b8bef8e15a8bd2cbb4c2cf53ee8c3_004', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-677c45de426b8bef8e15a8bd2cbb4c2cf53ee8c3_004" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">X</span> <span class="Operator">=</span> <span class="ID">PyCont</span><span class="Operator">[</span><span class="String">'EQ1'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">getSpecialPoint</span><span class="Operator">(</span><span class="String">'LP1'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ResWord">print</span> <span class="ID">X</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>If the point exists (which it does in this case), it will return that
+ point on the curve as a Point class object.  Any bifurcation 
+information that was found for that point can be found in the data 
+structure <tt>X.labels['LP']['data']</tt>, where <tt>X</tt> was the returned special point.  For example, the following gives the normal form information for the limit point <tt>LP1</tt>: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-31824ac510a1a9725cd61ced3a80d007564e84fa_005\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-31824ac510a1a9725cd61ced3a80d007564e84fa_005', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-31824ac510a1a9725cd61ced3a80d007564e84fa_005" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">X</span><span class="Operator">.</span><span class="ID">labels</span><span class="Operator">[</span><span class="String">'LP'</span><span class="Operator">]</span><span class="Operator">[</span><span class="String">'data'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">a</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>Now we want to plot the results: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-6cacaf6c5926a749ff59142725134a1491315761_006\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-6cacaf6c5926a749ff59142725134a1491315761_006', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-6cacaf6c5926a749ff59142725134a1491315761_006" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">[</span><span class="String">'EQ1'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">display</span><span class="Operator">(</span><span class="ID">axes</span><span class="Operator">=</span><span class="Operator">(</span><span class="Number">1</span><span class="Operator">,</span><span class="Number">2</span><span class="Operator">,</span><span class="Number">1</span><span class="Operator">)</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ID">PyCont</span><span class="Operator">[</span><span class="String">'EQ1'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">display</span><span class="Operator">(</span><span class="Operator">(</span><span class="String">'q2'</span><span class="Operator">,</span><span class="String">'x'</span><span class="Operator">)</span><span class="Operator">,</span> <span class="ID">axes</span><span class="Operator">=</span><span class="Operator">(</span><span class="Number">1</span><span class="Operator">,</span><span class="Number">2</span><span class="Operator">,</span><span class="Number">2</span><span class="Operator">)</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   3 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">info</span><span class="Operator">(</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>If you don't send <tt>display()</tt> arguments, it will default to 
+the coordinates consisting of the first free parameter and the first 
+listed state variable.  The second line lets you specify the plotting 
+coordinates.  You will notice that the special points are labeled and 
+colored according to their type.  Notice also that we are specifying the
+ axes using subplot notation from Matlab.  PyCont has a plotting 
+structure, <tt>PyCont.plot</tt>, that stores all of the matplotlib handles to the objects in the plots.  You can query its <tt>info()</tt>
+ method to see the organizational hierarchy.  We will give examples of 
+the functionality of the plotting class later in the demo.  Also, if you
+ happen to forget what the parameters or variables are for the model 
+when you want to plot, you can quickly access them by typing: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-7bc33372f011fde0ab1e09d9b59f75f5dab3b0f2_007\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-7bc33372f011fde0ab1e09d9b59f75f5dab3b0f2_007', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-7bc33372f011fde0ab1e09d9b59f75f5dab3b0f2_007" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">info</span><span class="Operator">(</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<li style="list-style-type: none;"><p>Now that we have an equilibrium 
+curve, let's continue a hopf curve starting from one of the special 
+points computed above.  The following block of code sets up and computes
+ a hopf curve from the special point H2:   </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-a78aebf750b2cec6a6babef1b95b850d802bf3f0_008\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-a78aebf750b2cec6a6babef1b95b850d802bf3f0_008', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-a78aebf750b2cec6a6babef1b95b850d802bf3f0_008" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PCargs</span> <span class="Operator">=</span> <span class="ID">args</span><span class="Operator">(</span><span class="ID">name</span><span class="Operator">=</span><span class="String">'HO1'</span><span class="Operator">,</span> <span class="ID">type</span><span class="Operator">=</span><span class="String">'H-C2'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">initpoint</span> <span class="Operator">=</span> <span class="String">'EQ1:H2'</span></span>
+<span class="line"><span class="LineNumber">   3 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">freepars</span> <span class="Operator">=</span> <span class="Operator">[</span><span class="String">'q2'</span><span class="Operator">,</span> <span class="String">'k'</span><span class="Operator">]</span></span>
+<span class="line"><span class="LineNumber">   4 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">MaxStepSize</span> <span class="Operator">=</span> <span class="Number">1e-2</span></span>
+<span class="line"><span class="LineNumber">   5 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">LocBifPoints</span> <span class="Operator">=</span> <span class="Operator">[</span><span class="String">'GH'</span><span class="Operator">,</span> <span class="String">'BT'</span><span class="Operator">,</span> <span class="String">'ZH'</span><span class="Operator">]</span></span>
+<span class="line"><span class="LineNumber">   6 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">MaxNumPoints</span> <span class="Operator">=</span> <span class="Number">100</span></span>
+<span class="line"><span class="LineNumber">   7 </span></span>
+<span class="line"><span class="LineNumber">   8 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">newCurve</span><span class="Operator">(</span><span class="ID">PCargs</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   9 </span><span class="ID">PyCont</span><span class="Operator">[</span><span class="String">'HO1'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">forward</span><span class="Operator">(</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>The type now is H-C2, standing for Hopf curve using method 2.  The 
+initial point is specified by label as EQ1:H2, meaning special point H2 
+on curve EQ1.  In general, you can specify an initial point as a 
+dictionary, a Point, a label, or an array.  For a curve of this type, we
+ need two free parameters, so we free up the extra parameter <tt>k</tt>.  <tt>LocBifPoints</tt> is now set to detect GH, BT and ZH points. </p>
+
+<pre>Note:  You may have noticed that we didn't specify an initial point for EQ1 above.  When an initial point is not specified, it defaults to the initial conditions for the model.  Also, the initial point is checked to see if it is of the right type and, if it is not, it is corrected to the "closest" point of that type.
+</pre>
+<p>The output of <tt>forward()</tt> is the location of two GH points.  You can type <tt>PyCont['HO1'].info()</tt> to get information on the curve, or you can type <tt>PyCont['HO1'].display()</tt> to plot the results.  What I want to point out now, however, is what happens when you do the following: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-650508d77c5d06dccd4da897c9c83fe5318d5ea1_009\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-650508d77c5d06dccd4da897c9c83fe5318d5ea1_009', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-650508d77c5d06dccd4da897c9c83fe5318d5ea1_009" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">clearall</span><span class="Operator">(</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">display</span><span class="Operator">(</span><span class="Operator">(</span><span class="String">'q2'</span><span class="Operator">,</span><span class="String">'x'</span><span class="Operator">)</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>The first line clears all open figures (in this case just <tt>fig1</tt>).  The second line plots all computed curves for the PyCont class, in this case EQ1 and HO1, to the just-cleared active figure <tt>fig1</tt>. </p>
+<p>Let's now compute a curve of fold points starting from LP1: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-b29a420ba174b115a07f7bda8490683c76fcb2da_010\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-b29a420ba174b115a07f7bda8490683c76fcb2da_010', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-b29a420ba174b115a07f7bda8490683c76fcb2da_010" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PCargs</span> <span class="Operator">=</span> <span class="ID">args</span><span class="Operator">(</span><span class="ID">name</span><span class="Operator">=</span><span class="String">'FO1'</span><span class="Operator">,</span> <span class="ID">type</span><span class="Operator">=</span><span class="String">'LP-C'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">initpoint</span> <span class="Operator">=</span> <span class="String">'EQ1:LP1'</span></span>
+<span class="line"><span class="LineNumber">   3 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">freepars</span> <span class="Operator">=</span> <span class="Operator">[</span><span class="String">'q2'</span><span class="Operator">,</span> <span class="String">'k'</span><span class="Operator">]</span></span>
+<span class="line"><span class="LineNumber">   4 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">LocBifPoints</span> <span class="Operator">=</span> <span class="String">'all'</span></span>
+<span class="line"><span class="LineNumber">   5 </span><span class="ID">PCargs</span><span class="Operator">.</span><span class="ID">MaxNumPoints</span> <span class="Operator">=</span> <span class="Number">110</span></span>
+<span class="line"><span class="LineNumber">   6 </span></span>
+<span class="line"><span class="LineNumber">   7 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">newCurve</span><span class="Operator">(</span><span class="ID">PCargs</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   8 </span><span class="ID">PyCont</span><span class="Operator">[</span><span class="String">'FO1'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">forward</span><span class="Operator">(</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>This is a limit point curve, denoted LP-C, starting from the point 
+EQ1:LP1.  We use the same free parameters as for the hopf curve.  For <tt>LocBifPoints</tt>, we now specify that we want to compute <em>all</em> bifurcation points for this curve type, which in the fold case are BT, CP, and ZH points.   </p>
+<p>We plot all curves as before: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-650508d77c5d06dccd4da897c9c83fe5318d5ea1_011\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-650508d77c5d06dccd4da897c9c83fe5318d5ea1_011', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-650508d77c5d06dccd4da897c9c83fe5318d5ea1_011" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">clearall</span><span class="Operator">(</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">display</span><span class="Operator">(</span><span class="Operator">(</span><span class="String">'q2'</span><span class="Operator">,</span><span class="String">'x'</span><span class="Operator">)</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>We could have just as easily typed <tt>PyCont['FO1'].display(('q2','x'))</tt>, and the curve <tt>FO1</tt> will have been added to the existing figure. Let's now move backward along the fold curve: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-18f169f5098e10db322f10122261e86071c90b74_012\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-18f169f5098e10db322f10122261e86071c90b74_012', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-18f169f5098e10db322f10122261e86071c90b74_012" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">[</span><span class="String">'FO1'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">backward</span><span class="Operator">(</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>Since we've added more points to the fold curve, we want to update 
+the plot to show the changes.  The plotting program is not extremely 
+intelligent here to know which points on the curve have already been 
+plotted, so we must delete the existing <tt>FO1</tt> curve from the plotting class and replot the <tt>FO1</tt> curve.  The following commands perform these actions: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-41d70f0747c93a775f32846d17d4bc26a45b5ea0_013\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-41d70f0747c93a775f32846d17d4bc26a45b5ea0_013', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-41d70f0747c93a775f32846d17d4bc26a45b5ea0_013" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">fig1</span><span class="Operator">.</span><span class="ID">axes1</span><span class="Operator">.</span><span class="ID">FO1</span><span class="Operator">.</span><span class="ID">delete</span><span class="Operator">(</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ID">PyCont</span><span class="Operator">[</span><span class="String">'FO1'</span><span class="Operator">]</span><span class="Operator">.</span><span class="ID">display</span><span class="Operator">(</span><span class="Operator">(</span><span class="String">'q2'</span><span class="Operator">,</span><span class="String">'x'</span><span class="Operator">)</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>Let's now look more closely at what else the plotting class can do.  
+The plots can get pretty cluttered with points and labels, so we've 
+included an option to toggle labels, points, curves and cycles on and 
+off.  The following command toggles the labels in all figures and axes 
+off: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-55e92ebb301cbbb11f66aafa4a079c3f95918618_014\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-55e92ebb301cbbb11f66aafa4a079c3f95918618_014', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-55e92ebb301cbbb11f66aafa4a079c3f95918618_014" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">toggleLabels</span><span class="Operator">(</span><span class="String">'off'</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>Now consider the actions of the following commands: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-eb1ce08e40014572c0aeaa145dfd46b9d06f74c4_015\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-eb1ce08e40014572c0aeaa145dfd46b9d06f74c4_015', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-eb1ce08e40014572c0aeaa145dfd46b9d06f74c4_015" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">toggleLabels</span><span class="Operator">(</span><span class="String">'on'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">togglePoints</span><span class="Operator">(</span><span class="String">'off'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   3 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">toggleCurves</span><span class="Operator">(</span><span class="String">'off'</span><span class="Operator">,</span> <span class="ID">byname</span><span class="Operator">=</span><span class="String">'HO1'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   4 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">fig1</span><span class="Operator">.</span><span class="ID">axes1</span><span class="Operator">.</span><span class="ID">HO1</span><span class="Operator">.</span><span class="ID">toggleCurve</span><span class="Operator">(</span><span class="String">'off'</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>The first line toggles all labels back on in all plots.  The second 
+line toggles all points off, while the third line toggles an entire 
+curve (labels and points included) off by specifying it's name, in this 
+case curve <tt>HO1</tt>.  You can perform the same operation by traversing through the plot class to the curve and using the singular method, <tt>toggleCurve()</tt>.  The fourth line does just that, although it's redundant in its actions. </p>
+<p>Eigenvalues are by default not computed along the curve.  You can 
+compute them afterwards, however, and represent the stability of the 
+equilibrium points in a new plot as follows: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-4d909355a603a227bf21b66c70ad4e5c3dcb5bed_016\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-4d909355a603a227bf21b66c70ad4e5c3dcb5bed_016', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-4d909355a603a227bf21b66c70ad4e5c3dcb5bed_016" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">computeEigen</span><span class="Operator">(</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">display</span><span class="Operator">(</span><span class="ID">coords</span><span class="Operator">=</span><span class="Operator">(</span><span class="String">'q2'</span><span class="Operator">,</span><span class="String">'x'</span><span class="Operator">)</span><span class="Operator">,</span> <span class="ID">stability</span><span class="Operator">=</span><span class="ID">True</span><span class="Operator">,</span> <span class="ID">figure</span><span class="Operator">=</span><span class="String">'fig2'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   3 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">fig2</span><span class="Operator">.</span><span class="ID">toggleAll</span><span class="Operator">(</span><span class="String">'off'</span><span class="Operator">,</span> <span class="ID">bytype</span><span class="Operator">=</span><span class="String">'P'</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>Stable fixed points are represented as solid lines, unstable fixed 
+points as dashed lines, and neutral fixed points as dashed/dotted lines.
+  There is some ambiguity in the situation where there is a stream of 
+fixed points which change stability at each step.  In this situation, 
+the curve is drawn as a dotted line.  Reducing <tt>MaxStepSize</tt> and 
+computing again may resolve this ambiguity.  Also, in computing limit 
+cycle curves, sometimes the Floquet multipliers are inaccurate.  In this
+ case, the curve will also be drawn as a dotted line.  This is pretty 
+common in the case where a limit cycle vanishes in a homoclinic orbit.  
+See <tt>PyCont_Lorenz.py</tt> and zoom in on the endpoints.  The third and final line uses a method called <tt>toggleAll</tt> for figure <tt>fig2</tt>.
+  It turns special points on or off (both labels and points).  Here we 
+specify all points that are endpoints (type P).  The endpoints are 
+useful to know what is forward or backward in computations (P1--&gt;P2 
+is forward), but once you want to publish the picture, they are 
+unnecessary, so we turn them off.  This is a common procedure in a lot 
+of the examples.  All of the plot methods can be applied at any level in
+ the hierarchy, so you can, for example, toggle all labels off in a 
+specific figure, axes, curve or point. </p>
+<p>One thing that is not mentioned in this example is the ability to 
+perform matplotlib commands on any object that PyCont has created.  You 
+can access the matplotlib handles to the objects (such as figures, axes,
+ curves, points, and texts) within the plot class.  For example, if you 
+ran the demo in interactive mode (using <tt>python&nbsp;-i</tt>), you can now type: </p>
+
+<div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onClick="return togglenumber(\'CA-afe7269fcdff1e91b1b4e958f81c6b832c6949ee_017\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script><a href="#" onclick="return togglenumber('CA-afe7269fcdff1e91b1b4e958f81c6b832c6949ee_017', 1, 1);" class="codenumbers">Toggle line numbers</a>
+<pre id="CA-afe7269fcdff1e91b1b4e958f81c6b832c6949ee_017" dir="ltr" lang="en"><span class="line"><span class="LineNumber">   1 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">fig2</span><span class="Operator">.</span><span class="ID">axes1</span><span class="Operator">.</span><span class="ID">axes</span><span class="Operator">.</span><span class="ID">set</span><span class="Operator">(</span><span class="ID">xlabel</span><span class="Operator">=</span><span class="String">'Free Parameter: q2'</span><span class="Operator">)</span></span>
+<span class="line"><span class="LineNumber">   2 </span><span class="ID">PyCont</span><span class="Operator">.</span><span class="ID">plot</span><span class="Operator">.</span><span class="ID">refresh</span><span class="Operator">(</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>This will access the axes handle and allow you to perform whatever 
+command you want directly.  The second line recursively goes through the
+ plot class and performs a <tt>pylab.draw()</tt> on all figures and axes so that you can see the change.  See Plotting below to see how to access the other objects. </p>
+
+<h3 id="head-78b82bd274679c2246d1d76bf2a8bbfae5f7e5ab">4.2. Respecting user-defined bounds on the parameters</h3>
+
+<p>In the Hopfield model example <tt>PyCont_Hopfield.py</tt> PyCont will stop at the pre-determined bounds of the parameters given by the <tt>pdomain</tt> to DSargs if continuation reaches either end of that domain. That is specified by setting <tt>PCargs.StopAtPoints&nbsp;=&nbsp;['B']</tt>. </p>
+
+<h3 id="head-d7d971489a31018c5de2dd58c9867a863f0c6149">4.3. Note about user-defined functions for continuation</h3>
+
+<p>User-defined continuation functions are introduced in <tt>PyCont_vanDerPol.py</tt>,
+ where canards are computed. This involves a sophisticated (read: not 
+altogether user-friendly) way of adding an event to the system that is 
+then manipulated within a user-specified function <tt>cont_func</tt> in 
+the body of the file, which is then passed as the continuation function 
+to PyCont. This functionality is used to track canards in the van der 
+Pol system. </p>
+
+<h2 id="head-6e2e7af30666b408eedda596d2f8e3ea8131a441">5. Classes and methods</h2>
+
+
+<h3 id="head-e32b10d42d528010d1eeb12f9ff48e45e98b44e7">5.1. ContClass</h3>
+
+<p>This is the main class which represents one continuation session.  
+This class will hold all curves computed for a particular 
+generator/model created by PyDSTool.  Once curves exist, you can display
+ them all at once using its <tt>display()</tt> method and toggle the plotted labels on and off with the <tt>toggleLabels()</tt> method.  The following will initialize a continuation session: </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>session&nbsp;=&nbsp;ContClass(model)</tt> </p>
+</li>
+</ul>
+<p>where <tt>model</tt> is a Model or Generator instance. </p>
+
+<h4 id="head-31e62327ec2a77841ca5a96e023be3061138d957">5.1.1. Attributes/Parameters</h4>
+
+
+<h4 id="head-6520698df6d39b4463d3ffb3e4402533d62d40cc">5.1.2. Methods</h4>
+
+
+<h5 id="head-d2b933d5cb5e378ac1b13609f0f278492a03e477">5.1.2.1. newCurve()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>newCurve(args)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Creates a new curve.  <tt>args</tt> is a dictionary of parameters for the curve.  Required parameters upon initialization are: </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>type</tt>: String specifyng curve type (EP-C, LP-C, H-C1, H-C2) </p>
+<p><tt>name</tt>: String specifying the curves name </p>
+<p><tt>initpoint</tt>: Initial point (of type Point, dict, array, list, 
+or label).  If this is not specified, it will default to the initial 
+condition for the model.  If this does not exist, an error will result. 
+ If a label is given, it should be given as a string in the format <tt>&lt;curve&nbsp;name&gt;:&lt;point&nbsp;label&gt;</tt>.  For example, if the label of a limit point is <tt>LP1</tt> from a curve named <tt>EQ1</tt>, then <tt>initpoint</tt> should be <tt>EQ1:LP1</tt>. </p>
+<p><tt>initdirec</tt>: Initial direction along curve (of type dict).  If
+ this is not specified, it will be computed.  This is used, for example,
+ when continuing along a second branch of a curve.  To see its usage, 
+see the example <tt>PyCont_Logistic.py</tt>. </p>
+<p><tt>freepars</tt>: List of strings specifying the free parameters.  
+If this is not specified, it will default to the first number of 
+parameters listed in the model that are necessary for the continuation 
+of a curve of the type specified in <tt>type</tt>. </p>
+</li>
+</ul>
+<p>Defaults will be given for the remaining parameters.  For a list of parameters, see ???. </p>
+</li>
+</ul>
+
+<h5 id="head-f8e0ef198c73bfdf2e4542ef64c3a44dc3b10c88">5.1.2.2. update()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>update(args)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Update parameters for <em>all</em> curves.  <tt>args</tt> is a dictionary of parameters from the list below: </p>
+<ul>
+<li><p> verbosity (0 = no output, 1 = minimal output, 2 = full output) </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<h5 id="head-eaea871beb399e99a3648f076a9558a0d5e20f16">5.1.2.3. display()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>display(coords=None,&nbsp;curves=None,&nbsp;figure=None,&nbsp;axes=None,&nbsp;stability=False,&nbsp;**plot_args)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Displays computed curves listed in <tt>curves</tt>, otherwise display all curves. </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>coords</tt>: (None/tuple)  If 
+this is None, the x-coordinate will be the first listed free parameter 
+and the y-coordinate the first listed state variable.  If this is a 
+tuple, the coordinates can be chosen from the state variables and 
+parameters, including auxiliary parameters, such as period _T (see LC-C)
+ or _k (see H-C2). </p>
+<p><tt>curves</tt>: (None/list of strings)  If this is None, then all curves will be displayed.  Otherwise, it should be a list of curve names. </p>
+<p><tt>figure</tt>: (None/string) If this is None, then either the 
+current figure will be the active figure or a new figure will be opened 
+and become active.  As a string, this represents the name of the figure 
+to display the curves.  If the figure name does not currently exist, a 
+new figure is opened. </p>
+<p><tt>axes</tt>: (None/string/tuple) If this is None, then either the 
+current axes will be the active axes or a new axes will be opened and 
+become active.  As a string, this represents the name of the axes to 
+display the curves.  If the axes name does not currently exist, a new 
+axes is opened.  As a tuple (n,m,i), this represents the i-th m x n 
+subplot of the active figure.  </p>
+<p><tt>stability</tt>: If eigen information is stored, then when this flag is True, stability information is plotted.  Stable (<tt>S</tt>) fixed points are drawn as solid lines, unstable (<tt>U</tt>) as dashed lines, and neutral (<tt>N</tt>) as dashed-dotted lines.  There is a fourth category (<tt>X</tt>),
+ drawn as dotted lines, for the ambiguous situation where there is a 
+stream of fixed points that changes stability at each step.  Reducing <tt>MaxStepSize</tt> may resolve this ambiguity. </p>
+<p><tt>plot_args</tt>: Any argument that you would pass to the 
+pylab.plot() command, such as linewidth or label, can be given here to 
+be applied to all curves displayed. </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<pre>Note: If you are using a backend other than TkAgg, you will not have interactive plotting (see matplotlib).  Also, in order to see the plot after the display() command, you need to run the extra command show().
+</pre>
+
+<h5 id="head-89a76888d4f8168634f41f1939a25677e7af33e1">5.1.2.4. info()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>info()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Displays information on the curve.  The information includes: </p>
+<ul>
+<li><p> model </p>
+</li>
+<li><p> state variables </p>
+</li>
+<li><p> model parameters </p>
+</li>
+<li><p> curves (names and types) </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<h5 id="head-f3245b1990d89962fe3f44c276deecc34d7b80bf">5.1.2.5. computeEigen()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>computeEigen()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Computes the eigen information 
+along all curves.  The resulting eigenvalues, eigenvectors (right) and 
+stability are stored as data along the curve in the attribute <tt>sol</tt>.  For example, if you are continuing an equilibrium curve (EP-C), it will be located as follows:  </p>
+<ul>
+<li><p> <tt>sol[n].labels['EP']['data'].evals</tt> </p>
+</li>
+<li><p> <tt>sol[n].labels['EP']['data'].evecs</tt> </p>
+</li>
+<li><p> <tt>sol[n].labels['EP']['stab']</tt> </p>
+</li>
+</ul>
+<p>The stability is denoted as <tt>S</tt> for stable, <tt>U</tt> for unstable and <tt>N</tt> for neutral.  Once the eigen information is computed and stored, the stability information can be plotted with the curve.  See <tt>display()</tt> for details. </p>
+</li>
+</ul>
+
+<h5 id="head-219acfa90e2cd0125a5156e2a791c5d788e17828">5.1.2.6. exportGeomview()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>exportGeomview(coords=None,&nbsp;filename="geom.dat")</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Useful for 3-dimensional plots.  This method is called by <tt>display()</tt> when <tt>coords</tt> is 3-dimensional.  It will export all curves to the file <tt>filename</tt> for importing into the geometric viewing program Geomview. </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>coords=None</tt>: See <tt>display()</tt>.  This must be length 3. </p>
+<p><tt>filename="geom.dat"</tt>: File where Geomview output is stored. </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<h3 id="head-aba5d2b0f08788d3fdfe090a2241d990976e22d4">5.2. Curve classes (EP-C, LP-C, H-C1, H-C2, FP-C, LC-C)</h3>
+
+<p>Once a curve is created by the <tt>newCurve()</tt> method of ContClass, you can access it by name using the following syntax: </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>ContClass[&lt;curve&nbsp;name&gt;]</tt> </p>
+</li>
+</ul>
+<p>For example, if the curve name is EQ1, then <tt>ContClass['EQ1']</tt> represents the curve.  The following lists the attributes and methods for the curve classes. </p>
+
+<h4 id="head-31e62327ec2a77841ca5a96e023be3061138d957-2">5.2.1. Attributes/Parameters</h4>
+
+<p>Always use the <tt>update()</tt> method to change or set parameters. </p>
+
+<h5 id="head-a27c89e33e4722a350f5e7ea25cd080a3d297467">5.2.1.1. MaxNumPoints</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Float </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Maximum number of points to compute along the curve for a specific call of <tt>forward</tt> or <tt>backward</tt>. </p>
+</li>
+</ul>
+
+<h5 id="head-f87fc728770a4b9bd7148fd824ba50deb7e06ace">5.2.1.2. MaxCorrIters</h5>
+
+
+<h5 id="head-032b86d2daba207d8b1f03f593bb1503998f7e7a">5.2.1.3. MaxTestIters</h5>
+
+
+<h5 id="head-5900a290b423b2546bab25a96638848e485f95b0">5.2.1.4. MaxStepSize</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Float </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Maximum step size. </p>
+</li>
+</ul>
+
+<h5 id="head-4be651432267d098367fdb0ddc4d0cf97a2d148c">5.2.1.5. MinStepSize</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Float </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Minimum step size. </p>
+</li>
+</ul>
+
+<h5 id="head-b5312ec7a749756ce313a3d4babc69aa8069e4e1">5.2.1.6. StepSize</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Float </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Initial step size.  The step size 
+will be adapted along the curve based on convergence criterion and will 
+not exceed the bounds specified by MinStepSize and MaxStepSize. </p>
+</li>
+</ul>
+
+<h5 id="head-19cd776572f6b5d770922aae0967b7ba52a7a6a4">5.2.1.7. VarTol</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Float </p>
+</li>
+</ul>
+
+<h5 id="head-a9c9bdaefe8259f4d09d12a63f3553b66a54aac0">5.2.1.8. FuncTol</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Float </p>
+</li>
+</ul>
+
+<h5 id="head-b9ba230110030df0dbc17dec75ed099d330917d4">5.2.1.9. TestTol</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Float </p>
+</li>
+</ul>
+
+<h5 id="head-e1b2b9ab9e4dd3332f188d71138effdf7b7187c5">5.2.1.10. ClosedCurve</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Bool </p>
+</li>
+</ul>
+
+<h5 id="head-73bad243148b2e50bc0f9bcea1a9d1f3f0daa49d">5.2.1.11. LocBifPoints</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>List </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Don't set this if you don't want 
+to detect any bifurcations. Set it to 'all' to detect all types, or give
+ a list of string symbols for any of the types listed in Section 7 
+below, i.e. any of LP, H, BP, CP, BT, ZH, GH, DH, LPC, PD, NS, and the 
+parameter boundary B (if defined by <tt>pdomain</tt> in your dynamical system). </p>
+</li>
+</ul>
+
+<h5 id="head-3b6173dfbd43cddf32e16d12332a48b6b37da29c">5.2.1.12. StopAtPoints</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>List </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Sets the bifurcations that, when detected, will stop the continuation algorithm. Uses the same codes as <a class="nonexistent" href="http://www.cam.cornell.edu/%7Erclewley/cgi-bin/moin.cgi/LocBifPoints">LocBifPoints</a> (see above). </p>
+</li>
+</ul>
+
+<h5 id="head-879349f55016245835f45ac20379844fa7b276c5">5.2.1.13. SaveJacobian</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Bool </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Calculates and saves the jacobian along the curve.  The jacobians are stored in the <tt>sol</tt> pointset for each point on the curve in their respective <tt>data</tt>
+ field.  For all curve types except LC-C, the jacobians with respect to 
+the state variables and parameters are saved respectively as <tt>jacx</tt> and <tt>jacp</tt>.  For example, if you just computed an equilibrium curve and named it <tt>'EQ1'</tt>, you could find it as <tt>PyCont['EQ1'].sol[#].labels['EP']['data'].jacx</tt>.  For curve type LC-C, the jacobian represents the jacobian of the flow.  It is saved in two pieces as <tt>jac0</tt> and <tt>jac1</tt>.  If you explicitly want the jacobian of the flow, it is given by <tt>inv(jac1)*jac0</tt>, where <tt>inv</tt> represents the inverse of a matrix. </p>
+</li>
+</ul>
+
+<h5 id="head-739eccd6e39c64cc4a62c0e5a6659436ff4de769">5.2.1.14. SaveEigen</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Bool </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Calculates and saves the eigenvalues along the curve.  The eigenvalues are stored in the <tt>sol</tt> pointset for each point on the curve in their respective <tt>data</tt> field.  The eigenvalues are saved as <tt>evals</tt>. </p>
+</li>
+</ul>
+
+<h5 id="head-7380f8256fc569aa5be691494777c9aaec67e31e">5.2.1.15. verbosity</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Integer </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Controls amount of output to the screen.  0 is none, 1 minimal, and 2 full output. </p>
+</li>
+</ul>
+
+<h5 id="head-a334355354a6e852606ba73605c9900e366834f3">5.2.1.16. period [FP-C]</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Integer </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Specifies the period of the cycles
+ you want to continue.  This is especially important if you want to 
+compute the period doubling branch at a PD point.  This will be somewhat
+ automated in the future.  See <tt>PyCont_Logistic.py</tt>. </p>
+</li>
+</ul>
+
+<h5 id="head-39e8393e48b4eb480f048dde68e17b4edb7f4199">5.2.1.17. SolutionMeasures [LC-C]</h5>
+
+<p><em>Type</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>String/List of strings </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Specifies which solution measures to compute along the limit cycle curve.  The solution measures are: </p>
+<ul>
+<li><p> <tt>max</tt>:  Maximum of each cycle component. </p>
+</li>
+<li><p> <tt>min</tt>:  Minimum of each cycle component. </p>
+</li>
+<li><p> <tt>avg</tt>:  Average of each cycle component. </p>
+</li>
+<li><p> <tt>nm2</tt>:  L2 norm of each cycle component. </p>
+</li>
+</ul>
+<p>Default is to compute <tt>max</tt> along the curve.  We'll use an 
+example to illustrate accessing these measure in the computed solution. 
+ Suppose we have the coordinate <tt>u1</tt> in our system and we've asked for <tt>avg</tt>.  Then there will be a coordinate named <tt>u1_avg</tt> in the computed pointset <tt>sol</tt>. </p>
+</li>
+</ul>
+
+<h5 id="head-b759f2bd70ced2e2ac661d9d62962324b5bce46c">5.2.1.18. NumSPOut [LC-C]</h5>
+
+
+<h5 id="head-34201d03530b9e1c2801ce983c88f700685f1f1c">5.2.1.19. NumIntervals [LC-C]</h5>
+
+
+<h5 id="head-e22fd91556f6602ba204f98f2612c3b27d5f3616">5.2.1.20. NumCollocation [LC-C]</h5>
+
+
+<h5 id="head-8007eebfaf766d8b6a108b79618f90928246b8e0">5.2.1.21. AdaptMesh [LC-C]</h5>
+
+
+<h5 id="head-171c125dc7b947799a2fb550d6557cee04ca5250">5.2.1.22. DiagVerbosity [LC-C]</h5>
+
+
+<h4 id="head-6520698df6d39b4463d3ffb3e4402533d62d40cc-2">5.2.2. Methods</h4>
+
+
+<h5 id="head-f8e0ef198c73bfdf2e4542ef64c3a44dc3b10c88-2">5.2.2.1. update()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>update(args)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Update the continuation parameters.  <tt>args</tt> is a dictionary of parameters for the curve. </p>
+</li>
+</ul>
+
+<h5 id="head-ed1664116d18dbe051fcddc2fd8d69bd0c4abfc6">5.2.2.2. reset()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>reset(args)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Reinitialize the curve to the parameters given in <tt>args</tt>.  Anything not specified in <tt>args</tt> will be reset to its default value. </p>
+</li>
+</ul>
+
+<h5 id="head-eaea871beb399e99a3648f076a9558a0d5e20f16-2">5.2.2.3. display()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>display(coords=None,&nbsp;figure=None,&nbsp;axes=None,&nbsp;stability=False,&nbsp;**plot_args)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Display computed curve. </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>coords</tt>: (None/tuple)  If 
+this is None, the x-coordinate will be the first listed free parameter 
+and the y-coordinate the first listed state variable.  If this is a 
+tuple, the coordinates can be chosen from the state variables and 
+parameters, including auxiliary parameters, such as period _T (see LC-C)
+ or _k (see H-C2). </p>
+<p><tt>figure</tt>: (None/string) If this is None, then either the 
+current figure will be the active figure or a new figure will be opened 
+and become active.  As a string, this represents the name of the figure 
+to display the curves.  If the figure name does not currently exist, a 
+new figure is opened. </p>
+<p><tt>axes</tt>: (None/string/tuple) If this is None, then either the 
+current axes will be the active axes or a new axes will be opened and 
+become active.  As a string, this represents the name of the axes to 
+display the curves.  If the axes name does not currently exist, a new 
+axes is opened.  As a tuple (n,m,i), this represents the i-th m x n 
+subplot of the active figure.  </p>
+<p><tt>stability</tt>: If eigen information is stored, then when this flag is True, stability information is plotted.  Stable (<tt>S</tt>) fixed points are drawn as solid lines, unstable (<tt>U</tt>) as dashed lines, and neutral (<tt>N</tt>) as dashed-dotted lines.  There is a fourth category (<tt>X</tt>),
+ drawn as dotted lines, for the ambiguous situation where there is a 
+stream of fixed points that changes stability at each step.  Reducing <tt>MaxStepSize</tt> may resolve this ambiguity. </p>
+<p><tt>plot_args</tt>: Any argument that you would pass to the 
+pylab.plot() command, such as linewidth or label, can be given here to 
+be applied to the curve. </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<pre>Note: If you are using a backend other than TkAgg, you will not have interactive plotting (see matplotlib).  Also, in order to see the plot after the display() command, you need to run the extra command show().
+</pre>
+
+<h5 id="head-f4a13339d5cdfe5fa157ad7e30c72961f9dfef49">5.2.2.4. plot_cycles()  [LC-C]</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>plot_cycles(coords=None,&nbsp;cycles=None,&nbsp;figure=None,&nbsp;axes=None,&nbsp;normalized=False,&nbsp;color='default',&nbsp;**plot_args)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Plots the cycles specified in <tt>cycles</tt>.  For a description of <tt>figure</tt> and <tt>axes</tt>, see <tt>display()</tt> above. </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>coords</tt>: (None/tuple)  If 
+this is None, the x-coordinate defaults to time and the y-coordinate to 
+the first state variable.  If this is a tuple, the coordinates can be 
+chosen from the state variables and parameters. </p>
+<p><tt>cycles</tt>: (None/string/list of strings)  If this is not 
+specified, all cycles will be displayed.  A string or list of strings 
+gives the name for the cycles (based on its associated special point on 
+the limit cycle curve) to be displayed. </p>
+<p><tt>normalized</tt>: (True/False)  If this is True, the period for 
+each cycle will be scaled to 1 before plotting.  This is only useful 
+when you are plotting time on one of the axes. </p>
+<p><tt>color</tt>: ('default', 'bytype')  The default coloring will 
+color the cycles in order through the default colormap.  If 'bytype' is 
+selected, the cycle color will be the color of its associated special 
+point type on the curve.  For example, period doubling points are 
+colored green on the curve, so the period doubling cycles are also 
+colored green (see <tt>PyCont_Lorenz.py</tt>). </p>
+<p><tt>plot_args</tt>: Any argument that you would pass to the 
+pylab.plot() command, such as linewidth or label, can be given here to 
+be applied to all specified cycles. </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<h5 id="head-808055a59528994036a5e24f68a45e6c7762ec06">5.2.2.5. cleanLabels()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>cleanLabels()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Reorders labels of all special 
+points in the forward direction along the curve (i.e. from P1 to P2).  
+For example, if you go forward along the curve and find a hopf point, it
+ will be labeled H1.  So the special point ordering will be P1 -&gt; H1 
+-&gt; P2.  If you then go backward and find another hopf point, it will 
+be labeled H2.  Now the special point ordering will be P1 -&gt; H2 -&gt;
+ H1 -&gt; P2.  Calling cleanLabels() will rename the special points to 
+P1 -&gt; H1 -&gt; H2 -&gt; P2. </p>
+</li>
+</ul>
+
+<h5 id="head-65fb2cd1ee6dd41588855213b1bf58177dbe7fee">5.2.2.6. forward()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>forward()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Computes "forward" along the curve.  The forward direction is chosen based on ...  </p>
+</li>
+</ul>
+
+<h5 id="head-a2e9bdd124e41970cb748e89ff29e5246f3f7aaa">5.2.2.7. backward()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>backward()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Computes "backward" along the curve.  See <tt>forward()</tt> above for a distinction between forward vs. backward. </p>
+</li>
+</ul>
+
+<h5 id="head-3bae617c5dfe47f7a14f499ece196c2729b03f45">5.2.2.8. getSpecialPoint()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>X&nbsp;=&nbsp;getSpecialPoint(label1,&nbsp;label2=None)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Gets a special point on the curve specified by label1 and label2.  The point, if it exists, is returned as a Point type. </p>
+<p><tt>X&nbsp;=&nbsp;getSpecialPoint(label1,&nbsp;label2)</tt>: <tt>label1</tt> specifies the point type.  <tt>label2</tt> specifies the point label. </p>
+<p><tt>X&nbsp;=&nbsp;getSpecialPoint(label1)</tt>: <tt>label1</tt> must be a point label of the form &lt;point type #&gt;, for example, <tt>LP3</tt>. </p>
+</li>
+</ul>
+
+<h5 id="head-89a76888d4f8168634f41f1939a25677e7af33e1-2">5.2.2.9. info()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>info()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Displays information on the curve.  The information includes: </p>
+<ul>
+<li><p> curve name and type </p>
+</li>
+<li><p> model </p>
+</li>
+<li><p> continuation parameters </p>
+</li>
+<li><p> special points </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<h5 id="head-f3245b1990d89962fe3f44c276deecc34d7b80bf-2">5.2.2.10. computeEigen()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>computeEigen()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Computes the eigen information 
+along curve.  The resulting eigenvalues, eigenvectors (right) and 
+stability are stored as data along the curve in the attribute <tt>sol</tt>.  For example, if you are continuing an equilibrium curve (EP-C), it will be located as follows:  </p>
+<ul>
+<li><p> <tt>sol[n].labels['EP']['data'].evals</tt> </p>
+</li>
+<li><p> <tt>sol[n].labels['EP']['data'].evecs</tt> </p>
+</li>
+<li><p> <tt>sol[n].labels['EP']['stab']</tt> </p>
+</li>
+</ul>
+<p>The stability is denoted as <tt>S</tt> for stable, <tt>U</tt> for unstable and <tt>N</tt> for neutral.  Once the eigen information is computed and stored, the stability information can be plotted with the curve.  See <tt>display()</tt> for details. </p>
+</li>
+</ul>
+
+<h5 id="head-219acfa90e2cd0125a5156e2a791c5d788e17828-2">5.2.2.11. exportGeomview()</h5>
+
+
+<h2 id="head-02adc8e1f50100e61e228102f288fdf98c957b2d">6. Plotting</h2>
+
+<p>PyCont contains a plotting class that helps keep track of your visual
+ displays.  The structure stores the handles to matplotlib figures, 
+axes, curves, and points in a hierarchical fashion and is designed to 
+make access to these handles easier than the built-in matplotlib 
+interface.  Some common and useful plotting tools, such as turning 
+labels of points on or off or changing labels, is implemented through 
+PyCont's plotting structure.  This section covers the layout and 
+structure of the plotting pargs class, as well as the methods 
+implemented to handle useful plotting tools.  The end of this section 
+discusses how PyCont's plotting structure deals with other programs that
+ manipulate matplotlib figures. </p>
+
+<pre>Note: If you are using a backend other than TkAgg, you will not have interactive plotting (see matplotlib).
+</pre>
+
+<h3 id="head-a2e9346d97102d10a4cf13899f4bc03841c6d9d3">6.1. pargs class</h3>
+
+<p>The pargs class is a recursively defined class that represents the 
+hierarchy of plotting data.  The root pargs class of the plotting data 
+is an attribute <tt>plot</tt> in ContClass, as well as in each of the curve classes.  Its structure is: </p>
+
+<pre>plot ---&gt; figures ---&gt; axes ---&gt; curves/cycles ---&gt; points
+</pre>
+<p>The pargs class is derived from the ancestor class <tt>args</tt>, and can thus be treated both as a structure and a dictionary.  The pargs class attributes and methods are described below. </p>
+
+<h4 id="head-ed55c096786f1a6118bb3d997a70b3e75d851600">6.1.1. Attributes</h4>
+
+
+<h5 id="head-be8e672137dcb2f1106f1143bf59d9e7dc490962">6.1.1.1. plot</h5>
+
+<p>This contains pargs classes representing figures.  Each figure is named starting from <tt>fig1</tt>. </p>
+
+<h5 id="head-6a574e5e0a0ffa3a9d26ec71f02e3f96d45d8c00">6.1.1.2. figures</h5>
+
+<p>This contains the figure handle <tt>fig</tt> for this figure, as well as pargs classes representing axes.  Each axes is named starting from <tt>axes1</tt>. </p>
+
+<h5 id="head-33755862f138ed650c52e7a1668b3dffa584a5a8">6.1.1.3. axes</h5>
+
+<p>This contains the axes handle <tt>axes</tt> for this axes, as well as
+ pargs classes representing curves and/or cycles.  Each curve is named 
+according to its name given in PyCont, while each cycle is named 
+according to its corresponding point name along the limit cycle curve. </p>
+
+<h5 id="head-8cb0957c297801849d39709a904b498fe9bf3dd3">6.1.1.4. curve</h5>
+
+<p>This contains the line2D handle(s) in the list <tt>curve</tt>.  The 
+length of this list is larger than one in the case where you plot 
+stability, since the curve is broken into multiple pieces.  This also 
+contains pargs classes representing points along the curve. </p>
+
+<h5 id="head-223d9fe118e8f8bd309dd753143e12caa363ee9d">6.1.1.5. cycle</h5>
+
+<p>This contains the line2D handle in the list <tt>cycle</tt>.  There are no other attributes. </p>
+
+<h5 id="head-9a1cf30f02d30c69209b8482fabbfabadadb4252">6.1.1.6. point</h5>
+
+<p>This contains two handles.  The first is the line2D handle for the point itself in the list <tt>point</tt>.  The second is the text label for the point in the handle <tt>text</tt>.  There are no other attributes. </p>
+
+<h4 id="head-6520698df6d39b4463d3ffb3e4402533d62d40cc-3">6.1.2. Methods</h4>
+
+<p>The recursive nature of the pargs class was designed so that all 
+methods described below could be called at any level in the hierarchical
+ plotting structure.  For example, you can toggle the labels on or off 
+for all points in a specific figure, axes, or curve. </p>
+
+<h5 id="head-89a76888d4f8168634f41f1939a25677e7af33e1-3">6.1.2.1. info()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>info()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Displays the hierarchical 
+structure of the plots.  It also displays the labels and legends for all
+ curves, cycles and points, as well as curve types. </p>
+</li>
+</ul>
+
+<h5 id="head-aaa0175ca2dc8970a6aba0423ce14b328afc133c">6.1.2.2. toggleLabels()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>toggleLabels(visible='on',&nbsp;bylabel=None,&nbsp;byname=None,&nbsp;bytype=None)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Toggles the point labels on/off according to bylabel, byname, or bytype. </p>
+<ul>
+<li><p> <tt>visible</tt>: Any string other than 'on' is considered 'off'. </p>
+</li>
+<li class="gap"><p> <tt>bylabel</tt>: (string/list of strings)  Turns on/off the point labels specified by the point labels listed here. </p>
+</li>
+<li class="gap"><p> <tt>byname</tt>: (string/list of strings)  Turns 
+on/off the point labels specified by their respective point name in 
+PyCont (e.g. H1, LP2, ...) </p>
+</li>
+<li class="gap"><p> <tt>bytype</tt>: (string/list of strings)  Turns on/off the point labels specified by their point type (e.g. H, LP, P, ...) </p>
+</li>
+</ul>
+<p>If bylabel, byname and bytype are all None, then all point labels will be turned on/off. </p>
+</li>
+</ul>
+
+<pre>Note:  When this is a method of a pargs class that represents a point, you can use the singular expression "toggleLabel(visible='on')" to toggle that specific point label on/off.
+</pre>
+
+<h5 id="head-b7e6ee8497da5be407891b9d67f79d7242e03acb">6.1.2.3. togglePoints()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>togglePoints(visible='on',&nbsp;bylabel=None,&nbsp;byname=None,&nbsp;bytype=None)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Toggles the points on/off according to bylabel, byname, or bytype. </p>
+<ul>
+<li><p> <tt>visible</tt>: Any string other than 'on' is considered 'off'. </p>
+</li>
+<li class="gap"><p> <tt>bylabel</tt>: (string/list of strings)  Turns on/off the points specified by the point labels listed here. </p>
+</li>
+<li class="gap"><p> <tt>byname</tt>: (string/list of strings)  Turns on/off the points specified by their name in PyCont (e.g. H1, LP2, ...) </p>
+</li>
+<li class="gap"><p> <tt>bytype</tt>: (string/list of strings)  Turns on/off the points specified by their point type (e.g. H, LP, P, ...) </p>
+</li>
+</ul>
+<p>If bylabel, byname and bytype are all None, then all points will be turned on/off. </p>
+</li>
+</ul>
+
+<pre>Note:  When this is a method of a pargs class that represents a point, you can use the singular expression "togglePoint(visible='on')" to toggle that specific point on/off.
+</pre>
+
+<h5 id="head-6dc8aa2e1404aa3ffb6471a33aad8bc5d1d099a9">6.1.2.4. toggleCurves()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>toggleCurves(visible='on',&nbsp;bylegend=None,&nbsp;byname=None,&nbsp;bytype=None)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Toggles the curves on/off according to bylegend, byname, or bytype. </p>
+<ul>
+<li><p> <tt>visible</tt>: Any string other than 'on' is considered 'off'. </p>
+</li>
+<li class="gap"><p> <tt>bylegend</tt>: (string/list of strings)  Turns on/off the curves specified by the curve legend labels listed here. </p>
+</li>
+<li class="gap"><p> <tt>byname</tt>: (string/list of strings)  Turns on/off the curves specified by their name in PyCont (e.g. EQ1, FO1, ...) </p>
+</li>
+<li class="gap"><p> <tt>bytype</tt>: (string/list of strings)  Turns on/off the curves specified by their curve type (e.g. EP, LP, H, ...) </p>
+</li>
+</ul>
+<p>If bylegend, byname and bytype are all None, then all curves will be turned on/off. </p>
+</li>
+</ul>
+
+<pre>Note:  When this is a method of a pargs class that represents a curve, you can use the singular expression "toggleCurve(visible='on')" to toggle that specific curve on/off.
+</pre>
+
+<h5 id="head-eed20a2fca5446382e9fe100cb780f8e1f274c8c">6.1.2.5. toggleCycles()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>toggleCycles(visible='on',&nbsp;bylegend=None,&nbsp;byname=None,&nbsp;bytype=None)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Toggles the cycles on/off according to bylegend, byname, or bytype. </p>
+<ul>
+<li><p> <tt>visible</tt>: Any string other than 'on' is considered 'off'. </p>
+</li>
+<li class="gap"><p> <tt>bylegend</tt>: (string/list of strings)  Turns on/off the cycles specified by the cycle legend labels listed here. </p>
+</li>
+<li class="gap"><p> <tt>byname</tt>: (string/list of strings)  Turns on/off the cycles specified by their corresponding point name in PyCont (e.g. P1, PD1, ...) </p>
+</li>
+<li class="gap"><p> <tt>bytype</tt>: (string/list of strings)  Turns on/off the cycles specified by their corresponding point type (e.g. P, PD, LPC, ...) </p>
+</li>
+</ul>
+<p>If bylegend, byname and bytype are all None, then all cycles will be turned on/off. </p>
+</li>
+</ul>
+
+<pre>Note:  When this is a method of a pargs class that represents a cycle, you can use the singular expression "toggleCycle(visible='on')" to toggle that specific cycle on/off.
+</pre>
+
+<h5 id="head-b6f08bde56f349672cfd3c1ef5e715591f2c66ef">6.1.2.6. toggleAll()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>toggleAll(visible='on',&nbsp;bylabel=None,&nbsp;byname=None,&nbsp;bytype=None)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Toggles the points, labels and cycles on/off according to bylabel, byname, or bytype. </p>
+<ul>
+<li><p> <tt>visible</tt>: Any string other than 'on' is considered 'off'. </p>
+</li>
+<li class="gap"><p> <tt>bylabel</tt>: (string/list of strings)  Turns on/off all objects associated with the point labels listed here. </p>
+</li>
+<li class="gap"><p> <tt>byname</tt>: (string/list of strings)  Turns on/off all objects associated with their name in PyCont (e.g. H1, LP2, ...) </p>
+</li>
+<li class="gap"><p> <tt>bytype</tt>: (string/list of strings)  Turns on/off all objects associated with their point type (e.g. H, LP, P, ...) </p>
+</li>
+</ul>
+<p>If bylabel, byname and bytype are all None, then all objects (points, labels and cycles) will be turned on/off. </p>
+</li>
+</ul>
+
+<h5 id="head-b5b51e1a3f433a3c8d752c7821e5a4064f1d7d47">6.1.2.7. setLabels()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>setLabels(label,&nbsp;bylabel=None,&nbsp;byname=None,&nbsp;bytype=None)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Sets all labels specified by bylabel, byname, or bytype to <tt>label</tt>. </p>
+<ul>
+<li><p> <tt>label</tt>: (string) </p>
+</li>
+<li class="gap"><p> <tt>bylabel</tt>: (string/list of strings)  Sets the labels specified by the point labels listed here. </p>
+</li>
+<li class="gap"><p> <tt>byname</tt>: (string/list of strings)  Sets the labels specified by their name in PyCont (e.g. H1, LP2, ...) </p>
+</li>
+<li class="gap"><p> <tt>bytype</tt>: (string/list of strings)  Sets the labels specified by their point type (e.g. H, LP, P, ...) </p>
+</li>
+</ul>
+<p>If bylabel, byname and bytype are all None, then all point labels will be set to <tt>label</tt>. </p>
+</li>
+</ul>
+
+<pre>Note:  When this is a method of a pargs class that represents a point, you can use the singular expression "setLabel(label)".
+</pre>
+
+<h5 id="head-f6f48b769774b970a6fa0c54d3b8c54b10d61d85">6.1.2.8. setLegends()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>setLegends(legend,&nbsp;bylegend=None,&nbsp;byname=None,&nbsp;bytype=None)</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Sets legends of all curves or cycles specified by bylegend, byname, or bytype to <tt>legend</tt>. </p>
+<ul>
+<li><p> <tt>legend</tt>: (string) </p>
+</li>
+<li class="gap"><p> <tt>bylegend</tt>: (string/list of strings)  Sets the legends specified by the curve or cycle legends listed here. </p>
+</li>
+<li class="gap"><p> <tt>byname</tt>: (string/list of strings)  Sets the legends specified by their name in PyCont (e.g. EQ1 for a curve, LPC1 for a cycle, ...) </p>
+</li>
+<li class="gap"><p> <tt>bytype</tt>: (string/list of strings)  Sets the 
+legends specified by their curve type (e.g. H, LP, P, ...) OR cycle type
+ (e.g. LPC, PD, ...) </p>
+</li>
+</ul>
+<p>If bylegend, byname and bytype are all None, then all curve/cycle legends will be set to <tt>legend</tt>. </p>
+</li>
+</ul>
+
+<pre>Note:  When this is a method of a pargs class that represents a curve or a cycle, you can use the singular expression "setLegend(label)".
+Note 2: This needs to be called separately for cycles and curves.
+</pre>
+
+<h5 id="head-822da286d0497f46f241e50d5032bccd4ff70565">6.1.2.9. clear()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>clear()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Clears the corresponding object as follows: </p>
+<ul>
+<li><p> <strong>figure</strong>: Removes all axes in the figure. </p>
+</li>
+<li><p> <strong>axes</strong>: Removes all objects in the axes. </p>
+</li>
+<li><p> <strong>curve</strong>: Removes all points on the curve. </p>
+</li>
+<li><p> <strong>point</strong>: This is the same as delete. </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<h5 id="head-c662a3d7528b536d6294f1223a4d581841bc49bc">6.1.2.10. clearall()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>clearall()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Calls <tt>clear()</tt> on all objects in that level of the plotting hierarchy. </p>
+</li>
+</ul>
+
+<h5 id="head-e40f90734eaffc961d94cb833ff936cf57747709">6.1.2.11. delete()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>delete()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>This calls <tt>clear()</tt> on the current object and then deletes it. </p>
+</li>
+</ul>
+
+<h5 id="head-3a97bc38ab73e3e6ae357d45d973904c56c19375">6.1.2.12. deleteall()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>deleteall()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Calls <tt>delete()</tt> on all objects in that level of the plotting hierarchy. </p>
+</li>
+</ul>
+
+<h5 id="head-cc932ff7487bf2e505db2f1b08276441e16587ed">6.1.2.13. refresh()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>refresh()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Refreshes that object in the display. </p>
+</li>
+</ul>
+
+<pre>Note:  Calling at the level of `plot` will refresh all figures.
+</pre>
+
+<h5 id="head-2f0cec9f91e7caf682607b3be64070302b0b90d1">6.1.2.14. clean()</h5>
+
+<p><em>Syntax</em> </p>
+<ul>
+<li style="list-style-type: none;"><p><tt>clean()</tt> </p>
+</li>
+</ul>
+<p><em>Description</em> </p>
+<ul>
+<li style="list-style-type: none;"><p>Goes through the plotting 
+structure and performs maintenance.  If any outside program (whether it 
+be software or human) modified the displays in any way, such as closing 
+figures by hand or through pylab, this method needs to be called so that
+ it can delete old handles.  This is called automatically before every 
+display() command, so if you've closed a figure by hand, it will correct
+ itself most of the time on its own.  When you do close a figure by 
+hand, the current method to detect that it has been closed is to spawn a
+ dummy figure and then close it immediately, so don't be surprised if 
+you see a figure flicker on and off. </p>
+</li>
+</ul>
+
+<pre>Note:  If you do all handling of display objects through PyCont's `plot` structure, this will not in general need to be used.
+</pre>
+
+<h2 id="head-50bb2933e52d0ee24c416ae73353e39bbeef8d16">7. Details of algorithmic implementation</h2>
+
+<p>Details are not written up as yet. For now, look at the code in PyDSTool/<a class="nonexistent" href="http://www.cam.cornell.edu/%7Erclewley/cgi-bin/moin.cgi/PyCont/BifPoint">PyCont/BifPoint</a>.py </p>
+
+<h3 id="head-cdfb438eedc6090dea7b6760fe638751d210a394">7.1. Equilibrium point curve (EP-C)</h3>
+
+<p>Bifurcations detected: </p>
+
+<h4 id="head-6dd50eb67fc177a2954d4fdd335812e6b91f52e1">7.1.1. Limit Point (LP)</h4>
+
+
+<h4 id="head-83526682d105f84a3797765e8fa56b0e939be5b9">7.1.2. Hopf Point (H)</h4>
+
+
+<h4 id="head-364404f4b39d69de1015cb7d0b7ca2c6992be09f">7.1.3. Branch Point (BP)</h4>
+
+
+<h3 id="head-1d4d62dfb541c6117d53033a87c250f2f583af7f">7.2. Limit point curve (LP-C)</h3>
+
+<p>Bifurcations detected: </p>
+
+<h4 id="head-58b3f40b90988f737153b536a4a65c7be5ff4643">7.2.1. Cusp Point (CP)</h4>
+
+
+<h4 id="head-c7f171731d2c602223476288887c94c716ef8dd7">7.2.2. Bogdanov-Takens Point (BT)</h4>
+
+
+<h4 id="head-05ec2ead21f3f0cf1aefe48590e98d81f89ed3d6">7.2.3. Zero-Hopf Point (ZH)</h4>
+
+
+<h3 id="head-09a6def9c681c8100fb4ba6ea9f6b908e01ec1c5">7.3. Hopf point curve, method 1 (H-C1)</h3>
+
+<p>Bifurcations detected: </p>
+
+<h4 id="head-c7f171731d2c602223476288887c94c716ef8dd7-2">7.3.1. Bogdanov-Takens Point (BT)</h4>
+
+
+<h4 id="head-05ec2ead21f3f0cf1aefe48590e98d81f89ed3d6-2">7.3.2. Zero-Hopf Point (ZH)</h4>
+
+
+<h4 id="head-832516e8404fea2ad237189bfd68802db16d270a">7.3.3. Generalized-Hopf Point (GH)</h4>
+
+
+<h4 id="head-1f27ff31d3942d33d2c7d45aa77f07eeb4665f17">7.3.4. Double-Hopf Point (DH)</h4>
+
+
+<h3 id="head-5037fed41e3a710146f635742cedd820bef8b96a">7.4. Hopf point curve, method 2 (H-C2)</h3>
+
+<p>Bifurcations detected: </p>
+
+<h4 id="head-c7f171731d2c602223476288887c94c716ef8dd7-3">7.4.1. Bogdanov-Takens Point (BT)</h4>
+
+
+<h4 id="head-05ec2ead21f3f0cf1aefe48590e98d81f89ed3d6-3">7.4.2. Zero-Hopf Point (ZH)</h4>
+
+
+<h4 id="head-832516e8404fea2ad237189bfd68802db16d270a-2">7.4.3. Generalized-Hopf Point (GH)</h4>
+
+
+<h3 id="head-90d34c384f6dc901aead0729a92828bf17f37b6c">7.5. Fixed point curve (FP-C)</h3>
+
+<p>Bifurcations detected: </p>
+
+<h4 id="head-bf0231844eef6623ae571b9ec240604a8938f55e">7.5.1. Limit point of cycles (LPC)</h4>
+
+
+<h4 id="head-a4c14eb318408bbd871dea8c2917bbb77bb0155e">7.5.2. Period doubling (PD)</h4>
+
+
+<h4 id="head-85d37b55c388aec65d97f949c810ba5148f2624b">7.5.3. Neimark-Sacker (NS)</h4>
+
+
+<h3 id="head-59ac30bfe3f0c7769415ebbe7fdb1ef499262694">7.6. Limit cycle curve (LC-C)</h3>
+
+<p>Bifurcations detected: </p>
+
+<h4 id="head-bf0231844eef6623ae571b9ec240604a8938f55e-2">7.6.1. Limit point of cycles (LPC)</h4>
+
+
+<h4 id="head-a4c14eb318408bbd871dea8c2917bbb77bb0155e-2">7.6.2. Period doubling (PD)</h4>
+
+
+<h4 id="head-85d37b55c388aec65d97f949c810ba5148f2624b-2">7.6.3. Neimark-Sacker (NS)</h4>
+
+<a id="bottom"></a>
+
+</li></div>
+<div id="pagebottom"></div>
+<p id="pageinfo" class="info" dir="ltr" lang="en">last edited
+2010-01-29 00:56:31 by RobClewley</p>
+
+</div> <!-- end page -->
+
+
+</div></body></html>

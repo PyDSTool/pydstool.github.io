@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Events in PyDSTool</title></head>
+
+<body  lang="en" dir="ltr">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1>Events</h1>
+
+<!--
+<div class="table-of-contents"><p class="table-of-contents-heading">Contents
+<ol>
+<li><a href="#Terminal_and_non-terminal_events">Terminal and non-terminal events</a></li>
+<li><a href="#Arbitrary_precision">Arbitrary precision</a></li>
+<li><a href="#Activation_of_events">Activation of events</a></li>
+<li><a href="#High-_and_low-level_events">High- and low-level events</a></li>
+<li><a href="#Directional_detection">Directional detection</a></li>
+<li><a href="#Simultaneous_events">Simultaneous events</a></li>
+<li><a href="#Defining_events">Defining events</a>
+<ol>
+ <li><a href="#Event_parameters">Event parameters</a></li>
+</ol></li>
+<li><a href="#Events_and_generators">Events and generators</a></li>
+<li><a href="#Further_information">Further information</a></li>
+</ol></div>
+
+<p class="line867">
+-->
+
+<hr>
+
+<h1 id="Terminal_and_non-terminal_events">1. Basic event concepts</h1>
+<h2>1.1. Terminal and non-terminal events</h2>
+
+<p class="line862">Discrete zero-crossing events provide the basis for stopping integration of an ODE or the computation of a difference equation / map, or for simply marking times at which a defined condition is met (without stopping generation of the trajectory). The first kind of events are known as <em>terminal</em>, the latter are known as <em>non-terminal</em>. </p>
+
+<p>Terminal events form the basis of transitions in hybrid dynamical systems (see <a href="./HybridSystems.html">HybridSystems</a>). Non-terminal events are useful for monitoring discrete changes in your dynamics, or for setting up the numerical computation of Poincare (return) maps and symbolic dynamics from continuous flows.</p>
+
+
+<h2 id="Arbitrary_precision">1.2. Arbitrary precision</h2>
+
+<p>For continuous dynamical systems, events can be resolved to arbitrary precision (<em>precise</em> events) or only to the precision of the trajectory generator's current step-size (<em>non-precise</em> events). For discrete DSs the step-size inherently corresponds to the maximal event precision.</p>
+
+<p>The VODE integrator uses refined integration steps to find an event precisely, whereas Dopri and Radau use interpolation to the same order as the integration method itself. </p>
+
+<p class="line874">Note that the precision of event detection can only be provided in terms of a tolerance for the independent variable associated with the event (e.g., time). Event precision cannot be specified in terms of a tolerance on the magnitude of the value of the zero-crossing function associated with the event.</p>
+
+
+<h2 id="Activation_of_events">1.3. Activation of events</h2>
+
+<p>Events that have been defined for a dynamical system can be made <em>active</em> or <em>inactive</em>, which controls whether or not those events are detected during generation of a trajectory. This can be specified at the time of definition, and then changed later through the <tt>eventstruct</tt> attribute of the Generator (see below). If they are temporarily not needed, setting events to be inactive makes integration more efficient.</p>
+
+
+
+<h1 id="Defining_events">2. Defining events</h1>
+
+<p>Events are defined much in the same way as the other elements of a <a href="./Generators.html">Generator.</a></p>
+
+<p>The recommended manner to create events for all compatible generators is the function <tt>makeZeroCrossEvent</tt>, exported from <tt>Events.py</tt>. This function takes as arguments a general string expression, a direction, a dictionary of algorithmic arguments, followed by 'declarations' of any names used in the string expression, including variables, parameters, and inputs. Auxiliary functions can be called in the string definition, but auxiliary variables may not be accessed. For instance,</p>
+
+<pre><code>ev_args_nonterm = {'name': 'monitor',
+<span class="anchor" id="line-2"></span>           'eventtol': 1e-4,
+<span class="anchor" id="line-3"></span>           'eventdelay': 1e-5,
+<span class="anchor" id="line-4"></span>           'starttime': 0,
+<span class="anchor" id="line-5"></span>           'active': True,
+<span class="anchor" id="line-6"></span>           'term': False,
+<span class="anchor" id="line-7"></span>           'precise': True}
+<span class="anchor" id="line-8"></span>
+<span class="anchor" id="line-9"></span>thresh_ev_nonterm = Events.makeZeroCrossEvent('in', 0,
+<span class="anchor" id="line-10"></span>                        ev_args_nonterm, inputnames=['in'],
+                        targetlang='python')
+</code></pre>
+
+<p class="line862">defines a non-terminal python event that monitors an external input signal <tt>in</tt> for zero crossings in either direction (given by 0 in the second argument). For all variables, parameters, inputs, or auxiliary functions used in the specification of the event, we must declare them in the argument list, using the keywords <em>varnames</em>, <em>parnames</em>, <em>inputnames</em>, and <em>fnspecs</em> for functions. <em>fnspecs</em> must actually be a dictionary mapping function names to their definitions. The default target language is Python, so the <em>targetlang</em> option was not strictly necessary, but this indicates the syntax used when specifying it. The other alternative for <em>targetlang</em> is 'c' when using any non-Python based integrator (Dopri, Radau, CUDA, ADMC++, etc).</p>
+
+<p class="line862">An older and deprecated alternative, for Python-based generators only, is <tt>makePythonStateZeroCrossEvent</tt>, which is also only able to make events for state variable threshold crossings. The sole advantage of this function is its simpler syntax, but we may phase this function out in future releases.
+
+<p>Events can be defined to trigger only when the event boundary is crossed in one direction or another, or in both directions. This is specified by an integer in the second argument to <tt>makeZeroCrossing</tt>, taking values -1 (decreasing), 0 (either), and 1 (increasing).
+
+<h2 id="Event_parameters">2.1. Other event parameters</h2>
+
+<p>Parameters not already described: </p>
+<ul>
+<li>eventtol: tolerance for event locater (in zero-crossing function value units, not in the independent variable)</li>
+<li>starttime: effective time zero for searches (used internally with eventdelay, usually keep at zero)</li>
+<li>eventdelay: time interval before event detection begins on each run</li>
+<li>eventinterval: time interval between event detections restart</li>
+<li>bisectlimit: number of bisection steps to take when finding events (this should rarely need to be changed from its default)</li>
+</ul>
+
+<p>As exemplified in <a href="http://pydstool.bzr.sourceforge.net/bzr/pydstool/annotate/head%3A/tests/vode_withJac_test.py">vode_withJac_test.py</a>, if you want to be able to detect an event that is expected to occur in a single time step, then currently you have to set <tt>eventdelay=0</tt>.</p>
+
+
+<h2 id="High-_and_low-level_events">2.2. High- and low-level events [advanced topic]</h2>
+
+<p>Users must specify which target language is being used when creating events, as this is not currently done automatically. The result is that th <tt>Event</tt> object created will be one of  two sub-classes: high level events <tt>HighLevelEvent</tt> (specified only using Python code), and low level events <tt>LowLevelEvent</tt> (specified using non-Python code, for either C or Matlab language targets). For convenience, low level events keep a version of their event specified in Python code, in case a user wishes to work with the event interactively and away from an integration run. </p>
+
+
+<h1 id="Working">3. Working with events</h1>
+
+<p>When trajectories are created, any active events that were detected will be recorded as part of that trajectory. To see which points those are, there are two options. From the trajectory directly, one is to use the 'getEventTimes' or 'getEvents' methods of the trajectory object. The generator or model also has similarly-named methods to extract the event data from the most recent integration. Trajectory methods for this:</p>
+<ul>
+  <li><strong>getEvents</strong>(self, evnames=None, asGlobalTime=True)<br>
+  Returns a pointset of all named events occuring  in global time, unless asGlobalTime option set to False (default is True). If no events are named, all are used.</li>
+  <li><strong>getEventTimes</strong>(self, evnames=None, asGlobalTime=True)<br>
+  Returns a list of times at which the named events occurred in global time, unless asGlobalTime option set to False (default is True). If no events are named, all are used.</li>
+</ul>
+<p>If a trajectory is sampled into a <a href="./Points.html">Pointset</a>, the pointset will also contain a record of the events detected via its labels, e.g. for some sampled pointset, <tt>pts</tt>, accessing <tt>pts.labels.by_label['Event:monitor']</tt> will return a dictionary of pointset indices mapping to event times for an event named 'monitor'. If you are not sure which events have occurred, you can first fetch a list of valid labels with <tt>pts.labels.getLabels()</tt>. To get the state variable values at those events, you merely have to index into the pointset with the indices provided by the dictionary keys.</p>
+
+<h2 id="Events_and_generators">3.1. Changing or viewing event properties</h2>
+
+<p>Once defined, events are passed to the initialization call to a generator in order to be incorporated into the generator. Events are contained in the <tt>eventstruct</tt> attribute of a generator. This attribute is an instance of the <tt>EventStruct</tt> class. This structure is used to maintain and query the events associated with the generator. With it, events can be added to or deleted from the structure. However, once a generator is created, only one that uses python as its target language will reflect such changes in its behaviour. C-based generators have their events committed at compile-time. The events attribute of the eventstruct contains a dictionary of all the defined events, but the following methods provide conveninent access to them for most purposes.</p>
+<p>Eventstruct methods:</p>
+<ul>
+  <li> getActiveEvents</li>
+  <li>    getAllEvents</li>
+  <li>    getHighLevelEvents</li>
+  <li>    getLowLevelEvents</li>
+  <li>    getNonActiveEvents</li>
+  <li>    getNonPreciseEvents</li>
+  <li>    getNonTermEvents</li>
+  <li>    getPreciseEvents</li>
+  <li>    getTermEvents</li>
+  <li>setActiveFlag</li>
+  <li>    setBisect</li>
+  <li>    setEventDelay</li>
+  <li>    setEventDir</li>
+  <li>    setEventICs</li>
+  <li>    setEventInterval</li>
+  <li>    setEventTol</li>
+  <li> setPreciseFlag</li>
+  <li>    setStartTime</li>
+  <li>    setTermFlag</li>
+  <li>    setglobalt0  *(see below)</li>
+  <li>query</li>
+</ul>
+
+<p>The <em>get</em> methods take no arguments and all return  a list of pairs (event_name, event_object) for events matching the type of event implied by the method name. The <em>set</em> methods all take an event name, or list of names, and a new value for those events' parameter, except for setglobalt0 which just takes a new float value for 'globalt0' (mostly for internal use).</p>
+<p>A generator's eventstruct can be queried using its 'query' method, with any of the following keys: ['term', 'nonterm', 'active', 'notactive', 'precise', 'notprecise', 'highlevel', 'lowlevel', 'varlinked', 'notvarlinked']. query will return a list of pairs (event_name, event_object) for events matching the query key(s). Use of multiple simultaneous keys will perform logical AND in filtering the results (notice that some of them are mutually exclusive so do not make sense to combine!). Variable-linked events are for advanced use outside of direct integration, for post-processing trajectories with high level events only.</p>
+
+<h1 id="Simultaneous_events">4. Simultaneous events</h1>
+
+<p>For continuously-defined dynamical systems it is not generic for multiple simultaneous events to occur. PyDSTool will resolve the correct order of multiple events that are flagged over a single time step, and depending on the generator will either flag an error if two events perfectly coincide or will choose an arbitrary order for them at consecutive time steps.</p>
+
+<div id="pagebottom"></div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>ToolboxDocumentation - PyDSTool</title></head>
+<body dir="ltr" lang="en">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1>Toolbox Documentation</h1><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Disclaimers">Disclaimers</a></li><li>
+<a href="#Parameter_Estimation">Parameter Estimation</a></li><li>
+<a href="#Compartmental_modeling_for_neural_modeling">Compartmental modeling for neural modeling</a><ol><li>
+<a href="#Classes_provided">Classes provided</a></li><li>
+<a href="#Factory_functions">Factory functions</a><ol><li>
+<a href="#Channels">Channels</a></li><li>
+<a href="#Other">Other</a></li></ol></li><li>
+<a href="#Chemical_synapse_implementation">Chemical synapse implementation</a><ol><li>
+<a href="#Dynamic_synapse_with_associated_ODE">Dynamic synapse with associated ODE</a></li><li>
+<a href="#Non-dynamic_synapse_with_associated_transition_function">Non-dynamic synapse with associated transition function</a></li><li>
+<a href="#Adaptive_synapses_.28facilitation_and_depression.29">Adaptive synapses (facilitation and depression)</a></li><li>
+<a href="#Threshold_functions">Threshold functions</a></li><li>
+<a href="#Removing_synaptic_connections">Removing synaptic connections</a></li></ol></li><li>
+<a href="#Electrical_.28gap_junction.29_synapses">Electrical (gap junction) synapses</a></li><li>
+<a href="#Second_messengers">Second messengers</a></li></ol></li><li>
+<a href="#DSSRT_toolbox">DSSRT toolbox</a><ol><li>
+<a href="#Tools_for_interfacing_with_DSSRT_in_Matlab">Tools for interfacing with DSSRT in Matlab</a></li></ol></li><li>
+<a href="#Phase_plane_tools">Phase plane tools</a></li><li>
+<a href="#Phase_response_curves">Phase response curves</a></li><li>
+<a href="#Mechanical_modeling">Mechanical modeling</a></li><li>
+<a href="#Fractal_dimension_analysis">Fractal dimension analysis</a></li><li>
+<a href="#Data_analysis">Data analysis</a></li>
+<li>
+<a href="#Sloppy_cell_modeling_and_SBML_conversion">Systems biology and SBML import</a></li></ol></div>
+
+<p class="line867">
+
+
+<h1 id="Disclaimers">1. Disclaimers</h1>
+<span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><ul>
+  <li>The contents of this page are not comprehensive, and more information will be added when time permits. <span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span></li>
+  <li class="gap">The toolbox contents are also in continuing development, and are not intended to be complete or perfectly functioning in any sense of the word. They are utilities that we have found useful during our research that we are sharing in the hope that they will be useful to you. <span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span></li></ul><p class="line874">If you have comments or wish contribute to these, or other, toolboxes then please contact us. <span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line867">
+<h1 id="Parameter_Estimation">2. Parameter Estimation</h1>
+<span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line867"><tt>PyDSTool/Toolbox/ParamEst.py</tt> <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line862">This toolbox has its own page, <a href="./ParamEst.html">ParamEst</a>. <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line867">
+<h1 id="Compartmental_modeling_for_neural_modeling">3. Compartmental modeling for neural modeling</h1>
+<span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><p class="line867"><tt>PyDSTool/Toolbox/neuralcomp.py</tt> <span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span>
+<p class="line862">This toolbox is intended for use by computational neuroscientists. This toolbox is made up of <a href="./ModelSpec.html">ModelSpec</a> sub-classes and object factory functions a.k.a. templates. It contains templates for common neural structures such as ion channels, compartments, synapses, and so forth. Examples of usage can be found in the<tt> PyDSTool/tests/</tt> directory, in particular the files
+
+<ul>
+<li>Tutorial_compneuro.py</li>
+<li>ModelSpec_test.py</li>
+<li>CIN.py</li>
+<li>MultiCompartments.py</li>
+<li>MultiCompartments2.py</li>
+</ul>
+
+<p class="line862">Additional helper functions for making model building easier are provided in <tt>Toolbox/ModelHelper.py</tt>. A range of common symbolic functions for activation functions are provided in <tt>Toolbox/ActivationFuncs.py</tt>. <span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><p class="line874">A "point neuron" refers to a single-compartment neuron model, for which synapses connect directly to the single compartment.
+
+<p><a href="Tutorial/Tutorial_NineML.html">New functionality</a> has been provided to import <a href="http://software.incf.org/software/nineml">NineML</a> neural model specifications via its <a href="http://phobos.incf.ki.se/">Python API</a>.</p>
+
+<h2 id="Classes_provided">3.1. Classes provided</h2>
+
+<p class="line874">The template classes provided possess some hierarchical structure. </p>
+
+<p class="line867"><strong>Abstract classes:</strong> (not intended for direct use)
+<ul><li>channel</li>
+<li>compartment</li>
+</ul>
+
+<p class="line867"><strong>Concrete classes:</strong>
+<ul><li>soma  (used as a point neuron for a single-compartment model) <span class="anchor" id="line-47"></span></li><li>dendr_compartment  (for multi-compartmental neuron only)</li>
+<li>synapse <span class="anchor" id="line-49"></span></li><li>neuron   (for multi-compartmental neuron only) <span class="anchor" id="line-50"></span></li><li>exc_synapse  (specialized sub-class for excitatory synapses) <span class="anchor" id="line-51"></span></li><li>inh_synapse  (specialized sub-class for inhibitory synapses) </li></ul>
+</p>
+
+<h2 id="Factory_functions">3.2. Factory functions</h2>
+<h3 id="Channels">3.2.1. Channels</h3>
+<span class="anchor" id="line-57"></span><span class="anchor" id="line-58"></span><ul><li>makeSynapseChannel <span class="anchor" id="line-59"></span></li><li>makeBiasChannel <span class="anchor" id="line-60"></span></li><li>makeChannel_halfact  (half-activation/time-scale based) <span class="anchor" id="line-61"></span></li><li>makeChannel_rates  (rates based) <span class="anchor" id="line-62"></span></li><li>makeExtInputCurrentChannel  (external input signal as a current) <span class="anchor" id="line-63"></span></li><li>makeExtInputConductanceChannel  (external input signal as a conductance) <span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span></li></ul><p class="line867">
+<h3 id="Other">3.2.2. Other</h3>
+<span class="anchor" id="line-66"></span><span class="anchor" id="line-67"></span><ul><li>makeSoma <span class="anchor" id="line-68"></span></li><li>makeSynapse <span class="anchor" id="line-69"></span></li><li>makeAdaptingSynapse <span class="anchor" id="line-70"></span></li><li>makePointNeuron <span class="anchor" id="line-71"></span></li><li>makePointNeuronNetwork <span class="anchor" id="line-72"></span><span class="anchor" id="line-73"></span></li></ul><p class="line874">The following function is only for multi-compartment network models, which are as yet untested. <span class="anchor" id="line-74"></span><span class="anchor" id="line-75"></span><ul><li>makeNeuronNetwork <span class="anchor" id="line-76"></span><span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span></li></ul><p class="line867">
+
+<h2 id="Chemical_synapse_implementation">3.3. Chemical synapse implementation</h2>
+<h3 id="Dynamic_synapse_with_associated_ODE">3.3.1. Dynamic synapse with associated ODE</h3>
+<span class="anchor" id="line-81"></span><span class="anchor" id="line-82"></span>
+<p class="line862">These are demonstrated in <tt>/tests/ModelSpec_test.py</tt>. After building the specification for the neural compartments to be coupled, call the object factory function <tt>connectWithSynapse</tt>, which performs the following steps. <span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span><ul><li><p class="line862">1.1 Creates a Leaf<tt class="backtick"></tt>Component object of type 'synapse', containing the gating variable ODE, e.g. a rate equation using 1st order kinetics. <span class="anchor" id="line-85"></span></li><li><p class="line862">1.2 The ODE has a free name, that of a pre-synaptic voltage variable. The name is hierarchical in order to refer to a non-local variable, e.g. <tt>soma1.V</tt>. <span class="anchor" id="line-86"></span></li><li><p class="line862">1.3 A Leaf<tt class="backtick"></tt>Component object of type 'channel' is created in the target cell's desired compartment (e.g. the soma for a point neuron), refering to that cell compartment's membrane potential. This creates a term in the current balance equation associated with that compartment, of the form <tt>g*s*(V_rev&nbsp;-&nbsp;V)</tt> where <tt>s</tt> is the synaptic gating variable from the ODE in (1.1) and V is the compartment's voltage variable. The channel object now exists in the cell compartment's <a href="./ModelSpec.html">ModelSpec</a> registry and will be included in the generation of the RHS for the current balance ODE when the model is instantiated. <span class="anchor" id="line-87"></span></li><li><p class="line862">1.4 The name of the target cell's compartment accessed in (1.3) is recorded in the synapse object under the attribute 'connxn<tt class="backtick"></tt>Targets', a list of <a href="./ModelSpec.html">ModelSpec</a> objects that the synapse object outputs to. In this example, this list will be a singleton. <span class="anchor" id="line-88"></span></li><li><p class="line862">1.5 The synapse object is returned from the function, for subsequent declaration to a <a href="./ModelSpec.html">ModelSpec</a> object that represents a network. <span class="anchor" id="line-89"></span><span class="anchor" id="line-90"></span><span class="anchor" id="line-91"></span></li></ul>
+
+<p class="line867">A graphical view of the chemical synaptic coupling in the Hodgkin-Huxley system demonstrated in the ModelSpec_test.py script (but omitting the gap junction) is:<img src="images/HHnet.jpg" width="720" height="540" alt="H-H model spec"></p>
+
+<h3 id="Non-dynamic_synapse_with_associated_transition_function">3.3.2. Non-dynamic synapse with associated transition function</h3>
+<span class="anchor" id="line-92"></span><span class="anchor" id="line-93"></span><p class="line874">This is not currently implemented. An example would be the so-called "alpha function" post-synaptic timecourse function. <span class="anchor" id="line-94"></span><span class="anchor" id="line-95"></span><p class="line862">In order to implement this in the future, the <tt>connectWithSynapse</tt> function would be adapted to <em>not</em> create a <tt>synapse</tt> class instance, but to create a post-synaptic channel term in the target cell's compartment for which the gating variable is given by an explicit function of the pre-synaptic voltage, rather than a differential equation. <span class="anchor" id="line-96"></span><span class="anchor" id="line-97"></span><span class="anchor" id="line-98"></span><p class="line867">
+<h3 id="Adaptive_synapses_.28facilitation_and_depression.29">3.3.3. Adaptive synapses (facilitation and depression)</h3>
+<span class="anchor" id="line-99"></span><span class="anchor" id="line-100"></span><p class="line862">We support a maximum of two synaptic variables per synaptic connection, which can be coupled together in a way that provides a simple model of facilitation or depression. An example of implementing facilitation is given in the <tt>\tests\CIN.py</tt> example script, using the <tt>makeAdaptingSynapse</tt> function. <span class="anchor" id="line-101"></span><span class="anchor" id="line-102"></span><span class="anchor" id="line-103"></span><p class="line867">
+<h3 id="Threshold_functions">3.3.4. Threshold functions</h3>
+<span class="anchor" id="line-104"></span><span class="anchor" id="line-105"></span><p class="line862">Users can specify their own voltage-threshold functions, for use in trigering a post-synaptic response. The default function is <tt>0.5+0.5*tanh(V/4)</tt>, where the voltage threshold is set at 0 mV. <span class="anchor" id="line-106"></span><span class="anchor" id="line-107"></span><span class="anchor" id="line-108"></span><p class="line867">
+<h3 id="Removing_synaptic_connections">3.3.5. Removing synaptic connections</h3>
+<span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span><p class="line862">The <tt>disconnectSynapse</tt> function undoes the creation of the synaptic channel in the target cell, and removes all associated entries in the target cell's <a href="./ModelSpec.html">ModelSpec</a> registry. The synapse object is not actually deleted, in case the user wishes to re-use it later. <span class="anchor" id="line-111"></span><span class="anchor" id="line-112"></span><span class="anchor" id="line-113"></span><p class="line867">
+
+<h2 id="Electrical_.28gap_junction.29_synapses">3.4. Electrical (gap junction) synapses</h2>
+<span class="anchor" id="line-114"></span><span class="anchor" id="line-115"></span><p class="line862">These are demonstrated in <tt>/tests/ModelSpec_test.py</tt>. <span class="anchor" id="line-116"></span><span class="anchor" id="line-117"></span><span class="anchor" id="line-118"></span><p class="line867">
+
+<h2 id="Second_messengers">3.5. Second messengers</h2>
+<span class="anchor" id="line-119"></span><span class="anchor" id="line-120"></span><p class="line862">We now support ionic current models that involve second messengers such as calcium. These are demonstrated in <tt>/tests/ModelSpec_test.py</tt>. <span class="anchor" id="line-121"></span><span class="anchor" id="line-122"></span><span class="anchor" id="line-123"></span><p class="line867">
+
+<h1 id="DSSRT_toolbox">4. DSSRT toolbox</h1>
+<span class="anchor" id="line-124"></span><span class="anchor" id="line-125"></span><p class="line867"><tt>PyDSTool/Toolbox/dssrt.py</tt> <span class="anchor" id="line-126"></span><span class="anchor" id="line-127"></span>
+<p class="line862">This is demonstrated in <tt>/tests/HH_DSSRTtest.py</tt>. <span class="anchor" id="line-128"></span><span class="anchor" id="line-129"></span><span class="anchor" id="line-130"></span>This toolbox supercedes the export tools for the original Matlab version of DSSRT discussed in Section 4.1. DSSRT stands for <em>Dominant Scale System Reduction Tool</em>.
+
+
+<h2 id="Tools_for_interfacing_with_DSSRT_in_Matlab">4.1. Tools for interfacing with DSSRT in Matlab</h2>
+<span class="anchor" id="line-131"></span><span class="anchor" id="line-132"></span><p class="line867"><tt>PyDSTool/Toolbox/DSSRT_tools.py</tt>, <span class="anchor" id="line-133"></span><tt>PyDSTool/Toolbox/FR.py</tt> <span class="anchor" id="line-134"></span><span class="anchor" id="line-135"></span>
+<p class="line862">This toolbox provides utilities to export ODE models in PyDSTool to the analysis software package DSSRT, written in Matlab. The Matlab implementation works only for "conditionally linear" systems such as conductance-based neural networks, chemical kinetics netorks, and many other systems that can be written using a "kinetic" formalism. <span class="anchor" id="line-136"></span><span class="anchor" id="line-137"></span>
+
+<p class="line862">The primary class of this toolbox is <tt>DSSRT_info</tt>. A single instance of it need not be initialized with any arguments, but there is an optional finite approximation to infinity, which defaults to 1e10. To trap bound violations this value can be dropped to a very modest finite number (e.g. in the '00s). <span class="anchor" id="line-138"></span><span class="anchor" id="line-139"></span><p class="line862">The <tt>makeDSSRTcfg</tt> method of this class is the intended access point for a user, but at this time <strong>is not fully implemented</strong>. To this method the user must supply a <tt>Model</tt> class instance containing a <em>single</em> ODE system Generator, <em>and also</em> the <tt>ModelSpec</tt> instance that defines it. The reason for this is that this method will only know how to convert a model to DSSRT format if it was created using the <tt>neuralcomp</tt> toolbox, described earlier on this page. <span class="anchor" id="line-140"></span><span class="anchor" id="line-141"></span><p class="line862">In lieu of the <tt>makeDSSRTcfg</tt> method, the class instance must be configured interactively. What follows is an example slightly adapted from a script for a stomatogastric ganglion model configuration, for which the object <tt>STG</tt> is an ODE Generator. <span class="anchor" id="line-142"></span><span class="anchor" id="line-143"></span><p class="line867"><span class="anchor" id="line-144"></span><span class="anchor" id="line-145"></span><span class="anchor" id="line-146"></span><span class="anchor" id="line-147"></span><span class="anchor" id="line-148"></span><span class="anchor" id="line-149"></span><span class="anchor" id="line-150"></span><span class="anchor" id="line-151"></span><span class="anchor" id="line-152"></span><span class="anchor" id="line-153"></span><span class="anchor" id="line-154"></span><span class="anchor" id="line-155"></span><span class="anchor" id="line-156"></span><span class="anchor" id="line-157"></span><span class="anchor" id="line-158"></span><span class="anchor" id="line-159"></span><span class="anchor" id="line-160"></span><span class="anchor" id="line-161"></span><span class="anchor" id="line-162"></span><span class="anchor" id="line-163"></span><span class="anchor" id="line-164"></span><span class="anchor" id="line-165"></span><span class="anchor" id="line-166"></span><span class="anchor" id="line-167"></span><span class="anchor" id="line-168"></span><span class="anchor" id="line-169"></span><span class="anchor" id="line-1-1"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-637b88790431631bd0fc0a574e891f5c746e98ac" lang="en"><span class="line"><span class="anchor" id="line-1-2"></span><span class="ID">STG_dssrt</span> = <span class="ID">DSSRT_info</span>(<span class="String">'</span><span class="String">STG_PD</span><span class="String">'</span>, <span class="ID">infty_val</span>=<span class="Number">120</span>)</span>
+
+<span class="line"><span class="anchor" id="line-2-1"></span><span class="ID">STG_dssrt</span>.<span class="ID">prepVarNames</span>( [<span class="String">'</span><span class="String">PDa_Kd_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDa_L</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDa_Na_h</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDa_Na_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDa_V</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_A_h</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_A_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_Ca</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_CaS_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_CaT_h</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_CaT_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_I</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_KCa_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_Kd_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_L</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_NaP_h</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_NaP_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_V</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_h_m</span><span class="String">'</span>])</span>
+<span class="line"><span class="anchor" id="line-3-1"></span><span class="ID">dummyvars</span> = [<span class="String">'</span><span class="String">PDs_L</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_I</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDa_L</span><span class="String">'</span>]</span>
+<span class="line"><span class="anchor" id="line-4-1"></span><span class="ID">STG_dssrt</span>.<span class="ID">deqns</span> = <span class="ID">remain</span>(<span class="ID">remain</span>(<span class="ID">STG_dssrt</span>.<span class="ID">varsall</span>, <span class="ID">STG</span>.<span class="ID">funcspec</span>.<span class="ID">auxvars</span>), <span class="ID">dummyvars</span>)</span>
+<span class="line"><span class="anchor" id="line-5-1"></span><span class="ID">STG_dssrt</span>.<span class="ID">prepInputs</span>(<span class="ID">STG</span>.<span class="ID">funcspec</span>.<span class="ID">dependencies</span>)</span>
+<span class="line"><span class="anchor" id="line-6-1"></span><span class="ID">subsFnDef</span>, <span class="ID">not_depars</span> = <span class="ID">STG_dssrt</span>.<span class="ID">prepAuxFns</span>(<span class="ID">auxfndict</span>, <span class="ID">default_pars</span>, <span class="ID">makeMfiles</span>=<span class="ID">makeMfiles</span>)</span>
+<span class="line"><span class="anchor" id="line-7-1"></span><span class="ResWord">assert</span> <span class="ID">not_depars</span> == []  <span class="Comment"># make sure all were DE pars</span></span>
+<span class="line"><span class="anchor" id="line-8-1"></span><span class="ID">gate_m</span> = [<span class="String">'</span><span class="String">PDs_CaT_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_CaS_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_h_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_NaP_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_Kd_m</span><span class="String">'</span>,</span>
+<span class="line"><span class="anchor" id="line-9-1"></span>            <span class="String">'</span><span class="String">PDs_KCa_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_A_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDa_Na_m</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDa_Kd_m</span><span class="String">'</span>]</span>
+<span class="line"><span class="anchor" id="line-10-1"></span><span class="ID">STG_dssrt</span>.<span class="ID">setUnitBounds</span>([<span class="String">'</span><span class="String">PDs_L</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_I</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDa_L</span><span class="String">'</span>] \</span>
+<span class="line"><span class="anchor" id="line-11-1"></span>                         + <span class="ID">gate_m</span> + <span class="ID">int_var_specs</span>.<span class="ID">keys</span>())</span>
+<span class="line"><span class="anchor" id="line-12-1"></span><span class="ResWord">for</span> <span class="ID">v</span> <span class="ResWord">in</span> [<span class="String">'</span><span class="String">PDa_V</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDs_V</span><span class="String">'</span>]:</span>
+<span class="line"><span class="anchor" id="line-13-1"></span>    <span class="ID">STG_dssrt</span>.<span class="ID">bounds</span>[<span class="ID">v</span>] = [-<span class="Number">60</span>, -<span class="Number">20</span>]</span>
+<span class="line"><span class="anchor" id="line-14-1"></span><span class="ID">STG_dssrt</span>.<span class="ID">bounds</span>[<span class="String">'</span><span class="String">PDs_Ca</span><span class="String">'</span>] = [<span class="Number">0</span>, <span class="Number">25</span>]</span>
+<span class="line"><span class="anchor" id="line-15-1"></span><span class="ID">STG_dssrt</span>.<span class="ID">cfac</span> = {<span class="String">'</span><span class="String">PDs_V</span><span class="String">'</span>: <span class="String">'</span><span class="String">PDs_Cm</span><span class="String">'</span>, <span class="String">'</span><span class="String">PDa_V</span><span class="String">'</span>: <span class="String">'</span><span class="String">PDa_Cm</span><span class="String">'</span>}</span>
+<span class="line"><span class="anchor" id="line-16-1"></span><span class="ID">STG_dssrt</span>.<span class="ID">depars</span> = <span class="ID">default_pars</span></span>
+<span class="line"><span class="anchor" id="line-17-1"></span><span class="ID">STG_dssrt</span>.<span class="ID">prepDEpars</span>()</span>
+<span class="line"><span class="anchor" id="line-18-1"></span><span class="ID">STG_dssrt</span>.<span class="ID">prepGraph</span>(<span class="ID">vbars_int</span>={<span class="String">'</span><span class="String">PDs_CaT_h</span><span class="String">'</span>: <span class="String">'</span><span class="String">PDs_CaT_m</span><span class="String">'</span>,</span>
+<span class="line"><span class="anchor" id="line-19-1"></span>                               <span class="String">'</span><span class="String">PDs_NaP_h</span><span class="String">'</span>: <span class="String">'</span><span class="String">PDs_NaP_m</span><span class="String">'</span>,</span>
+<span class="line"><span class="anchor" id="line-20-1"></span>                               <span class="String">'</span><span class="String">PDs_A_h</span><span class="String">'</span>: <span class="String">'</span><span class="String">PDs_A_m</span><span class="String">'</span>,</span>
+<span class="line"><span class="anchor" id="line-21-1"></span>                               <span class="String">'</span><span class="String">PDa_Na_h</span><span class="String">'</span>: <span class="String">'</span><span class="String">PDa_Na_m</span><span class="String">'</span>})</span>
+<span class="line"><span class="anchor" id="line-22-1"></span><span class="ID">plotNetworkGraph</span>(<span class="ID">STG_dssrt</span>)</span>
+<span class="line"><span class="anchor" id="line-23-1"></span><span class="Comment"># display information about the setup</span></span>
+<span class="line"><span class="anchor" id="line-24-1"></span><span class="ID">info</span>(<span class="ID">STG_dssrt</span>, <span class="String">"</span><span class="String">STG DSSRT setup</span><span class="String">"</span>)</span>
+<span class="line"><span class="anchor" id="line-25-1"></span><span class="ID">STG_dssrt</span>.<span class="ID">outputCFG</span>(<span class="String">'</span><span class="String">STG_PD</span><span class="String">'</span>)</span>
+</pre></div></div>
+
+<p class="line862">When the <tt>DSSRT_info</tt> object has been configured, the DSSRT files can be created in the file system using the method call <tt>outputCFG(&lt;filename&gt;)</tt>, which includes the .cfg file. However, at this time, the specification of the GAMMA1TERMS and GAMMA2TERMS in the .cfg file still have to be filled in by hand before the files are ready for use in DSSRT. See the DSSRT documentation for details. <span class="anchor" id="line-172"></span><span class="anchor" id="line-173"></span><p class="line862">The <tt>DSSRT_info</tt> class makes use of the Fruchterman-Reingold graph drawing algorithm, provided in <tt>FR.py</tt>, in order to turn the connectivity network of an ODE system (where variables are nodes and their interconnections are links) into a convenient 2D graph representation. <span class="anchor" id="line-174"></span><span class="anchor" id="line-175"></span><span class="anchor" id="line-176"></span><span class="anchor" id="line-177"></span><p class="line867">
+
+<h1 id="Phase_plane_tools">5. Phase plane tools</h1>
+
+<p><tt>PyDSTool/Toolbox/phaseplane.py</tt></p>
+
+<p>The code is well commented and the API documentation is detailed. A couple of appropriately named examples are also present in the <tt>tests</tt> directory. The first one to look at is <a href="./Tutorial/Tutorial_VdP.html"><tt>Tutorial_VdP.py</tt></a>, which has its own tutorial page here. After that, see <tt>phaseplane_HHtest.py</tt>. In the latter, the following phase plane diagrams are produced for the (V, m) sub-space of the variables in the 4-D ODE system. The script shows a combination of calls for finding fixed points, nullclines and the vector field, and how to plot them effectively.</p>
+
+<table width="900" border="1">
+  <tr>
+    <td><img src="./images/PP_HH.png" width="550" height="400"></td>
+    <td>&nbsp;</td>
+    <td><img src="./images/PP_HHzoom.png" width="550" height="400"></td>
+  </tr>
+  <tr>
+    <td><center>Fig 1. Phase plane  (right click - &quot;View Image&quot; for hi-res version)</center></td>
+    <td>&nbsp;</td>
+    <td><center>
+        Fig 2. Phase plane, zoomed  (right click - &quot;View Image&quot; for hi-res version)
+    </center></td>
+  </tr>
+</table>
+
+<h3>Classes defined</h3>
+
+
+<ul>
+<li><p> phaseplane </p>
+</li>
+<li><p> fixedpoint_nD </p>
+</li>
+<li><p> fixedpoint_2D </p>
+</li>
+<li><p> distance_to_pointset </p>
+</li>
+<li><p> mesh_patch_2D </p>
+</li>
+<li><p> dx_scaled_2D </p>
+</li>
+</ul>
+
+<h3>Functions defined</h3>
+
+<ul>
+<li><p> find_nullclines </p>
+</li>
+<li><p> find_saddle_manifolds </p>
+</li>
+<li><p> find_isochrons (coming soon) </p>
+</li>
+<li><p> find_fixedpoints (= find_steadystates = find_equilibria) </p>
+</li>
+<li><p> make_distance_to_line_auxfn </p>
+</li>
+<li><p> make_distance_to_known_line_auxfn </p>
+</li>
+<li><p> find_period </p>
+</li>
+<li><p> make_flow_normal_event </p>
+</li>
+<li><p> perp </p>
+</li>
+</ul>
+
+<br>
+
+<h1 id="Phase_response_curves">5. Phase response curves</h1>
+<span class="anchor" id="line-178"></span><span class="anchor" id="line-179"></span><p class="line867"><tt>PyDSTool/Toolbox/adjointPRC.py</tt> and <tt>PyDSTool/Toolbox/InputProfile.py</tt> <span class="anchor" id="line-180"></span><span class="anchor" id="line-181"></span><p class="line874">The adjoint PRC calculation can be performed on an oscillator for which there exists a normally hyperbolic stable limit cycle. <span class="anchor" id="line-182"></span>For direct PRC calculations the functions in <tt>InputProfile.py</tt> help to set up the database model of input signal to the oscillator. See the recent paper in Neural Computation by Govaerts and Sautois and the scholarpedia page on PRCs for details of both calculations. <span class="anchor" id="line-183"></span><span class="anchor" id="line-184"></span><span class="anchor" id="line-185"></span><p class="line867">
+
+<h1 id="Mechanical_modeling">6. Mechanical modeling</h1>
+<span class="anchor" id="line-193"></span><span class="anchor" id="line-194"></span><p class="line867"><tt>PyDSTool/Toolbox/mechmatlib.py</tt> <span class="anchor" id="line-195"></span><span class="anchor" id="line-196"></span><p class="line874">This toolbox contains matrix utilities for mechanical modeling, such as for augmenting position or displacement 3-vectors to 4-vectors, and constructors for spatial transformations. <span class="anchor" id="line-197"></span><span class="anchor" id="line-198"></span><p class="line862">An example of a rigid-body ODE/DAE system describing finger motion (using equations for an inverted triple pendulum with non-constant mass matrices) are found in <tt>PyDSTool/tests/freefinger_noforce_radau.py</tt>. <span class="anchor" id="line-199"></span><span class="anchor" id="line-200"></span><span class="anchor" id="line-201"></span><p class="line867">
+
+<h1 id="Fractal_dimension_analysis">7. Fractal dimension analysis</h1>
+
+<p class="line867"><tt>PyDSTool/Toolbox/fracdim.py</tt> and <tt>PyDSTool/Toolbox/prep_boxplot.py</tt></p>
+
+<p>Correlation and pointwise dimension analysis tools for time-series data analysis.  For more information on pointwise dimension see J. Guckenheimer, "Dimension Estimates for Attractors", Contemporary Mathematics, Vol. 28, 1984.  A journal publication concerning the use of these functions has been published in IEEE Transactions on Biomedical Engineering (see the an extended version at the <a href="http://www.arxiv.org/abs/q-bio.QM/0610058">arXiv</a>). The <tt>prep_boxplot.py</tt> functions provide plotting tools for the results of our pointwise dimension estimation algorithm PD-E, described in detail in the journal paper.</p>
+
+<h1 id="Data_analysis">8. Data analysis</h1>
+
+<p class="line867"><tt>PyDSTool/Toolbox/dataanalysis.py</tt></p>
+
+<p class="line862">Data analysis tools and utilities, particularly involving estimation of dimension in data-driven modelling, using principal component analysis (PCA). This toolbox requires the <a href="http://mdp-toolkit.sourceforge.net">MDP</a> Modular toolkit for Data Processing package.</p>
+
+<h1 id="Sloppy_cell_modeling_and_SBML_conversion">9. Systems biology and SBML import</h1>
+
+
+<p>Please see this <a href="Tutorial/Tutorial_SBML.html">tutorial page</a> for details.</p>
+ 
+<div id="pagebottom"></div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>PyDSTool</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="css/mm_computer.css" type="text/css">
+<script language="javascript">
+//--------------- LOCALIZEABLE GLOBALS ---------------
+var d=new Date();
+var monthname=new Array("January","February","March","April","May","June","July","August","September","October","November","December");
+//Ensure correct for language. English is "January 1, 2004"
+var TODAY = monthname[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+//---------------   END LOCALIZEABLE   ---------------
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+<!--
+.style5 {
+  font-size: 16px;
+  font-family: Geneva, Arial, Helvetica, sans-serif;
+}
+.style6 {font-size: 16px}
+.style7 {font-size: 15px}
+.style9 {font-size: 34px}
+.style12 {
+  font-size: 15px;
+  font-weight: bold;
+}
+-->
+</style>
+</head>
+
+<body bgcolor="#E9EFED">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#868A8A">
+    <td rowspan="2"><img src="images/PyDSTool_logo2_001.jpg" alt="PyDSTool logo" width="210" height="151" border="0" align="middle" /></td>
+    <td rowspan="2">&nbsp;</td>
+    <td height="55" colspan="4" valign="bottom" nowrap class="pageName" id="logo"><strong><span class="style9">PyDSTool </span></strong></td>
+    <td width="13%">&nbsp;</td>
+  </tr>
+
+  <tr bgcolor="#868A8A">
+    <td colspan="4" id="tagline" valign="top"><p style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+    <p style="margin-top: 0; margin-bottom: 0;"><span class="style5">Dynamical systems modeling, simulation and analysis&nbsp;environment</span></p></td>
+	<td width="13%">&nbsp;</td>
+  </tr>
+
+  <tr>
+    <td colspan="7" bgcolor="#666666"><img src="images/mm_spacer.gif" alt="" width="1" height="1" border="0"></td>
+  </tr>
+
+  <tr>
+    <td colspan="7" bgcolor="#66FFFF"><img src="images/mm_spacer.gif" alt="" width="1" height="1" border="0"></td>
+  </tr>
+
+  <tr bgcolor="#759DA1">
+  	<td colspan="7" id="dateformat">&nbsp;&nbsp;<script language="javascript">
+      document.write(TODAY);	</script>
+	</td>
+  </tr>
+ <tr>
+    <td colspan="7" bgcolor="#666666"><img src="images/mm_spacer.gif" alt="" width="1" height="1" border="0"></td>
+  </tr>
+
+ <tr>
+    <td width="18%" rowspan="4" valign="top" bgcolor="#232A34" id="navborder">
+      <table width="214" height="312" border="0" cellpadding="0" cellspacing="0" id="navigation">
+        <tr>
+          <td width="214">&nbsp;<br>
+          &nbsp;<br></td>
+        </tr>
+        <tr>
+          <td width="214" height="50"><p style="margin-top: 0; margin-bottom: 0"><a href="ProjectOverview.html"><span class="style6">Overview</span></a></p></td>
+        </tr>
+        <tr>
+          <td width="214" height="46"><a href="GettingStarted.html" class="navText style6"><span class="style6">Installation guide &amp; Getting started</span></a></td>
+        </tr>
+        <tr>
+          <td width="214" height="45"><a href="Tutorial.html" class="navText style6"><span class="style6">Tutorial</span></a></td>
+        </tr>
+        <tr>
+          <td width="214" height="42"><a href="CodeTopics.html" class="navText style6"><span class="style6">Code topics</span></a></td>
+        </tr>
+        <tr>
+          <td width="214" height="50"><a href="UserDocumentation.html" class="navText style6"><span class="style6">Basic user documentation</span></a></td>
+        </tr>
+        <tr>
+          <td height="50"><a href="TechDocumentation.html" class="navText style6"><span class="style6">Technical documentation</span></a></td>
+        </tr>
+        <tr>
+          <td><a href="ToolboxDocumentation.html" class="navText style6"><span class="style6">Toolbox documentation</span></a></td>
+        </tr>
+      </table>
+      <img src="images/mm_grid_000.gif" alt="grid" width="212" height="119" border="0"><br>
+      &nbsp;<br>
+      &nbsp;<br>
+      &nbsp;<br>
+      &nbsp;<br>
+    </td>
+    <td width="2%" rowspan="4" valign="top" id="navborder">&nbsp;</td>
+    <td rowspan="4" valign="top"><p style="margin-top: 0;"><img src="images/mm_spacer.gif" alt="" width="305" height="1" border="0"><br>
+        <span class="style6">&nbsp;<br>
+        <span class="style7">PyDSTool is a sophisticated &amp; integrated simulation and analysis environment 
+        for dynamical systems models of physical systems (ODEs, DAEs, maps, and 
+        hybrid systems).</span></span></p>
+      <p class="style7">PyDSTool is platform independent, written primarily in Python with some underlying C and Fortran legacy code for fast solving. It makes extensive use of the <a href="http://scipy.org">numpy and scipy libraries</a>. PyDSTool supports symbolic math, optimization, phase plane analysis, continuation and bifurcation analysis, 
+    data analysis, and other tools for modeling -- particularly for biological applications.</p>
+  <p class="style7">The project  is fully open source with a BSD license, and welcomes contributions from the community. Please visit the <a href="http://sourceforge.net/projects/pydstool/support">support pages</a> at Sourceforge.net to post questions and feedback.</p>
+<p class="style7">These documentation pages are still under development. <span style="margin-top: 0; margin-bottom: 0;">In the meantime</span>, please feel free to ask questions on the support pages or email the developers.</p>
+<p class="style7" style="margin-bottom: 0;">&nbsp;</p>
+<p class="style12" style="margin-top: 0;">If you use PyDSTool in your published work, please cite it in the following way:</p>
+<p><span class="style7">Clewley RH, Sherwood WE, LaMar MD, Guckenheimer JM (2007) <em>PyDSTool, a software environment for dynamical systems modeling</em>. URL http://pydstool.sourceforge.net</span></p>
+<p style="margin-bottom: 0;">&nbsp;</p>
+<p class="style6" style="margin-top: 0; margin-bottom: 0;">Screenshot:</p>
+<p style="margin-top: 0; margin-bottom: 0;"><br>
+</p>
+      <table border="0" cellspacing="0" cellpadding="0" width="220">
+        <tr>
+          <td width="220" height="147" class="bodyText"><p><img src="images/PyDSTool_PyCont_screenshot.jpg" width="460" height="346" /></p>
+            <p style="margin-bottom: 0;">&nbsp;</p></td>
+        </tr>
+      </table>
+      &nbsp;<br>
+      &nbsp;<br>
+      &nbsp;<br>
+    </td>
+    <td width="5%" rowspan="4"><img src="images/mm_spacer.gif" alt="" width="30" height="1" border="0"></td>
+    <td height="170" colspan="2" valign="top">
+	<table border="0" cellspacing="0" cellpadding="0" width="190">
+        <tr>
+		<td width="190" class="quote"><div align="center"><br>
+		  <a href="http://sourceforge.net/projects/pydstool/files/">Download at sourceforge.net</a></div></td>
+		</tr>
+
+		<tr>
+		<td class="smallText"><div align="center"><span class="style7"><br>
+		  Latest version: 0.88.111221</span><br>
+		  </div></td>
+		</tr>
+	</table>
+	<p style="margin-top: 0; margin-bottom: 0">&nbsp;</p></td>
+	<td width="13%" rowspan="4">&nbsp;</td>
+  </tr>
+ <tr>
+   <td height="81" colspan="2" valign="top"><a href="http://sourceforge.net/projects/pydstool/"><img src="images/sflogo_000.jpg" width="182" height="52" border="0" /></a></td>
+ </tr>
+ <tr>
+   <td height="101" colspan="2" valign="top"><a href="http://wingware.com"><img src="images/wingware-logo-180x58.png" width="180" height="58" /></a></td>
+ </tr>
+ <tr>
+   <td width="7%" valign="top">&nbsp;</td>
+   <td width="15%" valign="top"><a href="http://nsf.gov/awardsearch/showAward.do?AwardNumber=0829742"><img src="images/nsf1_000.gif" width="102" height="102" border="0" /></a></td>
+ </tr>
+  <tr>
+    <td width="18%">&nbsp;</td>
+    <td width="2%">&nbsp;</td>
+    <td width="40%">&nbsp;</td>
+    <td width="5%">&nbsp;</td>
+    <td colspan="2">&nbsp;</td>
+	<td width="13%">&nbsp;</td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>FunctionalSpec - PyDSTool</title>
+
+</head>
+
+<body  lang="en" dir="ltr">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1>Model functional specifications</h1>
+
+
+<div class="table-of-contents"><p class="table-of-contents-heading">Contents
+<ol>
+  <li><a href="#Introduction">Introduction</a></li>
+  <li><a href="#Target_languages">Target languages</a></li>
+  <li><a href="#Spec">Elements of a system specification</a></li>
+  <li><a href="#Macros">Macros</a></li>
+  <li><a href="#Aux_fns">Auxiliary functions</a></li>
+  <li><a href="#Sub-expr">Sub-expression substitutions in target language [technical]</a></li>
+</ol>
+</div><hr>
+
+<h1 id="Introduction">1. Introduction</h1>
+
+<p>The <tt>FuncSpec.py</tt> module deals with the specification of functionality of a <a href="./Generators.html">Generator</a> object. A FuncSpec object is passed to a Generator object when it is initialized, which the Generator uses to build internal representations of its trajectory generation functions -- for instance, a function that computes the value of the right-hand side of an ODE, which can be passed to an ODE solver.
+
+<h1 id="Target_languages">2. Target languages</h1>
+
+<p class="line862">Valid target languages for model specifications in PyDSTool are: Python, C, and ODETools/<a href="http://sourceforge.net/projects/admcpp/">ADMC++</a> (automatic differentiation via ODETools).
+However, to access ODETools/ADMC++ you should specify C as the target language and then use the ADMC++ Generator class.</p>
+
+<p class="line862">You can use the <a href="http://www.warrenweckesser.net/vfgen/">VFGEN</a> software for further help in importing and exporting vector field definitions.
+
+<h1 id="Spec">3. Elements of a system specification</h1>
+
+<p>A system specification is made up of some or all of the following types of definition: </p>
+
+<ul>
+<li> Name of model system [Needed]
+</li>
+<li> State variables [Needed]
+</li>
+<li> Auxiliary variables
+</li>
+<li> Auxiliary (or "helper") functions
+</li>
+<li> System parameters
+</li>
+<li> Domains for state variables and parameters
+</li>
+<li> Initial conditions for state variables
+</li>
+<li> Autonomous external inputs
+</li>
+<li> User-defined zero-crossing events
+</li>
+<li> Algorithmic parameters (e.g., integration tolerances)</li>
+<li>List of special names to ignore when parsing</li>
+<li> Other target Generator-specific options
+</li>
+</ul>
+
+<p>Auxiliary variables are meant for the output of useful quantities <em>derived</em> from state variables, parameters etc. Thus, a specification of a state variable may <strong>not</strong> refer to an auxiliary variable. Specification of valid domains for 
+these variables, parameters, and the independent variable may be 
+optional, depending on the target Generator. These are supplied as 
+two-element lists containing the interval range endpoints that can 
+include <tt>Inf</tt>. Also see <a href="./BoundsSafety.html">BoundsSafety</a> for uses of the domain information. </p>
+
+<p>If you want to avoid costly re-calculation of terms, either define <a href="#Aux_fns">auxiliary</a> ("helper") functions or utilize the <tt>reuseterms</tt> option in your system definition. Examples of use are provided in the <tt>/tests/</tt> directory. Auxiliary functions are also a way to create <strong>derived parameters</strong>.
+ E.g., suppose you have a parameter P in your model that really is a 
+derivation from a function of two other parameters, A and B, according 
+to <tt>P&nbsp;=&nbsp;B*exp(A)</tt>. In PyDSTool, create an auxiliary function with no arguments that computes the necessary derivation: 
+</p>
+
+<pre>auxfns = {'P': ([], 'B*exp(A)')}
+</pre>
+<p>You will have to call this function to use it, i.e. use <tt>P()</tt> in your vector field definitions. </p>
+<p>User-defined events (see <a href="./Events.html">Events</a>) and autonomous external inputs can also be provided to the system specification. </p>
+
+<h2 id="head-0393cac11e7490e1de34042c8f9656ea92f77aad">3.1. Mathematical expression syntax</h2>
+
+<p>PyDSTool's API provides a simple syntax for the specification of 
+expressions and functions that define Generator objects -- i.e. 
+differential or difference equation right-hand sides, and auxiliary 
+('helper') or explicit functions. We have not undertaken the 
+time-consuming effort of building a true parser to deal with this, and 
+there are some restrictions on what can be specified through the API, 
+and what syntax or naming errors can be detected. </p>
+<p>The expression syntax is independent of the target language, and is "compiled" into target language specifications by the <tt>FuncSpec</tt> class (see <a href="./FunctionalSpec.html">FunctionalSpec</a>). Symbolic manipulation of the abstract syntax prior to "compilation" is described on the page <a href="./Symbolic.html">Symbolic</a>.
+ The specification of structured models, that exhibit hierarchical 
+modularity and other such symmetries, is described on the page <a href="./ModelSpec.html">ModelSpec</a>, along with examples. </p>
+
+<h3 id="head-4118bdcb9a6f8c4c7e11dc78fc112aacc620579c">3.1.1. Syntax checking</h3>
+
+<p>There is a small amount of syntax checking provided at 'compile' 
+time, mainly to check that all string tokens reference known variables, 
+parameters, inputs, auxiliary functions or math objects. No semantic 
+checking is done, and errors not caught at the time of initializing a 
+Generator may lead to cryptic Python errors during trajectory 
+generation. </p>
+
+<h3 id="head-62c7b3c7d2af9ac699bfeb3ea517b781e465a3be">3.1.2. Standard math names</h3>
+
+<p>Standard math names such as <tt>sin</tt>, <tt>pow</tt>, and <tt>pi</tt> do not need prefixing with a library reference such as in <tt>math.sin</tt> (for a Python target). Time must be referenced as <tt>t</tt>,
+ and references to variables, parameters, and external inputs is by the 
+corresponding declared name. This is known as "index-free" notation. 
+Internally, The <tt>FuncSpec.py</tt> module will translate these names 
+to array index references once and for all. The user does not have to 
+know or use these indices. Some support for special 
+math names (such as the error function provided by SciPy) is provided, although many of these will only function with Python-based ODE integrators (Euler and VODE). </p>
+
+<p>The <tt>sign</tt> and <tt>mod</tt> functions are available in both python and C.</p>
+
+<h3>3.1.3. Special functions</h3>
+
+<p>Presently, &quot;special&quot; functions (as defined by scipy) are only available in the python-based integrators Vode and Euler. When using it, prefix the function name with <tt>special_</tt> in your definition string. The list of available functions is:</p>
+<p>airy, airye, ai_zeros, bi_zeros, ellipj, ellipk, ellipkinc, ellipe, ellipeinc, jn, jv, jve, yn, yv, yve, kn, kv, kve, iv, ive, hankel1, hankel1e, hankel2, hankel2e, lmbda, jnjnp_zeros, jnyn_zeros, jn_zeros, jnp_zeros, yn_zeros, ynp_zeros, y0_zeros, y1_zeros, y1p_zeros, j0, j1, y0, y1, i0, i0e, i1, i1e, k0, k0e, k1, k1e, itj0y0, it2j0y0, iti0k0, it2i0k0, besselpoly, jvp, yvp, kvp, ivp, h1vp, h2vp, sph_jn, sph_yn, sph_jnyn, sph_in, sph_kn, sph_inkn, riccati_jn, riccati_yn, struve, modstruve, itstruve0, it2struve0, itmodstruve0, bdtr, bdtrc, bdtri, btdtr, btdtri, fdtr, fdtrc, fdtri, gdtr, gdtrc, gdtria, nbdtr, nbdtrc, nbdtri, pdtr, pdtrc, pdtri, stdtr, stdtridf, stdtrit, chdtr, chdtrc, chdtri, ndtr, ndtri, smirnov, smirnovi, kolmogorov, kolmogi, tklmbda, gamma, gammaln, gammainc, gammaincinv, gammaincc, gammainccinv, beta, betaln, betainc, betaincinv, psi, digamma, rgamma, polygamma, erf, erfc, erfinv, erfcinv, erf_zeros, fresnel, fresnel_zeros, fresnelc_zeros, fresnels_zeros, modfresnelp, modfresnelm, lpn, lqn, lpmn, lqmn, lpmv, sph_harm, legendre, chebyt, chebyu, chebyc, chebys, jacobi, laguerre, genlaguerre, hermite, hermitenorm, gegenbauer, sh_legendre, sh_chebyt, sh_chebyu, sh_jacobi, hyp2f1, hyp1f1, hyperu, hyp0f1, hyp2f0, hyp1f2, hyp3f0, pbdv, pbvv, pbwa, pbdv_seq, pbvv_seq, pbdn_seq, mathieu_a, mathieu_b, mathieu_even_coef, mathieu_odd_coef, mathieu_cem, mathieu_sem, mathieu_modcem1, mathieu_modcem2, mathieu_modsem1, mathieu_modsem2, pro_ang1, pro_rad1, pro_rad2, obl_ang1, obl_rad1, obl_rad2, pro_cv, obl_cv, pro_cv_seq, obl_cv_seq, pro_ang1_cv, pro_rad1_cv, pro_rad2_cv, obl_ang1_cv, obl_rad1_cv, obl_rad2_cv, kelvin, kelvin_zeros, ber, bei, berp, beip, ker, kei, kerp, keip, ber_zeros, bei_zeros, berp_zeros, beip_zeros, ker_zeros, kei_zeros, kerp_zeros, keip_zeros, expn, exp1, expi, wofz, dawsn, shichi, sici, spence, zeta, zetac, cbrt, exp10, exp2, radian, cosdg, sindg, tandg, cotdg, log1p, expm1, cosm1, round</p>
+
+<p>To use similar functions in C definitions you will have to include a C library defining them and call them with the imported names (see <a href="./Generators.html#Making_changes_to_the_C_code_through_the_API">this section</a>). You will have to let PyDSTool know which functions you are using so that it doesn't throw an error for finding an &quot;undefined&quot; name, using the <tt>ignorespecial</tt> keyword in the defining arguments.</p>
+
+<h3 id="head-38d0ceb2acb9119798d9191e06d96984ef1d03ef">3.1.4. Noteworthy syntax quirk: powers</h3>
+
+<p>For Python language targets you should always use the syntax <tt>pow(x,p)</tt> rather than <tt>x^p</tt> or <tt>x**p</tt> in order to express powers involving floating point values. Python does not behave correctly with the caret operator <tt>^</tt> for floating point numbers. In order to make it easier to convert legacy code to work with PyDSTool, the utility <tt>convertPowers(&lt;string&gt;,&nbsp;&lt;target&gt;)</tt> is available, where <tt>&lt;target&gt;</tt> is "^", "**", or "pow". </p>
+<p>If you use the symbolic expression classes (see <a href="./Symbolic.html">Symbolic</a>), you can build expressions using the <tt>**</tt> operator. Internally, the represenation for powers are converted to using the <tt>pow</tt> function.</p>
+<p>&nbsp;</p>
+
+<h1 id="Macros">4. Macros</h1>
+
+<p>For an example of macros in action, see the <a href="http://pydstool.bzr.sourceforge.net/bzr/pydstool/annotate/head%3A/tests/basic_gen_tests.py">basic_gen_tests.py</a> script.</p>
+
+
+
+<p>Here, there are two summations, over indices <tt>i</tt> and <tt>j</tt>. The <tt>p[j]</tt> will map on to one of the three parameters defined, and the user-defined <tt>indexfunc</tt> will be called with the value of <tt>j</tt> added to the selected parameter value, depending on <tt>i</tt> and the evaluation of the if statement.</p>
+
+<h2>4.1 Multiple state variable definitions using the 'for' macro</h2>
+
+<p>A 'for' loop macro is provided to ease repetitive definitions in all 
+specification strings. This is pre-processed to 'unroll' the loop into a
+ flat list of definitions before the parser processes the specification 
+string. The syntax is: </p>
+
+<pre><code>for(i, &lt;ilo&gt;, &lt;ihi&gt;, &lt;expr_in_i&gt;)</code></pre>
+
+<p>where <tt>&lt;ilo&gt;</tt> and <tt>&lt;ihi&gt;</tt> are integers, and the expression in <tt>i</tt> (or any other alphabet character) has all occurrences of <tt>i</tt> in square brackets replaced with the appropriate integer. Parameter declarations for such expressions are strings of the form <tt>x[i]</tt> for a variable <tt>x</tt>. </p>
+
+<pre><code>
+args(name='for_demo',
+     pars={'p0': 0, 'p1': 1, 'p2': 2},
+     varspecs={'z[j]': 'for(j, 0, 1, 2*z[j+1] + p[j])',
+               'z2': '-z0 + p2 + special_erfc(2.0)'})   # z2 is defined as the end case
+</code></pre>
+
+<h2>4.2 Summation using the 'sum' macro</h2>
+
+<pre><code>sum(i, 0, 4, &lt;code_using_i&gt;)</code></pre>
+
+<pre><code>
+args(name='sum_demo',
+     pars={'p0': 0, 'p1': 1, 'p2': 2},
+     varspecs={'x': 'sum(i, 0, 4, sum(j, 0, 1, if([i]==2, 0, indexfunc([j] + p[j]))))'},
+     fnspecs={'indexfunc': (['x'], 'pi*x')}  # user-defined function returning Pi * x
+     )
+</code></pre>
+
+<h1 id="Aux_fns">5. Auxiliary functions</h1>
+
+<p>Auxiliary functions are accessible to variable specifications and 
+event definitions by name. As well as the option for user-defined 
+functions, several in-built auxiliary functions are provided.  
+Currently, these are: </p>
+
+<ul>
+<li><p> <tt>if(&lt;cond_expr&gt;,&nbsp;&lt;expr_1&gt;,&nbsp;&lt;expr_2&gt;)</tt> evaluates to <tt>&lt;expr_1&gt;</tt> if <tt>&lt;cond_expr&gt;</tt> evaluates to True, otherwise <tt>&lt;expr_2</tt> is evaluated. </p>
+</li>
+<li><p> <tt>heav(&lt;expr&gt;)</tt> = 1 if the expression evaluates to a positive value, otherwise = 0. </p>
+</li>
+<li><p> <tt>globalindepvar(&lt;local_indepvar&gt;)</tt> returns the 
+system's "global" independent variable (usually time) corresponding to 
+the "local" value of the independent variable. See <a href="./HybridSystems.html">HybridSystems</a>. </p>
+</li>
+<li><p> <tt>initcond(&lt;var_name&gt;)</tt> returns the initial condition of the named state variable. </p>
+</li>
+</ul>
+
+<p>The first two are present for dealing with discrete-time systems (i.e., <tt>MapSystem</tt>),
+ or legacy ODE code (e.g., from XPP) when the discrete events they 
+involve are not computed beyond the accuracy of the integrator's step 
+size. For accurate discrete event handling in continuous-time systems, 
+the hybrid system <tt>Model</tt> class should be used. </p>
+<p>The user may specify other, user-defined, auxiliary functions. These 
+can help to simplify and organize the evaluation of right-hand sides, 
+and to improve computational efficiency. User-defined functions are 
+exposed in the generator as python functions. For instance, a function 'h' of one argument
+ for a generator <tt>g</tt> is exposed as <tt>g.auxfns.h</tt> and has 
+the same calling sequence as the internal function. Any parameter values
+ used in the definition of the function are also mapped dynamically to 
+the current values of <tt>g.pars</tt>.</p>
+
+<h1 id="Sub-expr">6. Sub-expression substitutions in target language [technical]</h1>
+
+<p>There is a helpful option to use a two-pass sub-expression parser and
+ term reuser in expressions appearing in the target language vector 
+field function definition, and in auxiliary functions / variable 
+defintions. The user can list pairs of (subexpression, symbolname) 
+strings in a dictionary at the initialization of the Generator, through 
+the keyword <tt>reuseterms</tt>. If the subexpressions are actually found in the function code, this causes 
+</p>
+<pre>double symbolname = subexpression;
+</pre>
+<p>in C-code Generators, and 
+</p>
+<pre>symbolname = subexpression
+</pre>
+<p>in Python-code Generators. to appear in the preamble of the 
+appropriate function, and all occurrences of subexpression will be 
+replaced in the RHS. The two-pass aspect allows 'second-order 
+subexpressions'. For instance, consider the specification </p>
+<p><tt>2*sin(afunc(p))+cos(afunc(p))*sin(afunc(p))-afunc(p)/5.</tt> </p>
+<p>A <tt>reuseterms</tt> dictionary <tt>&nbsp;{'afunc(p)':&nbsp;'afp',&nbsp;'sin(afp)':&nbsp;'sa',&nbsp;'other(x)':&nbsp;'ox'}&nbsp;</tt> will result in the final specification: </p>
+<p><tt>2*sa+cos(afp)*sa-afp/5.</tt> </p>
+<p>preceded by the declarations: 
+</p>
+<pre>double afp = afunc(p);
+double sa = sin(afp);
+</pre>
+<p>(in C) 
+</p>
+<pre>afp = afunc(p)
+sa = sin(afp)
+</pre>
+<p>(in Python) </p>
+<p>Note that, because <tt>other(x)</tt> did not appear in the code specification, no declarations for <tt>ox</tt> are made. This avoids some compiler warnings about unused symbols. </p>
+<p>The two-pass system ensures that second-order references are not 
+processed until the second pass, and that the declarations appear in the
+ correct order. </p>
+
+
+
+<div id="pagebottom"></div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>ModelSpec</title></head>
+<body  lang="en" dir="ltr">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+
+<h1>ModelSpec</h1>
+
+<p><b>Model specification tools.</b></p>
+
+
+<div id="page" lang="en" dir="ltr">
+
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><p class="line867"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#ModelSpec_structured_model_specification">ModelSpec structured model specification</a><ol><li>
+<a href="#Learning_by_example">Learning by example</a></li><li>
+<a href="#Hierarchical_model_construction">Hierarchical model construction</a><ol><li>
+<a href="#Multiple_Quantity_definitions">Multiple Quantity definitions</a></li></ol></li><li>
+<a href="#Components">Components</a></li><li>
+<a href="#ModelSpec_objects_as_databases">ModelSpec objects as databases</a></li></ol></li><li>
+<a href="#Transforming_specifications_into_models">Transforming specifications into models</a><ol><li>
+<a href="#The_ModelConstructor_utility">The ModelConstructor utility</a></li></ol></li></ol></div> <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><p class="line867"><hr /><p class="line874"> <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span>
+
+
+<h1 id="ModelSpec_structured_model_specification">1. ModelSpec structured model specification</h1>
+<span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><p class="line867">
+
+<h2 id="Learning_by_example">1.1. Learning by example</h2>
+<p>In the absence of comprehensive documentation at this time, we recommend studying the examples provided in the  <tt>/tests/</tt> directory. These focus on ODE models, but in most cases discrete-time equations could be substituted for the ODEs by making the target Generators <tt>MapSystem</tt> rather than an ODE solver. Also see the computational neuroscience <a href="./Tutorial.html">tutorial</a> in the intermediate section. </p>
+
+<p class="line867">
+
+<h2 id="Hierarchical_model_construction">1.2. Hierarchical model construction</h2>
+<span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><p class="line862">The goal of the <tt>ModelSpec</tt> classes is to provide a class hierarchy that allows complex dynamical models to be composed from simple units of mathematical expression. <span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><p class="line862">There is a low-level <tt>QuantSpec</tt> wrapper around a parser class, which in turn is built into the <tt>Quantity</tt> classes. These classes are really the elementary model building blocks, and are discussed on the page <a href="./Symbolic.html">Symbolic</a>. <span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><p class="line874">On this page we continue to develop the hierarchical structure from that point. <span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><p class="line867">
+
+<h3 id="Multiple_Quantity_definitions">1.2.1. Multiple Quantity definitions</h3>
+<span class="anchor" id="line-24"></span><span class="anchor" id="line-25"></span><p class="line862">A useful short-hand is available for defining a range of numbered Quantities, for instance <tt>x0</tt>-<tt>x10</tt>. This is achieved by making the Quantity name consist of <span class="anchor" id="line-26"></span>an alphanumeric string followed (with no whitespace) by a three-element list containing an index name, the <span class="anchor" id="line-27"></span>starting index value, and the ending index value (in increasing order). The definition may use the index as a <span class="anchor" id="line-28"></span>locally-defined integer value in expressions. It may itself be used inside references to other multiply-defined <span class="anchor" id="line-29"></span>Quantities. These definitions are also discussed on the page <a href="./Symbolic.html">Symbolic</a>. <span class="anchor" id="line-30"></span><span class="anchor" id="line-31"></span><p class="line867"><strong>Example</strong>: <span class="anchor" id="line-32"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en"><pre dir="ltr" id="CA-b5d8608d2005082088026e88fe2107768bd6afc7" lang="en"><span class="line"><span class="anchor" id="line-1-2"></span>&gt;&gt;&gt; <span class="ID">m</span>=<span class="ID">Var</span>(<span class="String">'</span><span class="String">3*i-a</span><span class="String">'</span>, <span class="String">'</span><span class="String">m[i,1,4]</span><span class="String">'</span>)</span>
+<span class="line"><span class="anchor" id="line-2-1"></span>&gt;&gt;&gt; <span class="ID">m</span>[<span class="Number">2</span>]</span>
+<span class="line"><span class="anchor" id="line-3-1"></span><span class="ID">Quantity</span> <span class="ID">m2</span> (<span class="ID">ExpFuncSpec</span>)</span>
+<span class="line"><span class="anchor" id="line-4-1"></span>&gt;&gt;&gt; <span class="ResWord">print</span> <span class="ID">m</span>[<span class="Number">2</span>]()</span>
+<span class="line"><span class="anchor" id="line-5-1"></span><span class="Number">3</span>*<span class="Number">2</span>-<span class="ID">a</span></span>
+<span class="line"><span class="anchor" id="line-6-1"></span>&gt;&gt;&gt; <span class="ResWord">print</span> <span class="ID">m</span>[<span class="Number">3</span>].<span class="ID">eval</span>(<span class="ID">a</span>=<span class="Number">1</span>)</span>
+<span class="line"><span class="anchor" id="line-7-1"></span><span class="Number">8</span></span>
+<span class="line"><span class="anchor" id="line-8-1"></span>&gt;&gt;&gt; <span class="ResWord">print</span> <span class="ID">m</span>[<span class="Number">0</span>]</span>
+<span class="line"><span class="anchor" id="line-9-1"></span><span class="ID">IndexError</span>: <span class="ID">Index</span> <span class="ID">to</span> <span class="ID">multiple</span> <span class="ID">Quantity</span> <span class="ID">definition</span> <span class="ID">out</span> <span class="ID">of</span> <span class="ID">the</span> <span class="ID">valid</span> <span class="ResWord">range</span> [<span class="Number">1</span>,<span class="Number">4</span>]</span>
+<span class="line"><span class="anchor" id="line-10-1"></span>&gt;&gt;&gt; <span class="ID">n</span>=<span class="ID">Var</span>(<span class="String">'</span><span class="String">2+m[k*2]</span><span class="String">'</span>, <span class="String">'</span><span class="String">n[k,0,2]</span><span class="String">'</span>)</span>
+<span class="line"><span class="anchor" id="line-11-1"></span>&gt;&gt;&gt; <span class="ResWord">print</span> <span class="ID">n</span>[<span class="Number">2</span>]()</span>
+<span class="line"><span class="anchor" id="line-12-1"></span>&gt;&gt;&gt; <span class="Number">2</span>+<span class="ID">m4</span></span>
+</pre></div></div><span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><p class="line874">Here, the 'k*2' forms the index to the 'm' Quantities. The expression forming the index must statically evaluate to an integer when 'k' is substituted with the values in the declared range, at the time of definition. For example, the index cannot involve a parameter or variable value that will not be known until run-time. Built-in functions that return integers (such as 'mod' or 'pow' with integer arguments) can be used to create the index expression.  <span class="anchor" id="line-49"></span><span class="anchor" id="line-50"></span><p class="line867">
+
+<h2 id="Components">1.3. Components</h2>
+<span class="anchor" id="line-51"></span><span class="anchor" id="line-52"></span>
+<p class="line862">At the next level of the model specification hierarchy are "components" (class Component). These may be either regular components or "leaf" components (class Leaf<tt class="backtick"></tt>Component, a sub-class of Component) that cannot themselves contain other components, i.e. are at the &quot;tips&quot; of the tree structure. <span class="anchor" id="line-53"></span><span class="anchor" id="line-54"></span>
+<p class="line862">Access down the levels of hierachical composition of model components is represented in the familiar "dot" notation of Python object-oriented classes. For instance, "mysuper.leaf1" and "mysuper.leaf2" would describe a Component "mysuper" that can contain Leaf<tt class="backtick"></tt>Components "leaf1" and "leaf2". <span class="anchor" id="line-55"></span><span class="anchor" id="line-56"></span><span class="anchor" id="line-57"></span><p class="line867">
+
+<h2 id="ModelSpec_objects_as_databases">1.4. ModelSpec objects as databases</h2>
+<span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span><p class="line862">The <tt>searchModelSpec</tt> function is powerful way to access or probe the contents of a Model<tt class="backtick"></tt>Spec object according to a variety of search criteria. The criteria may include wild-cards, for instance, and makes use of the "dot" notation for representing hierarchical depth. <span class="anchor" id="line-60"></span><span class="anchor" id="line-61"></span><p class="line862">A range of information is held in a <tt>_registry</tt> attribute of a Model<tt class="backtick"></tt>Spec component. Sub-components can be added, renamed, and deleted. <span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><span class="anchor" id="line-64"></span><p class="line867">
+<h1 id="Transforming_specifications_into_models">2. Transforming specifications into models</h1>
+<span class="anchor" id="line-65"></span><span class="anchor" id="line-66"></span><p class="line862">In order to turn a hierarchical specification of a model into a target Generator or Model object, the specification must be "flattened", and information about the sub-components that is embedded in this specification in a structured way must also be extracted and listed out. A Model<tt class="backtick"></tt>Spec component has a method <tt>flattenSpec</tt> which can be called once the model has been fully defined. A fully defined model is one that has no free names in need of resolving. The component has the attribute <tt>freeSymbols</tt>, but names external to the specification, such as <tt>t</tt> for time in non-autonomous systems, or names of built-in auxiliary functions, will be treated as free symbols. The <tt>flattenSpec</tt> function takes an optional list argument <tt>globalRefs</tt> to specify such names in order to complete the definition of the system. <span class="anchor" id="line-67"></span><span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span><p class="line867">
+
+<h2 id="The_ModelConstructor_utility">2.1. The ModelConstructor utility</h2>
+<span class="anchor" id="line-70"></span><span class="anchor" id="line-71"></span><p class="line862">The Model<tt class="backtick"></tt>Constructor classes simplify some of the tasks in converting a Model<tt class="backtick"></tt>Spec specification into a Func<tt class="backtick"></tt>Spec call that ultimately produces a target <a href="./Generators.html">Generator</a> or Model class instance (see page <a href="./FunctionalSpec.html">FunctionalSpec</a>). <span class="anchor" id="line-72"></span><span class="anchor" id="line-73"></span><p class="line862">Models created in this way contain a copy of their source Model<tt class="backtick"></tt>Spec in the <tt>mspecdict</tt> attribute. <span class="anchor" id="line-74"></span><span class="anchor" id="line-75"></span><p class="line862">Examples of usage are provided in <tt>/tests/CIN.py</tt> and <tt>/tests/ModelSpec_test.py</tt>. <span class="anchor" id="line-76"></span><span class="anchor" id="bottom"></span></div>
+
+<div id="pagebottom"></div>
+</div>
+</body>
+</html>
+

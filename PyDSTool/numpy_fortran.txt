@@ -1,0 +1,78 @@
+# This is how I got Radau to work on 64bit Linux (Ubuntu 9.04) and numpy 1.2 and python2.6
+# This worked on 3 different machines (all ubuntu 9.04 64 bit), with different architectures AMD and 2 Intel's (L7500, Q9450)
+# AMD required changes to 2 codes in numpy (...distutils/cpuinfo.py  and ...distutils/fcompiler/gnu.py)
+# the Intel systems I merely had to run codes (cpuinfo.py first) then RADAU worked for me
+# the original compile of the 2 scripts must have had a problem when I first installed on intels so merely rerunning scripts worked
+# I am using  the AMD Phenom as the example as I had to make changes only to AMD Phenom version
+# change to editor of choice (nano,kate,..) I used gedit as I figured novices like me could follow better
+
+# method  changes for AMD Phenom tweak as neccessary
+#first run  
+	cat /proc/cpuinfo
+# example output
+	name@comp:~$ cat /proc/cpuinfo
+	processor	: 0
+	vendor_id	: AuthenticAMD
+	cpu family	: 16
+	model		: 2
+	model name	: AMD Phenom(tm) 9850 Quad-Core Processor
+	stepping	: 3
+	cpu MHz		: 1250.000   # I used cpu scaling I know there isn't 1.25Ghz Phenom
+	cache size	: 512 KB
+	physical id	: 0
+	siblings	: 4
+	core id		: 0
+	cpu cores	: 4
+	apicid		: 0
+	initial apicid	: 0
+	fpu		: yes
+	fpu_exception	: yes
+	cpuid level	: 5
+	wp		: yes
+	flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm 3dnowext 3dnow constant_tsc rep_good pni monitor cx16 lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs
+	bogomips	: 5022.19
+	TLB size	: 1024 4K pages
+	clflush size	: 64
+	cache_alignment	: 64
+	address sizes	: 48 bits physical, 48 bits virtual
+	power management: ts ttp tm stc 100mhzsteps hwpstate
+# to check 'vender id' 'cpu family' etc need to make these consistent in numpy
+# Then run 
+	/usr/lib/python2.6/dist-packages/numpy/distutils/cpuinfo.py 
+# and check if output is consistent with your specs
+# If consistent just run 
+	/usr/lib/python2.6/dist-packages/numpy/distutils/fcompiler/gnu.py
+#  then try to run radau , make sure to delete any earlier radau files for earlier attempts or else you get segmentation fault
+
+#If the cpuinfo.py output is not correct ( as with my AMD Phenem machine) change as follows
+	sudo gedit /usr/lib/python2.6/dist-packages/numpy/distutils/cpuinfo.py
+
+#for amd phenom changes around line 145 from
+	def _is_AMD64(self):
+        	return  self.is_AMD() and self.info[0]['family'] == '15' # make consistent with 'cpu family' value from above
+#to (line 163)
+	def _is_AMD64(self):
+        	return  self.is_AMD() and self.info[0]['cpu family'] == '16'
+#Then add def for phenom
+	def _is_Phenom(self):
+	 	return re.match(r'.*?Phenom\b',
+                        self.info[0]['model name']) is not None 
+
+# Since my model number was 2 I also changed the following to keep from my machine being labeled a k6-2
+    def _is_AthlonK6_2(self):
+        return self._is_AMD() and self.info[0]['model'] == '1'  
+# my model number was 2 make sure different from your model number
+
+# save and run (ipython)
+# then change gnu.py if necessary I didn't need to for Intel but I did for AMD
+	sudo gedit /usr/lib/python2.6/dist-packages/numpy/distutils/fcompiler/gnu.py
+
+# example for phenom (change as appropriate) add under  "def get_flags_arch(self):" (line 180)
+# added to both subsections " if gnu_ver >= '3.1.1':"(line 214) and "if gnu_ver >= '3.4':"(line 241) since I wasn't sure
+	    elif cpu.is_Phenom():
+		marh_opt = '-march=opteron'
+# could try march_opt = '-march=Phenom' but not sure if that works  there doesn't seem to be any differences in these options
+
+#save and run 
+
+#Radau should now work or at least it did for me

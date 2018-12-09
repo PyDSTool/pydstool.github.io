@@ -1,0 +1,437 @@
+<html>
+<body>
+<h2>Step by step PyDSTool on Gentoo</h2>
+
+<p>by Shai Revzen, ca. 2006. These instructions refer to old versions of libraries, etc., but may nonetheless provide help for those installing everything from source code on Gentoo linux.</p>
+<p>This page provides a step by-step record of an experience installing a full PyDSTool system from scratch on a Linux Gentoo distribution. </p>
+<p>I've taken the approach of installing all the PyDSTool requisites in their own filesystem branch, without overwriting the main Gentoo tools. It is advisable to use this approach because Gentoo tools are constantly updated and may break backward compatibility with PyDSTool, even if were possible to get them to work. Furthermore, so far PyDSTool does not work with any of the "cutting edge" versions of Python used in Gentoo. </p>
+<p>A second significant installation choice is that I'm installing as root for shared use computer -- i.e. setting things up so that multiple students can use PyDSTool from their own accounts independently and without steppin g on each other's toes. If you are installing PyDSTool only for one user, there might be easier ways to do it. </p>
+<hr class="hr2">
+<p> </p>
+<hr class="hr2">
+<p> </p>
+<h3>Files to Download</h3>
+
+<ul>
+<li style="list-style-type:none"><p>Based on the instructions in this wiki, I downloaded the following: </p>
+</li>
+<li><p> Numeric-23.8.tar.gz </p>
+</li>
+<li><p> ipython-0.7.2.tar.gz </p>
+</li>
+<li><p> numarray-1.4.1.tar.gz </p>
+</li>
+<li><p> fftw-2.1.5.tar.gz </p>
+</li>
+<li><p> SciPy_complete-0.3.2.tar.gz  </p>
+</li>
+<li><p> matplotlib-0.80.tar.gz   </p>
+</li>
+<li><p> scipy_distutils-latest.tar.gz </p>
+</li>
+<li><p> Python-2.3.6.tar.bz2  </p>
+</li>
+<li><p> PyDSTool-0.83.3.060921.zip </p>
+</li>
+</ul>
+
+<h3>Get Gentoo to do some of the work for us</h3>
+
+<p>We'll use Gentoo to provide the optimized ATLAS/LAPACK library. The Gentoo library already deals with combining the ATLAS and LAPACK libraries to provide an optimized LAPACK (off-the-web ATLAS does not provide a full LAPACK, and just installing both libraries will not make LAPACK algorithms use the ATLAS optimization), </p>
+<p>Gentoo also provides swig and gnuplot at no extra effort. </p>
+
+<pre>
+interactive=1 emerge blas-atlas
+interactive=1 emerge lapack-atlas
+emerge swig
+emerge gnuplot
+</pre>
+<hr class="hr2">
+<p> </p>
+
+<h3>Install an alternative python</h3>
+
+<p>Unpack python and configure it to use an alternative install path: 
+</p>
+<pre>
+tar xjvf Python-2.3.6.tar.bz2
+cd Python-2.3.6
+./configure  --prefix=/usr/local/pydstool/ --enable-shared
+make &amp;&amp; make install
+</pre>
+<p>Make our new python the default for the current shell: </p>
+
+<pre>
+export PATH=/usr/local/pydstool/bin/:$PATH
+ldconfig /usr/local/pydstool/lib
+which python
+python -c 'print "ok"'
+</pre>
+<p>The <tt>which&nbsp;python</tt> command should return  
+</p>
+<pre>
+  /usr/local/pydstool/bin/python
+</pre>
+<p>If that worked, then the <tt>python&nbsp;-c&nbsp;'print&nbsp;"ok"'</tt> command should print <tt>ok</tt>. If you get a library error, try to give 
+</p>
+<pre>
+ ldconfig /usr/local/pydstool/lib/ &amp;&amp; python -c "print 'ok'"
+</pre>
+<hr class="hr2">
+<p> </p>
+
+<h3>Install numarray</h3>
+
+<p>Gentoo calls the Fortran ABI blas library libblas.so, instead of the libf77blas.so that numarray expects. The easy solution is to make a symlink to alias libf77blas.so to libblas.so, but I didn't want to pollute my system directories with manually generated symlinks. You'd think that the --library-dirs option to distutil's config would be pretty reliable, and we could use that to make distutil look in the current directory. No such luck: although documented, the option has no effect at all for numarray. </p>
+<p>So we make a mildly intrusive set of symlinks, just to make numarray happy, setup with "external LAPACK" and test: 
+</p>
+<pre>
+ln -s /usr/lib/blas/threaded-atlas/libblas.so /usr/local/lib/libf77blas.so
+ln -s /usr/include/atlas/ /usr/local/include/atlas
+python setup.py  --use_lapack config --gencode install
+python -c 'import numarray.testall as testall; testall.test()'
+</pre>
+<hr class="hr2">
+<p> </p>
+
+<h3>Installing Numeric</h3>
+
+<p>The good news about installing Numeric is that it works easily, just by using <tt>&nbsp;python&nbsp;setup.py&nbsp;install&nbsp;</tt> </p>
+<p>The bad news is that all configuration *MUST* be done by patching the <tt>setup.py</tt> file. Here's a shell snippet that creates the patch: 
+</p>
+<pre>
+cat &gt;Numeric-23.8-setup.patch &lt;&lt;ENDS-PATCH
+--- Numeric-23.8/setup.py       2005-02-08 14:58:25.000000000 -0800
++++ Numeric-23.8-setup.py       2006-12-24 21:34:36.000000000 -0800
+@@ -19,7 +19,7 @@
+ MA_version = version
+ 
+ headers = glob (os.path.join ("Include","Numeric","*.h"))
+-extra_compile_args = []  # You could put "-O4" etc. here.
++extra_compile_args = ["-O3"]  # You could put "-O4" etc. here.
+ mathlibs = ['m']
+ define_macros = [('HAVE_INVERSE_HYPERBOLIC',None)]
+ undef_macros = []
+@@ -32,20 +32,20 @@
+     mathlibs = []
+ 
+ # delete all but the first one in this list if using your own LAPACK/BLAS
+-sourcelist = [os.path.join('Src', 'lapack_litemodule.c'),
+-              os.path.join('Src', 'blas_lite.c'), 
+-              os.path.join('Src', 'f2c_lite.c'), 
+-              os.path.join('Src', 'zlapack_lite.c'),
+-              os.path.join('Src', 'dlapack_lite.c')
+-             ]
++sourcelist = [os.path.join('Src', 'lapack_litemodule.c') ] #,
++#              os.path.join('Src', 'blas_lite.c'), 
++#              os.path.join('Src', 'f2c_lite.c'), 
++#              os.path.join('Src', 'zlapack_lite.c'),
++#              os.path.join('Src', 'dlapack_lite.c')
++#             ]
+ # set these to use your own BLAS;
+ 
+-library_dirs_list = []#'/usr/lib/atlas']
+-libraries_list = []#'lapack', 'cblas', 'f77blas', 'atlas', 'g2c'] 
++library_dirs_list = ['/usr/lib/blas/threaded-atlas/']#'/usr/lib/atlas']
++libraries_list = ['lapack','cblas']#'lapack', 'cblas', 'f77blas', 'atlas', 'g2c'] 
+ 
+ # set to true (1), if you also want BLAS optimized matrixmultiply/dot/innerproduct
+-use_dotblas = 0
+-include_dirs = []#'/usr/include/atlas']  
++use_dotblas = 1 # 0
+ENDS-PATCH
+</pre>
+<p>Now we apply the patch and install Numeric: 
+</p>
+<pre>
+tar xzvf Numeric-23.8.tar.gz
+cd Numeric-23.8.tar.gz
+patch  &lt; ../Numeric-23.8-setup.patch
+python setup.py install
+</pre>
+<p>The unit test is rather slow. It is found by running: 
+</p>
+<pre>
+python Test/test.py
+</pre>
+<p>A nice "sanity" test that Numeric is installed is 
+</p>
+<pre>
+python Demo/life.py
+</pre>
+<hr class="hr2">
+<p> </p>
+
+<h3>Installing F2PY</h3>
+
+<p>This one is "pure" python, so it's easy: 
+</p>
+<pre>
+python setup.py install
+</pre>
+<p>That's it. Sometimes it just works. </p>
+<hr class="hr2">
+<p> </p>
+
+<h3>wxPython</h3>
+
+<p>wxPython is useful for scipy GUI and matplotlib. So as to prevent it from conflicting with the Gentoo package, I installed from source and let it use the Gentoo wxGTK -- to no avail -- the Gentoo wxGTK is a wx 2.6 GTK-2 -- way too advanced for the installer to recognize. </p>
+<p>So we build out own wxGTK: 
+</p>
+<pre>
+        export WXPREF=/usr/local/pydstool/wxPython
+        cd wxPythonSrc-2.4.2.4
+        mkdir build
+        cd build
+        ../configure --with-gtk \
+                     --prefix=$WXPREF \
+                     --enable-rpath=$WXPREF/lib \
+                     --with-opengl \
+                     --enable-geometry \
+                     --enable-optimise \
+                     --enable-debug_flag 
+        make
+        make install
+        cd ../wxPython
+        python setup.py \
+               BUILD_GLCANVAS=0 \ 
+               WX_CONFIG=/usr/local/pydstool/bin/wx-config \
+               build install
+        cd demo
+        python demo.py
+</pre>
+<hr class="hr2">
+<p> </p>
+
+<h3>FFTW library</h3>
+
+<ul>
+<li style="list-style-type:none"><p>fftw needs to be installed twice - once for double and once for single precision numbers. The library must be made from the old 2.x version sources (3.x API is not backward compatible). </p>
+<p>Un-tar the code in the obvious way, change to the tar directory and: </p>
+</li>
+</ul>
+
+<pre>
+./configure \
+        --enable-shared --enable-threads \
+        --enable-static \
+        --enable-type-prefix --prefix=/usr/local/pydstool/
+make
+make install
+./configure \
+        --enable-shared --enable-threads \
+        --enable-static --enable-float \
+        --enable-type-prefix --prefix=/usr/local/pydstool/
+make
+make install
+</pre>
+<hr class="hr2">
+<p> </p>
+
+<h3>Installing SciPy - At Long Last!</h3>
+
+<ul>
+<li style="list-style-type:none"><p>Surprisingly well behaved, it installed with: </p>
+</li>
+</ul>
+
+<pre>
+        tar xzvf SciPy_complete-0.3.2.tar.gz
+        cd SciPy_complete-0.3.2
+        python setup.py install
+</pre>
+<ul>
+<li style="list-style-type:none"><p>Test it with: </p>
+</li>
+</ul>
+
+<pre>
+        ipython
+        import scipy
+        scipy.test(level=1, verbosity=2)
+</pre>
+<ul>
+<li style="list-style-type:none"><p>If you are brave, run the full test: </p>
+</li>
+</ul>
+
+<pre>
+        scipy.test(level=10, verbosity=2)
+</pre>
+<ul>
+<li style="list-style-type:none"><p>It runs 986 tests in 82.397s on my machine </p>
+</li>
+</ul>
+<hr class="hr2">
+<p> </p>
+
+<h3>Installing matplotlib</h3>
+
+<ul>
+<li style="list-style-type:none"><p>Similarly easy is matplotlib, except for a little annoying setup bug (see below) </p>
+</li>
+</ul>
+
+<pre>
+        tar xzvf matplotlib-0.80.tar.gz
+        cd matplotlib-0.80
+        python setup.py build install
+</pre>
+<ul>
+<li style="list-style-type:none"><p>Expect a lot of warnings. If all worked well, you can now see a graph: </p>
+</li>
+</ul>
+
+<pre>
+        cd ..
+        ipython
+        from pylab import *
+        t = arrayrange(0,20,0.05)
+        s = sin(t)
+        plot(t,s)
+        show()
+</pre>
+<ul>
+<li style="list-style-type:none"><p>If this crashed at the import, make sure the right rc file is being loaded: </p>
+</li>
+</ul>
+
+<pre>
+        import matplotlib
+        matplotlib.matplotlib_fname()
+</pre>
+<ul>
+<li style="list-style-type:none"><p>The result should be: </p>
+</li>
+</ul>
+
+<pre>
+        /usr/local/pydstool/share/matplotlib/.matplotlibrc
+</pre>
+<ul>
+<li style="list-style-type:none"><p>If it isn't, you probably didn't believe me that the <tt>cd&nbsp;..</tt> is needed, but there is a <tt>.matplotlibrc</tt> with a bogus configuration in the matplotlib-0.80 root directory. Guess how many hours I spent to figure that out.... </p>
+<p>Make sure that the following entries are in the rc file: </p>
+</li>
+</ul>
+
+<pre>
+        backend      : WXAgg
+        interactive  : True
+</pre>
+<ul>
+<li style="list-style-type:none"><p>If you really need help doing this, you can give the following shell commands to apply a patch: </p>
+</li>
+</ul>
+
+<pre>
+cd /usr/local/pydstool/share/matplotlib/
+cat &gt;matplotlibrc.patch &lt;&lt;ENDS-PATCH
+--- .matplotlibrc       2005-04-07 11:56:27.000000000 -0700
++++ /usr/local/pydstool/share/matplotlib/.matplotlibrc  2007-01-17 00:06:14.000000000 -0800
+@@ -28,9 +28,9 @@
+ #  - a legal html color name, eg red, blue, darkslategray
+ 
+ #### CONFIGURATION BEGINS HERE
+-backend      : GTKAgg    # the default backend
++backend      : WXAgg    # the default backend
+ numerix      : Numeric   # Numeric or numarray
+-interactive  : False     # see http://matplotlib.sourceforge.net/interactive.html
++interactive  : True     # see http://matplotlib.sourceforge.net/interactive.html
+ toolbar      : toolbar2   # None | classic | toolbar2
+ timezone     : UTC        # a pytz timezone string, eg US/Central or Europe/Paris
+ENDS-PATCH
+patch &lt;matplotlibrc.patch &amp;&amp; rm matplotlibrc.patch
+</pre>
+<hr class="hr2">
+<p> </p>
+
+<h3>Installing PyDSTool</h3>
+
+<ul>
+<li style="list-style-type:none"><p>Since this machine has a "dedicated" python for PyDSTool, it makes sense to put the library in the site-packages of that python instance: </p>
+</li>
+</ul>
+
+<pre>
+        export P=`pwd`/PyDSTool*zip
+        cd /usr/local/pydstool/lib/python2.3/site-packages
+        unzip $P
+</pre>
+<ul>
+<li style="list-style-type:none"><p>Now test our newfound glory with: </p>
+</li>
+</ul>
+
+<pre>
+        cp -rv /usr/local/pydstool/lib/python2.3/site-packages/PyDSTool/tests ~
+        cd ~/tests
+        ipython
+        run run_all_tests.py
+</pre>
+<ul>
+<li style="list-style-type:none"><p>We have to run the tests from our homedir? because they require write permissions for temporary files, and are not using the <tt>/tmp</tt> directory or python's tempfile interface </p>
+</li>
+</ul>
+<hr class="hr3">
+<p> </p>
+<h3>Adding into the env-update path</h3>
+
+<ul>
+<li style="list-style-type:none"><p>If you want all your users to have access to the PyDSTool package when they run ipython, there's an option that will actually make life easier: add into the <tt>/etc/env.d</tt> so that Gentoo's own env-update scripts configure the libraries and path: </p>
+<p>As root, type: </p>
+</li>
+</ul>
+
+<pre>
+        cat &gt; /etc/env.d/99pydstool &lt;&lt;END
+        LDPATH="/usr/local/pydstool/lib"
+        PATH="/usr/local/pydstool/bin"
+        END
+</pre>
+<ul>
+<li style="list-style-type:none"><p>This will set up a file called <tt>/etc/env.d/99pydstool</tt> that tells Gentoo's env-update script to configure our new tools at the very end of the search path. If you want to check whether this worked, open a new shell that was not configured for out PyDSTool and type </p>
+</li>
+</ul>
+
+<pre>
+        env-update
+        . /etc/profile
+        ipython
+</pre>
+<ul>
+<li style="list-style-type:none"><p>You should get a PyDSTool capable ipython, running from <tt>/usr/local/pydstool/bin</tt>. A nice corollary is that everything will work just fine after <tt>emerge</tt>-ing new packages, i.e. you won't need to run <tt>ldconfig</tt>. </p>
+</li>
+</ul>
+<p><strong>WARNING:</strong> I haven't tested this thoroughly yet... mileage may vary. </p>
+<hr class="hr3">
+<p> </p>
+
+<h2>Appendix - Useful Notes</h2>
+
+<h3>Debugging python's disutils</h3>
+
+<p>Debugging distutils is a pain in the ass. The first thing to try is adding <tt>DISTUTILS_DEBUG=1</tt> to your shell environment. But here's a tiny change that made me much happier: in distutils/spawn.py modify the function spawn to add a debug printout on the first line after the docstring: </p>
+
+<pre>
+  print "#: "," ".join(cmd) #!!!
+</pre>
+<p>This causes distutils to generate make-like output showing all the commands that are spawned. It's pretty useful when things go bad, and keeps you from falling asleep when the build is slow. </p>
+<h3>Library madness</h3>
+
+<p>Another misadventure was due to a Gentoo rather than a PyDSTool problem, but it is hard to track: the PyDSTool's tests failed when using scipy.gplt, with a useless error message (Broken Pipe). It turned out that gnuplot failed consistentently because it wanted libXaw.so.8 - which Gentoo doesn't have at this point in time. This turned out to me a depedency through libplot.so, left over from pre-modular xorg (if this means nothing to you - be very happy!).  </p>
+<ul>
+<li style="list-style-type:none"><p>Solution: </p>
+</li>
+</ul>
+
+<pre>
+        emerge plotutils
+        emerge gnuplot
+</pre>
+<ul>
+<li style="list-style-type:none"><p>And try again. Everything works! </p>
+</li>
+</ul>
+
+</body>
+</html>

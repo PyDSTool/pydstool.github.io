@@ -1,0 +1,512 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><title>TechDocumentation - PyDSTool</title></head>
+<body dir="ltr" lang="en">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1>Technical Documentation</h1>
+
+<ol>
+
+<li>
+<a href="#head-c269b8efa84a35b1a6877f9975a75d5f8c81fe7c">Technical details about numeric types</a>
+<ol>
+
+<li>
+<a href="#head-05d608e2835c6ea3ae782fbd67fbdd9180104d29">Note on numeric types</a>
+</li>
+
+<li>
+<a href="#head-170087aa02c121e0e41bf494fe6b21848653ff26">Interval</a></li>
+
+<li>
+<a href="#head-8ce0bcfc3d34ccd337203d9df916e8a7da226356">Points</a></li>
+
+<li>
+<a href="#head-73b2927a78fd5ce571d621388d4c90add92b2827">Variable</a>
+<ol>
+
+<li>
+<a href="#head-1d4cebe08ee83e07e9dcf70f9e37b2e701955c0a">Inside the API of the Variable class</a>
+</li>
+
+</ol>
+
+</li>
+<li>
+<a href="#head-924760b76091ce93db932bb4ec1713a1b4b36b9b">Trajectory</a>
+</li>
+
+</ol>
+
+</li>
+<li>
+<a href="#head-299b2ecf73af3dcb0873530caa926d3431092052">Model</a></li>
+
+<li>
+<a href="#head-764ab8a29dc39437bdfd8a94d5e11e3d41fad582">System specification with FuncSpec</a>
+</li>
+<ol>
+  <li><a href="#Sub-classes">Sub-classes</a></li>
+  <li><a href="#Initialization_keywords">Initialization keywords</a></li>
+  <li><a href="#head-3e140b13ab905d0b69cd6b2ded2bf765bd656546">Elements of a system specification</a></li>
+  <li><a href="#head-0393cac11e7490e1de34042c8f9656ea92f77aad">Mathematical expression syntax</a></li>
+  <ol>
+
+        <li>
+        <a href="#head-4118bdcb9a6f8c4c7e11dc78fc112aacc620579c">Syntax checking</a>
+        </li>
+        
+        <li>
+        <a href="#head-62c7b3c7d2af9ac699bfeb3ea517b781e465a3be">Standard math names</a>
+        </li>
+        
+        <li>
+        <a href="#head-3cc0a3172ba89d64e77998ae8ff16be2456c9bb5">Multiple definitions using the for loop macro</a>
+        </li>
+        
+        <li>
+        <a href="#head-d590a356208d41a9bc317bbfbaa6f7287f43242e">Auxiliary functions</a>
+        </li>
+        
+        <li>
+        <a href="#head-38d0ceb2acb9119798d9191e06d96984ef1d03ef">Noteworthy syntax quirk: powers</a>
+        </li>
+        
+        <li>
+        <a href="#head-9a51e52a6d1e5dd3cafa1f12cc6c786abe98ee6e">Sub-expression substitutions in target language</a>
+        </li>
+    </ol>
+
+</ol>
+
+<li>
+<a href="#head-feaf595c314306386248d7d5ecb1b9ffd57d2e85">Dynamically-created functions</a>
+<ol>
+
+<li>
+<a href="#head-4ec6e57158efa9d7b82e8ec5d345692f20c59428">Object persistence issues</a>
+<ol>
+
+<li>
+<a href="#head-44a0f68fa69a025dc0b180800830c495b79e643b">Cfunc objects, etc.</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li>
+<li>
+<a href="#head-0c4bc4052fac544c2e903ad1ebea0a368f2447dc">Generator classes</a>
+</li>
+
+<li>
+<a href="#head-1f331cf99ab0251292916a88295422570a69e666">Implementation of numerical integration</a>
+</li>
+
+<li>
+<a href="#head-f47b0850d4cbd3f7457ed37aab7c314ebc80bce7">Implementation of numerical continuation</a>
+</li>
+
+<li>
+<a href="#head-bf174a58679a2b2e5324a4b96a5ba4655619caae">Implementation of parameter estimation</a>
+</li>
+
+<li>
+<a href="#head-4dea5c1c53965ab66e53306f773c460890d8f97e">Other PyDSTool modules</a>
+<ol>
+
+<li>
+<a href="#head-29a5a4654cec3782a9bef2dff58b31151c11b6c2">utils.py</a>
+</li>
+
+<li>
+<a href="#head-ebed813d259b20f15ab720bcc4d1a5b3e2f7deae">common.py</a>
+</li>
+
+<li>
+<a href="#head-10008a1ed22810cb26149cf78d279e19474cdcdb">errors.py</a>
+</li>
+
+<li>
+<a href="#head-a1934583fb0ec61daadd7d2d93b5801fe58ee349">parseUtils.py</a>
+</li>
+</ol>
+
+</li>
+</ol>
+
+<p> </p>
+<hr>
+<p> </p>
+<p>
+Leading underscores in the names of attributes, methods or functions suggest that they 
+should be treated as "internal" and not for general use, usually because
+ they provide no useful function to end-users. Those that might be 
+useful for advanced users are also underscored because usage of those 
+methods, or direct alteration of those attributes, is difficult to get 
+right as an end-user, and mistakes could lead to irreparable damage to 
+the object. </p>
+
+<h2 id="head-c269b8efa84a35b1a6877f9975a75d5f8c81fe7c">1. Technical details about numeric types</h2>
+
+<p>Throughout this page, names followed by an asterisk indicate that it 
+is not intended for end-users, and usually that the name is present for 
+entirely internal usage by PyDStool. Since Python does not provide 
+private as well as public interfaces to a class, an asterisk is a 
+different type of indication that the name is not intended for typical 
+end-user use. </p>
+
+<h3 id="head-05d608e2835c6ea3ae782fbd67fbdd9180104d29">1.1. Note on numeric types</h3>
+
+<p>PyDSTool uses the numpy package to provide double precision floating 
+point arithmetic. All floating point calculations in PyDSTool are to 
+double precision. By default, Python uses double precision for its <tt>float</tt> type, and we have used the <tt>double</tt>
+ type in the C code implementations of numerical integration. Complex 
+numbers for data points, numeric intervals, and so forth, are not 
+currently supported in PyDSTool. All numeric types mentioned below will 
+refer to 32-bit integers or double-precision (64-bit) floats. </p>
+
+<h3 id="head-170087aa02c121e0e41bf494fe6b21848653ff26">1.2. Interval</h3>
+
+<p>This module defines interval ranges and operations for floating point values. This module exports two classes, <tt>Interval</tt> and <tt>IntervalMembership</tt>. See <a href="./Intervals.html">Intervals</a> for general user information.</p>
+<h3 id="head-8ce0bcfc3d34ccd337203d9df916e8a7da226356">1.3. Points</h3>
+
+<p>Points and Pointsets are described in detail on their own page: <a href="./Pointsets.html">Pointsets</a> </p>
+
+<h3 id="head-73b2927a78fd5ce571d621388d4c90add92b2827">1.4. Variable</h3>
+
+<p>A <tt>Variable</tt> object is the specification of a single 
+variable's value as a function of an independent variable (generally 
+time). It is the basic representational unit for a (multi-dimensional) 
+trajectory. </p>
+<p>A properly configured Variable object <tt>x</tt> is callable, when the argument (independent variable) values are within the set specified by attribute <tt>indepdomain</tt>, which is an <a href="./Intervals.html">Interval</a> object for continuous domains, and an array dictionary for discrete domains. The domain of the variable is given by the <tt>depdomain</tt> attribute, which is also a <tt>Interval</tt> or array dictionary. These intervals default to the bi-infinite real line unless otherwise specified. </p>
+<p>The Variable class also provides bounds checking that may be required
+ on the independent or dependent variables of a system. If 
+bounds-checking is on, calls to a Variable object first pass through a 
+filter to verify that the independent variable is within its bounds, 
+before the Variable object's <tt>output</tt> method is called. This 
+method has different forms depending on the nature of the Generator that
+ created it. After this method has produced a value, it will pass 
+through an additional filter that checks its boundedness. </p>
+<p>The Variable objects that are based on an underlying mesh have a simple form for the <tt>output</tt> method that returns a value. The method is typically an interpolation function that also contains the mesh. The <tt>output</tt> method is more complex for the "on demand" types of trajectory calculator. </p>
+
+
+
+<h4>Attributes</h4>
+
+<ul>
+  <li>defined (Boolean)
+  <li>indepdomain (A pair or Interval)
+  <li>indepvartype	(A numeric type, float or int)
+  <li>indepvarname	
+  <li>depdomain	(A pair or Interval)
+  <li>coordtype	(A numeric type, float or int)
+  <li>coordname	
+  <li>dimension  (an integer)
+  <li>trajibound	(Tight bounds on independent variable domain, if known)
+  <li>trajdbound	(Tight bounds on dependent variable domain, if known)
+</ul>
+
+
+<h4>Methods</h4>
+
+<ul>
+  <li>getdatapoints	(Returns datapoints underlying the variable, if they exist)
+  <li>info(verboselevel=1)	
+</ul>
+
+
+<h4 id="head-1d4cebe08ee83e07e9dcf70f9e37b2e701955c0a">1.4.1. Inside the API of the Variable class</h4>
+
+<p>(Follow along in the file <tt>/tests/test_variable_traj.py</tt>).</p>
+
+<p>Wrapping mathematical functions inside the methods of generic objects
+ is a sure way to lose call efficiency. Unfortunately, this is a 
+necessary expense so that a consistent API is presented to a user or to 
+other objects. In particular, such wrapping is necessary in order to 
+provide event detection and bounds checking facilities in a unified way.
+ For instance, consider a 1D curve that we wish to specify using an 
+explicit function, let's say the sine function. In order for the curve 
+to be recognizable as such by PyDSTool functions and utilities, the 
+explicit function <tt>sin</tt> has to be wrapped into a Variable object, which itself is callable. </p>
+<p>To do this, a user would build a ExplicitFnGen generator. For 
+simplicity of exposition, and as developers, we can hack a little to 
+make the wrapping more transparent. The <tt>OutputFn</tt> class is the 
+generic function wrapper for functions that need domain checks enforced 
+on the independent variable values passed as arguments, and on the 
+output value resulting from the function call. </p>
+
+<div class="codearea" dir="ltr" lang="en"><pre id="CA-3fe0970014eb9ad0e9c983fe61f7cef6f091fd5c_000" dir="ltr" lang="en"><span class="line"><span class="ID">sin_opfunc</span> <span class="Operator">=</span> <span class="ID">OutputFn</span><span class="Operator">(</span><span class="ID">math</span><span class="Operator">.</span><span class="ID">sin</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>The OutputFn object contains extra information about the types of the
+ input and output of the function, and the domains in which those values
+ lie. Without additional parameters at initialization, these default to 
+(Float, Float) and ([-Inf, Inf], [Inf, Inf]), respectively. We can 
+create a Variable object directly, using this OutputFn. </p>
+
+<div class="codearea" dir="ltr" lang="en"><pre id="CA-4f6c8131cdb1d0a1c51f405b159e1bbc7b85f00b_001" dir="ltr" lang="en"><span class="line"><span class="ID">sin_var</span> <span class="Operator">=</span> <span class="ID">Variable</span><span class="Operator">(</span><span class="ID">sin_opfunc</span><span class="Operator">,</span> <span class="ID">Interval</span><span class="Operator">(</span><span class="String">'t'</span><span class="Operator">,</span> <span class="String">'float'</span><span class="Operator">,</span> <span class="Operator">[</span><span class="Operator">-</span><span class="ID">Inf</span><span class="Operator">,</span><span class="ID">Inf</span><span class="Operator">]</span><span class="Operator">)</span><span class="Operator">,</span></span>
+<span class="line">                    <span class="ID">Interval</span><span class="Operator">(</span><span class="String">'x'</span><span class="Operator">,</span> <span class="String">'float'</span><span class="Operator">,</span> <span class="Operator">[</span><span class="Operator">-</span><span class="Number">1</span><span class="Operator">,</span><span class="Number">1</span><span class="Operator">]</span><span class="Operator">)</span><span class="Operator">)</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>In this example, we haven't specified any restriction on the domains,
+ but we can investigate the efficiency of this wrapping under different 
+calling conditions. Here is the output of a script that measures the 
+time taken for 10000 computations of sine. </p>
+
+<pre>Time to compute 10000 calls of sin(0.5) to ...
+math.sin
+0.0209426058339
+ufunc sin
+0.149249695143
+sin_var variable (with default checklevel (0))
+0.135739598189
+sin_var variable (with explicit checklevel = 0)
+0.180701737232
+sin_var variable (with checklevel = 2)
+1.34982770157
+sin_var variable using vectorized call (with default checklevel (0))
+0.0412761957175
+sin_var variable using vectorized call (with explicit checklevel = 0)
+0.0448467612505
+sin_var variable using vectorized call (with checklevel = 2)
+0.666583881471
+</pre>
+<p>Apart from noticing that math.sin should always be called over the 
+universal function sin, there are two lessons for PyDSTool developers 
+here. </p>
+<p>The first is to call a Variable object with a vector of argument 
+values whenever possible. The speed-up of vectorization is approximately
+ a factor of 3. </p>
+<p>The additional slow-down factor associated with switching on bounds 
+checking (checklevel = 2) is about equal when using vectorized calls or 
+individual calls. The second lesson is that, where possible, bounds 
+checking should be used during exploratory work, but if confidence in 
+the input and output bounds is known or gained during the exploration, 
+then bounds checking can be turned off for maximum efficiency. </p>
+
+<h3 id="head-924760b76091ce93db932bb4ec1713a1b4b36b9b">1.5. Trajectory</h3>
+
+<p>The <tt>Trajectory</tt> class implements parameterized and
+non-parameterized trajectories and curves. It is essentially a collection of 
+1D Variable objects brought together (usually under a common
+independent variable in parameterized curves) to create an
+N-dimensional curve over some domain. The main features to discuss in this 
+abstraction are the call method, and the <tt>sample</tt> method, which enables users to sample values from a continuously or discretely defined trajectory in different ways. </p>
+<p>Calling the <tt>sample</tt> method with no arguments on a Trajectory 
+defined using an underlying mesh will efficiently return the values at 
+the mesh points. Trajectories are constructed by <tt>Generators</tt>
+(a core PyDSTool class, see <a href="./Generators.html">Generators</a>) using an explicit or implicit function, or
+using a mesh of points. When called, the objects return a state value,
+using interpolation between mesh points if necessary. Linear and quadratic interpolation are supported. </p>
+
+
+<h2 id="head-299b2ecf73af3dcb0873530caa926d3431092052">2. Models</h2>
+
+
+<ul>
+<li>Hybrid models are a sub-class of Model so that they can be organized hierarchically, with Generator-only based models as the leaves. Hybrid models use <a href="./ModelInterface.html">ModelInterface</a> objects to allow flexible inter-operability and consistency checking.
+</li>
+<li>Auxiliary vars of a model are those that are exported by all of its sub-models.
+</li>
+<li>All sub-models of a hybrid system must "export" the same variables (e.g., see differences in <tt>tests/fingermodel_vode.py</tt>)
+</li>
+<li>Can promote a Generator's auxiliary variables to be treated as observable or internal vars at 
+Model level, provided all sub-models export them. forceObsVars and 
+forceIntVars used to promote the auxiliary vars or to change internal 
+&lt;-&gt; observable variables (now has no effect if variables already 
+of desired type)
+</li>
+</ul>
+
+<h2 id="head-764ab8a29dc39437bdfd8a94d5e11e3d41fad582">3. System specification with FuncSpec</h2>
+
+<p>All user interface routes to defining a dynamical system end up with 
+the creation of a FuncSpec object, that contains the full abstract 
+definition of a system before it is instantiated to a target language 
+definition (as a Generator object). The basics of system specification are detailed on the page <a href="./FunctionalSpec.html">FunctionalSpec</a>.</p>
+
+<h2 id="Sub-classes">3.1. Sub-classes</h2>
+<span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><p class="line862">There are three subclasses which are specific to the types of Generator that use them.  The most important one is <tt>RHSfuncSpec</tt>, for use with ODE systems and discrete-time maps. <tt>ExpFuncSpec</tt> is for use with the <tt>ExplicitFnGen</tt> class, for instance. Similarly, <tt>ImpFuncSpec</tt> is used by the <tt>ImplicitFnGen</tt>. These <span class="anchor" id="line-22"></span>subclasses can be viewed as simply providing types so that a Generator object can better validate the Func<tt class="backtick"></tt>Spec object passed to it. Presently, these subclasses contain no special functionality, but this might change in future revisions. <span class="anchor" id="line-23"></span>
+
+<h2 id="Initialization_keywords">3.2 Initialization keywords for FuncSpec</h2>
+<span class="anchor" id="line-26"></span><span class="anchor" id="line-27"></span><p class="line862">On initialization, a new Func<tt class="backtick"></tt>Spec object expects a dictionary or <tt>args</tt> object containing keyword-value mappings. These must at least contain a name for the object under the keyword 'name', and a list of declared variable names under the key 'vars'. If parameters and external inputs are to be present in the Generator, these are also declared as lists of name strings using the keys 'pars' and 'inputs'. An additional feature in PyDSTool is to allow auxiliary variables to be computed alongside the regular state variables. These variables are declared under the key 'auxvars', but their specifications as algebraic functions of the state, time, and parameters, use the same syntax. The auxiliary variables can also be used for plotting purposes, or for other post-processing analysis and diagnosis of a computed <span class="anchor" id="line-28"></span>trajectory. <span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><p class="line874">A dictionary of strings containing a representations of the <span class="anchor" id="line-31"></span>functionality of the Generator is expected under the initialization argument's key 'varspecs'. The dictionary keys are the variable names and auxiliary variable names (if any). The syntax of these specifications is discussed below. <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span><p class="line862">A dictionary of function names -&gt; definition strings must also be specified under the intialization argument key 'fnspecs' for any auxiliary functions declared. The declared parameter names are purely local to the specification string, and are not meant to necessarily correspond to declared variable, parameter, or input names. <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><p class="line862">Events, autonomous external inputs, algorithmic parameters, and other Generator-specific details may be present in the arguments to initialize a Func<tt class="backtick"></tt>Spec object. <span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><p class="line862">For now, you are encouraged to read the documented code in the <tt>FuncSpec.py</tt> module to find out more.
+
+
+<h2 id="head-feaf595c314306386248d7d5ecb1b9ffd57d2e85">4. Dynamically-created functions</h2>
+
+<p>The dual goals of efficiency and convenience in the user 
+specification of functions (be they right-hand sides of ODEs, auxiliary 
+functions, and so on) are somewhat at odds with eachother. Users are not
+ expected to write their own C functions in order to achieve greatest 
+efficiency, mainly because of the delicacy of interfacing a large core 
+of code with third-party C code correctly. </p>
+<p>User-provided functions in native Python are not a great alternative,
+ because they are exceptionally slow to execute when embedded in larger 
+calculations. This is particularly true if "index-free" notation is to 
+be provided to the user, as this creates additional overhead when 
+PyDSTool has to map names to array indices and vice-versa on entry and 
+exit from every call to the user's functions. </p>
+<p>In response to these two extremes, a key feature in the current 
+implementation is to allow users to specify partial function signature 
+information and function bodies to PyDSTool, using an elementary 
+"syntax". PyDSTool then creates its own internal versions of the 
+functions as dynamically executed Python code strings. These functions 
+are free to use indices as they remain entirely hidden from the user, 
+while the user can use names for all the variables, parameters, etc., 
+and be free from being concerned about the full detail of function 
+signatures, or other interfacing details in order that PyDSTool can use 
+the functions correctly. </p>
+<p>Additionally, the same user code specifications can be turned into C 
+functions for use with external, compiled, modules. This unified feature
+ of the user interface is mostly handled in the <tt>FuncSpec.py</tt> module (see <a href="./FunctionalSpec.html">FunctionalSpec</a> page). </p>
+<p>Returning to the native Python form for user-specified functions, it 
+is most convenient to make these functions accessible to objects as if 
+they were regular class methods. Therefore, these functions are 
+dynamically added to classes by a command such as </p>
+<p><tt>setattr(&lt;class_name&gt;,&nbsp;&lt;func_name&gt;,&nbsp;&lt;ptr_to_func&gt;)</tt>. </p>
+<p>In Python, <tt>&lt;ptr_to_func&gt;</tt> is implemented as <tt>eval(func_name)</tt>.
+ Furthermore, in order to avoid name clashes in a class's namespace when
+ a user creates multiple functions, these functions generally need 
+unique internal names. However, when bound to methods that often perform
+ the same role in an object, such as functions that specify the RHS of a
+ differential equation, the methods must have fixed names that are known
+ in advance. Thus, the actual methods created are generally wrappers 
+around the unique names, and the unique names remain locally-defined 
+functions to the object. </p>
+
+<h3 id="head-4ec6e57158efa9d7b82e8ec5d345692f20c59428">4.1. Object persistence issues</h3>
+
+<p>At present, the major drawback of this approach is the way that Python handles the <em>namespaces</em>
+ of objects, with respect to dynamically created attributes and methods,
+ and the locally-defined functions that they typically refer to. Many 
+important core Python utilities, in particular those that "copy" objects
+ and "load" or "save" objects to permanent storage, rely on the contents
+ of an object's associated namespace to know what constitutes an object.
+ This information indicates how the operations will divide-and-conquer 
+their task. Unfortunately, it is the case that locally created functions
+ do not appear in the object's namespace (i.e. that designated by <tt>__main__</tt>)
+ even when they are referred to by functions that do. Therefore,  
+without additional attention, those core operations would fail on such 
+objects. </p>
+<p>The core classes to which these issues apply are Generator and Variable. In these classes, two special methods <tt>__getstate__</tt> and <tt>__setstate__</tt>
+ are defined. These provide overrides for the default behaviour when 
+"copy" and "save" operations are invoked. They provide the opportunity 
+to do special housekeeping immediately before and after pickling. The <tt>_funcreg</tt> dictionary provides information about the dynamically-created methods that refer to locally-defined functions, and permits <tt>__getstate__</tt> to delete references to those methods prior to pickling. After unpickling, <tt>__setstate__</tt>
+ may use the same dictionary to reconstruct those methods from the 
+original sources that it holds. Alternatively, the object may call a 
+method such as <tt>addMethods</tt> that rebuilds those methods anew. </p>
+<p>Read more about object persistence in Python <a class="external" href="http://www-106.ibm.com/developerworks/linux/library/l-pypers.html">in this article</a>. </p>
+
+<h4 id="head-44a0f68fa69a025dc0b180800830c495b79e643b">4.1.1. Cfunc objects, etc.</h4>
+
+<p>As a postscript to the above discussion of object persistence, 
+external Python modules that are largely implemented in C may define 
+Python types that are essentially direct "lifts" of C objects. Prime 
+examples of these are so-called Python Cfuncs, and numpy uses them for 
+the fundamental numeric types <tt>float</tt>, <tt>int</tt>, and <tt>complex</tt>,
+ which are thin wrappers around C implementations. The core Python 
+utilities for copying, and so forth, do not know how to deal with such 
+"third-party" types and throw exceptions. Therefore, an addition to the <tt>__getstate__</tt> and <tt>__setstate__</tt>
+ methods discussed above is the temporary re-mapping of such types when 
+they appear in object attributes. As a result, most of the core PyDSTool
+ classes implement these special methods. </p>
+
+<h2 id="head-0c4bc4052fac544c2e903ad1ebea0a368f2447dc">5. Generator classes</h2>
+
+<p>An introduction to the <tt>Generator</tt> classes is given on the page <a href="./Generators.html">Generators</a>. </p>
+<p>In terms of class inheritance, there are two types of Generator: 
+those for which time varies continuously, and those for which it varies 
+discontinuously. In consequence, all end-user ("concrete") classes 
+inherit from either the <tt>ctsGen</tt> or <tt>discGen</tt> abstract classes. </p>
+<p>In terms of functionality, there is another distinction here. Some 
+generators create trajectory objects that are accurately defined only at
+ their underlying mesh-points, others create trajectory objects (curves)
+ that compute trajectory points "on demand" to full accuracy (so-called 
+dense output). Examples of the first type are the lookup table and the 
+standard Runge-Kutta style integrators for ODEs. Examples of the second 
+type are the explicit and implicit function generators, for which an 
+underlying mesh is not required. Taylor series integration bridges the 
+gap between these two extremes, but is currently only accessible via ADMC++ in Matlab (see the <a href="./Generators.html">Generators</a> page). </p>
+
+<h2 id="head-1f331cf99ab0251292916a88295422570a69e666">6. Implementation of numerical integration</h2>
+
+<p>PyDSTool supports several ODE/DAE integrators. See the <a href="./Generators.html">Generators</a> page for more details. </p>
+<p>For general information about using these integrators (including some implementation information) see the <a href="./UserDocumentation.html">UserDocumentation</a> page. </p>
+
+<h2 id="head-f47b0850d4cbd3f7457ed37aab7c314ebc80bce7">7. Implementation of numerical continuation</h2>
+
+<p>See the page on the sub-package <a href="./PyCont.html">PyCont</a>. </p>
+
+<h2 id="head-bf174a58679a2b2e5324a4b96a5ba4655619caae">8. Implementation of parameter estimation</h2>
+
+<p>This is done primarily through the MINPACK Fortran libraries, available via SciPy. PyDSTool's <a href="./ParamEst.html">ParamEst</a>
+ class is a thin wrapper around these, and provides examples of residual
+ cost functions for use with Generator and Model objects. Examples are 
+provided in the download, such as the files <tt>pest_test1.py</tt>, etc. </p>
+
+<h2 id="head-4dea5c1c53965ab66e53306f773c460890d8f97e">9. Other PyDSTool modules</h2>
+
+
+<h3 id="head-29a5a4654cec3782a9bef2dff58b31151c11b6c2">9.1. utils.py</h3>
+
+<p>Important exported functions from this module include: </p>
+
+<ul>
+<li><tt>who</tt> is useful in providing information about all PyDSTool-related objects currently named in memory. The function 
+behaves much like it does in MATLAB, and takes an optional dictionary 
+argument containing PyDSTool objects (such as that returned by a call to
+ <tt>local()</tt> or <tt>global()</tt>).
+</li>
+</ul>
+<ul>
+  <li><p> <tt>orderEventData</tt> transforms the output of the Model class's <tt>getTrajGenEventTimes</tt> method into a list of time-ordered (eventname, time) tuples. If the optional 'nonames' Boolean argument is set to <tt>True</tt>, the function returns only an ordered list of event times, with no associated event names. </p>
+</li>
+
+<li class="gap"><p> <tt>makeImplicitFunc</tt> builds a simple implicit 
+function representation of an N-dimensional curve, usually specified by 
+N-1 equations. Thus the first argument f is generally a function of 1 
+variable.  In the case of the 'fsolve' method, however, f may have 
+dimension up to N-1, thereby specifying the curve with correspondingly 
+fewer equations. Available solution methods are: newton, bisect, 
+steffensen, fsolve. All these methods utilize SciPy's MINPACK wrappers to Fortran codes, and do not perform any turning point detection (for which you should see <a href="./PyCont.html">PyCont</a>).</p>
+
+</li>
+<li><tt>loadObjects</tt> and <tt>saveObjects</tt> (see <a href="./UserDocumentation.html#head-dde1e664e12cae149618eb5ab400fd75f9624008">user documentation</a> under saving and loading).</li>
+</ul>
+
+<h3 id="head-ebed813d259b20f15ab720bcc4d1a5b3e2f7deae">9.2. common.py</h3>
+
+<p>This module defines common utility functions for internal use within PyDSTool, or for advanced users. </p>
+
+<h3 id="head-10008a1ed22810cb26149cf78d279e19474cdcdb">9.3. errors.py</h3>
+
+<p>This module contains custom Python exception definitions. Exception 
+raising using these classes is not yet consistently applied throughout 
+PyDSTool. </p>
+
+<h3 id="head-a1934583fb0ec61daadd7d2d93b5801fe58ee349">9.4. parseUtils.py</h3>
+
+<p>This utility library contains many small functions, primarily useful for developers. It contains functions for manipulating strings, Quantity objects, argument lists, etc.
+</p>
+
+<div id="pagebottom"></div>
+
+</div> <!-- end page -->
+
+
+</div></body></html>

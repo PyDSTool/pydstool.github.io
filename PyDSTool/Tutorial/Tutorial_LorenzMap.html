@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><title>Tutorial - PyDSTool</title>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link href="../../prettify.css" type="text/css" rel="stylesheet" />
+
+    <script src="../../prettify.js" type="text/javascript"></script>
+    <style type="text/css">div.boxed {
+  border:1px outset #DDD;
+  margin:2px
+}</style>
+</head>
+<body dir="ltr" lang="en" onload="prettyPrint()">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="../ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="../CodeTopics.html">CodeTopics</a></li>
+<li><a href="../GettingStarted.html">GettingStarted</a></li>
+<li><a href="../Tutorial.html">Tutorial</a></li>
+<li><a href="../UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="../ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="../TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1 id="Ca">Elementary tutorial: A 1D discrete mapping (the Lorenz map)</h1>
+
+<p>See <tt>Tutorial_LorenzMap.py</tt>.</p>
+
+<p>A 1D mapping can be derived from an approximation to the triple-zero unfolding of the Lorenz system of ODEs (e.g., see the original <a href="http://www.math.pitt.edu/~bard/bardware/tut/newstyle.html#triple">XPP tutorial example</a>):
+
+<div class="equation-block-right">
+  <div class="equation-box">
+    <p class="math-type-block">
+      \(
+        z(t+1) = a+b (z(t)-c)^2, \quad
+      \)
+      <span class="equation-label">(Lor)</span>
+    </p>
+  </div>
+</div>
+
+where <tt>t</tt> is discrete time. To define the <a href="http://en.wikipedia.org/wiki/Lyapunov_exponent">Lyapunov exponent</a> we follow the linearization of Eq. (Lor) along its solutions in log coordinates, namely
+<script type="math/tex"> zp(t+1) = zp(t)+ \log( \mathrm{abs}(2b(z(t)-c))) </script>
+, and look at the long term behavior of <script type="math/tex">L = zp(t) / t</script>, which is an 'auxiliary' value derived from the map varible <tt>zp</tt> (the same way that auxiliary variables are defined in XPP.).</p>
+
+
+<p>The system is specified using PyDSTool with 
+</p>
+
+<pre class="prettyprint lang-py"><code>
+import PyDSTool as dst
+from PyDSTool import args
+import numpy as np
+from matplotlib import pyplot as plt
+
+DSargs = args(name='Lorenz map')
+DSargs.varspecs = {'z': 'a+b*(z-c)**2',   # note syntax for power
+                   'zp': 'zp+log(abs(2*b*(z-c)))',
+                   'L': 'zp/(t+1)'}  # L is an auxiliary variable
+DSargs.tdomain = [0, 200]            # Default range of independent variable 't' 
+DSargs.pars = args(a=2.93,
+                   b=-1.44,
+                   c=1.85)           # Using args() class to specify parameters with less syntax than a dictionary
+DSargs.vars = ['z', 'zp']            # Implicitly, then, L will be an auxiliary variable
+DSargs.ics = {'z': 2, 'zp': 0}       # Initial conditions
+DSargs.ttype = int                   # force independent variable type to be integer (discrete time)
+</code>
+</pre>
+
+<p>Notice that the variable <tt>L</tt> is defined using <tt>t+1</tt> because the discrete time begins at 0.</p>
+
+<h3 id="Lor-sols">Solutions</h3>
+
+<p>The solution of the discrete dynamical system Eq. (Lor) can be computed using a <a href="./Generators">Generator</a> mapping instance: 
+</p>
+
+<pre class="prettyprint lang-py"><code>
+lmap = dst.Generator.MapSystem(DSargs)   # an instance of the 'Generator' class for maps.
+traj = lmap.compute('test')              # compute a trajectory named 'test'
+pts = traj.sample()                      # sample the points from the trajectory
+
+# PyPlot commands
+plt.figure(1)
+plt.plot(pts['t'], pts['z'], 'ko-')
+plt.title(lmap.name)
+plt.xlabel('t')
+plt.ylabel('z')
+
+plt.figure(2)
+plt.plot(pts['t'], pts['L'], 'ro')
+plt.title('Lyapunov exponent')
+plt.ylabel('L')
+plt.xlabel('t')
+plt.show()
+</code>
+</pre>
+
+
+<p>Depending on your local configuration of the Matplotlib interactive mode, the last command <tt>plt.show()</tt> might not be necessary. </p>
+<ul>
+<li style="list-style-type: none;"><img src="Tutorial_files/Lor_map.png" width="500" height="300"></li>
+<li style="list-style-type: none;"><img src="Tutorial_files/Lor_Lyap.png" width="500" height="300"></li>
+</ul>
+
+<div id="pagebottom"></div>
+
+</div> <!-- end page -->
+
+
+</div></body></html>

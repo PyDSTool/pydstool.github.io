@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title>Models in PyDSTool</title>
+</head>
+
+<body  lang="en" dir="ltr">
+
+<h1>Models in PyDSTool</h1>
+
+<div class="table-of-contents"><p class="table-of-contents-heading">Contents
+<ol>
+<li><a href="#Overview">Overview</a></li>
+<li><a href="#The_elements_of_a_hybrid_system">The elements of a Model</a></li>
+<li><a href="#Interfacing_with_the_Model_class">Interfacing</a>
+  <ol>
+  <li><a href="#Trajectories">Trajectories</a>
+  <li><a href="#Important_model_methods">Important model methods</a>
+  </ol></li>
+</ol></div> 
+
+<hr>
+
+<h1 id="Overview">1. Overview</h1>
+
+<p class="line862">On this page we describe the use of the <tt>Model</tt> class, in particular its sub-class NonHybridModel. A summary of the Model <strong>aggregation hierarchy</strong> (containment of other classes) is shown in the following figures:
+
+<center>
+  <table width="900" border="1">
+    <tr>
+      <td width="430"><img src="images/NonHybridModel.jpg" width="370" alt="NonHybridModel-agg"></td>
+      <td width="52">&nbsp;</td>
+      <td width="396"><img src="images/HybridModel.jpg" width="380" alt="HybridModel-agg"></td>
+    </tr>
+  </table>
+</center> 
+
+<p>iMI (eMI) means internal (external, respectively) Model Interface, while the subscripts indicate that there can be one or more of each. Parentheses indicate optional attributes. For instance, the Feature and Metric classes are used optionally in external MIs, which are used optionally for global consistency control during hybrid trajectory calculations. These are discussed further on the <a href="./ModelInterface.html">ModelInterface</a>  and <a href="./HybridSystems.html">HybridSystems</a> pages. Generators also contain an object of class <a href="./Generators.html#Diagnostics">Diagnostics</a>, not shown in this diagram.</p>
+
+
+<h1 id="The_elements_of_a_hybrid_system">2. The elements of a Model</h1>
+
+<p class="line874">A non-hybrid model is a dressed-up version of a Generator. The primary difference is that it can store its trajectories for easy access. Models can also use convenient hierarchical naming conventions not available for Generators. This is particularly relevant to building models using the structured ModelSpec classes, where a tree hierarchy is navigated using the dot '.' naming convention familiar to object orientation in Python. (See the /tests/CIN.py script for an example.) The NonHybridModel class is provided for API-compatibility with the HybridModel class so that they are inter-changeable in large models.</p>
+
+<p>For hybrid models, there are three essential elements in PyDSTool: Generators (wrapped via NonHybridModels), events, and transition rules between the Generators that are applied on occurrence of the events. The specification of an initial state condition must uniquely determine which Generator should be used to begin determining a trajectory. This is done by evaluation of the associated events for the system at the initial condition. A terminal  <a href="./Events.html">event</a> may occur that stops the trajectory generation.</p>
+
+<h2>2.1. Building a model</h2>
+
+<p>To take advantage of the introspection and book-keeping utilities 
+built into the Model class, you may wish to convert a single Generator 
+corresponding to a non-hybrid system into a Model object. For convenience, the function <tt>embed</tt> is provided to wrap an individual Generator into a NonHybridModel object. Simply call the <tt>embed(&lt;generator&gt;,&nbsp;[&lt;model_name&gt;])</tt> function, which returns a NonHybridModel containing the single Generator. If the model name is not specified, the Generator's name plus the suffix '_model' is applied.  To build a hybrid model, see <a href="./HybridSystems.html">HybridSystems</a>.</p>
+
+<h3> ModelSpec templates and ModelConstructor</h3>
+<p>The ModelConstructor class is what is used to build Model objects from ModelSpec functional specifications.</p>
+<p>If built in this way, a Model will have a non-empty attribute 'mspecdict' that contains the complete, flattened specification dictionary of the ModelSpec used to define it.</p>
+
+<h3>ModelDescriptor and Model transformations (advanced)</h3>
+
+<p>More information later. These classes are still experimental.</p>
+
+<h1 id="Interfacing_with_the_Model_class">3. Interfacing </h1>
+
+
+<h2 id="Trajectories">3.1. Trajectories</h2>
+
+<p>Trajectories are stored inside the Model object they are associated with. Trajectories can be accessed much the same way as regular trajectory objects when treated as continuous curves. In a Model object, alongside the trajectory is information about the event parameters used during its calculation. In fact, there is an object containing various types of information about the trajectory, referenced as <tt>my_model.trajectories[&lt;traj_name&gt;]</tt>. The event parameters are stored in a copy of the <tt>EventStruct</tt> object associated with each Generator used to create the hybrid trajectory in a dictionary attribute 'genEventStructs', accessed in the following way: <tt>my_model.trajectories[&lt;traj_name&gt;].genEventStructs[&lt;gen_name&gt;]</tt>.</p>
+
+<h2 id="Important_model_methods">3.2. Important model methods</h2>
+
+<p class="line862">When you have built a model, use <tt>help(Model.&lt;methodname&gt;)</tt> to read the documentation string for any of these methods. <span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span>
+
+<ul>
+<li><p>query  (<strong>This one is very important!</strong>)</p></li>
+<li>info</li>
+<li>searchForNames (useful for hierarchical naming)</li>
+<li>searchForVars (useful for hierarchical naming)</li>
+<li>set (combined setting of algorithmic parameters for the Generators, system parameters, initial conditions, time interval for solution)</li>
+<li>setPars (set just system parameters) <span class="anchor" id="line-76"></span></li>
+<li>setICs (set just system ICs) <span class="anchor" id="line-77"></span></li>
+<li>setDSEventActive <span class="anchor" id="line-78"></span></li>
+<li>setDSEventTerm <span class="anchor" id="line-79"></span></li>
+<li> ... etc for other event parameter setting</li>
+<li>getEventMappings <span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span>(for hybrid models only)</li>
+<li class="gap">showDSInfo <span class="anchor" id="line-82"></span></li>
+<li>showDSEventInfo <span class="anchor" id="line-83"></span></li>
+<li>showSpec</li>
+<li>showAuxSpec </li>
+<li>showAuxFnSpec<span class="anchor" id="line-84"></span><span class="anchor" id="line-85"></span></li>
+<li>showEventSpec</li>
+<li class="gap">sample <span class="anchor" id="line-86"></span></li>
+<li class="gap">sub_models (returns a list of ModelInterfaces or Generators)</li>
+<li class="gap">getDSAlgPars</li>
+<li>getTrajGenName</li>
+<li>getTrajEvents</li>
+<li>getTrajEventTimes</li>
+<li>getTrajEventStruct (presently unused) </li>
+<li>getTrajTimeInterval</li>
+<li>getTrajTimePartitions</li>
+<li>getTrajModelName (for hybrid model trajectories, to show which sub-models were used)<span class="anchor" id="line-92"></span></li>
+<li>getEndPoint</li>
+<li>getEndTime</li>
+<li>Rhs</li>
+<li>AuxVars</li>
+<li>Jacobian</li>
+<li>JacobianP</li>
+<li>MassMatrix</li>
+</ul>
+
+<p>The <tt>query</tt> method is particularly important for large models built using the <a href="./ModelSpec.html">ModelSpec</a> syntax, where there are hierarchically-defined components with composite names (e.g. 'cell2.syn.s') separated by dots. With this method the user can return information about the Model using this syntax for names. (Internally, these names are converted to strings that use '_' for separators instead of dots.)</p>
+
+<!--
+<h2 id="Example">4.1. Example</h2>
+-->
+
+
+<div id="pagebottom"></div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><title>Tutorial - PyDSTool</title>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link href="../../prettify.css" type="text/css" rel="stylesheet" />
+
+    <script src="../../prettify.js" type="text/javascript"></script>
+    <style type="text/css">div.boxed {
+  border:1px outset #DDD;
+  margin:2px
+}</style>
+</head>
+<body dir="ltr" lang="en" onload="prettyPrint()">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="../ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="../CodeTopics.html">CodeTopics</a></li>
+<li><a href="../GettingStarted.html">GettingStarted</a></li>
+<li><a href="../Tutorial.html">Tutorial</a></li>
+<li><a href="../UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="../ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="../TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1 id="VdP">Elementary tutorial: Importing neuroscience models from NineML</h1>
+
+<p>See <tt>NineML_import_test.py</tt>.</p>
+
+<p>PyDSTool now directly supports the importing of <a href="http://software.incf.org/software/nineml">NineML</a> model specifications via the <a href="http://phobos.incf.ki.se/">Python API</a>. Details of installing that software can be found in the link. The NineML toolbox is currently in development. Only &quot;flat&quot; models are currently importable, but support for the full feature set is being actively developed in collaboration with the authors of NineML. The interface is extremely easy to use. Just build a model in NineML, and export it as a &quot;component&quot; using the python interface. In the examples below, the simple single neuron models are built directly using the python-NineML API, but they could have been loaded first from NineML files. A warning will be generated about not providing initial conditions at the time of definition.</p>
+
+<!--
+<div class="equation-block-right">
+  <div class="equation-box">
+    <p class="math-type-block">
+      \(
+        \left\{ \begin{align*}
+         \frac{dy_0}{dt} &= -0.04 y_0 + 10^{-4} y_1 y_2, \\
+		\frac{dy_1}{dt} &= 3 \cdot 10^{7} y_1^2, \\
+        \frac{dy_2}{dt} &= - \frac{dy_0}{dt} - \frac{dy_2}{dt} \end{align*} \right.
+		\qquad
+      \) <span class="equation-label">(Chem)</span></p>
+  </div>
+</div>
+-->
+
+
+<pre class="prettyprint lang-py"><code>
+from PyDSTool import *
+from PyDSTool.Toolbox.NineML import *
+
+c = get_HH_component()
+
+# Convert to PyDSTool.ModelSpec and create NonHybridModel object
+# Provide extra parameter Isyn which is missing from component definition
+# in absence of any synaptic inputs coupled to the model membrane
+HHmodel = get_nineml_model(c, 'HH_9ML', extra_args=[Par('Isyn')])
+
+HHmodel.set(pars={'C': 1.0,
+                  'Isyn': 20.0,
+                  'celsius': 20.0,
+                  'ek': -90,
+                  'el': -65,
+                  'ena': 80,
+                  'gkbar': 30.0,
+                  'gl': 0.3,
+                  'gnabar': 130.0,
+                  'theta': -40.0},
+            ics={'V': -70, 'm': 0.1, 'n': 0, 'h': 0.9},
+            tdata=[0,15])
+
+HHmodel.compute('test', force=True)
+pts = HHmodel.sample('test')
+plt.plot(pts['t'], pts['V'],'k')
+plt.title('Hodgkin-Huxley membrane potential')
+
+ev_info = pts.labels.by_label['Event:spikeoutput']
+for ev_ix, ev_tdata in ev_info.items():
+    plt.plot(ev_tdata['t'], pts[ev_ix]['V'], 'ko')
+
+plt.xlabel('t')
+plt.ylabel('V')
+</code>
+</pre>
+
+
+<div id="pagebottom"></div>
+
+</div> <!-- end page -->
+
+
+</div></body></html>

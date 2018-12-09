@@ -1,0 +1,532 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><title>GoodPractice - PyDSTool Wiki</title></head><body
+dir="ltr" lang="en">
+
+
+
+<div id="page" dir="ltr" lang="en"><!-- start page -->
+
+
+<h1 id="title">Good Practice in computational research</h1>
+<div id="content" dir="ltr" lang="en">
+<a id="top"></a>
+<p><strong>A guide to good practice for collaborative research in
+  data-driven computational modeling and simulation</strong> </p>
+  
+<p><em>"You do not really understand something unless you can explain it to your grandmother." -- Albert Einstein</em> </p>
+<p><em>"A mathematical theory is not to be considered complete until you
+ have made it so clear that you can explain it to the first man whom you
+ meet on the street." -- View of an (unknown) old French mathematician, 
+retold by David Hilbert during his <a class="external" href="http://www-history.mcs.st-and.ac.uk/%7Ehistory/Extras/Hilbert_Problems.html"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> address</a>, titled "Mathematical Problems" to the Second International Congress of Mathematicians in Paris, 1900.</em> </p>
+<hr>
+  
+<p><b>Please note:</b> This page is a temporary backup of the original wiki page hosted at
+  Cornell University.</p>
+<ol>
+
+<li>
+<a href="#head-0dd53e71ac1148e978446075a0aa821a5a2f3e81">Intended audience</a>
+</li>
+
+<li>
+<a href="#head-7b509150cb00655cff03dd52cc98171950fe6746">Open and collaborative wiki content</a>
+</li>
+
+<li>
+<a href="#head-0718b21b1d458b7f7a96e967843b1095850efb2f">Introduction</a>
+</li>
+
+<li>
+<a href="#head-e44fd3a874356db0524f0e0614b2ec8ef7563cef">The good practice guide</a>
+<ol>
+
+<li>
+<a href="#head-61f0bde2e2cc09ba7f0c05be240f4f5c23786385">Administrative and mental preparation</a>
+</li>
+
+<li>
+<a href="#head-f235fc5c9bb50ea651b7d5aee71867a22d906f8d">Before collecting data</a>
+</li>
+
+<li>
+<a href="#head-041985c8d55752608b5a17cb3264822bf520b8d2">Pilot tests and “proof of concept”</a>
+</li>
+
+<li>
+<a href="#head-e45f8cfd7897dc4c51ea313c2bd0900dda83511e">Preparation of acquired data</a>
+</li>
+
+<li>
+<a href="#head-cd1bee927ab39ab592331897bb756a6d57940ce1">Data analysis</a>
+</li>
+
+<li>
+<a href="#head-00ed9425cc296aea42f6aea0e69ea5e07e39b2bf">Modeling issues impacted by experimental approach</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-cec221598cd109d1fb3f135022c7ce158e46049e">External resources and further reading</a>
+<ol>
+
+<li>
+<a href="#head-355e0de75c4140ec421d85d3fc1e5a7d55abdfaf">Professional</a>
+<ol>
+
+<li>
+<a href="#head-c39ee45a61b09bdb92f26c4334de3fcb7f40e51d">The Ten Simple Rules Series</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-a2cd35460ee6afdb17c9ced3995028a348d192b0">Background reading and advocacy</a>
+</li>
+
+<li>
+<a href="#head-424497829ba4e45ea4049d78729b81f5bec6fe9c">Technical</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+<p> </p>
+<hr>
+<p> </p>
+
+<h2 id="head-0dd53e71ac1148e978446075a0aa821a5a2f3e81">1. Intended audience</h2>
+
+<p>This document is a working outline of ideas concerning good practice guidelines for collaborative projects between experimentalists and computational modelers / applied mathematicians in the physical sciences. It is 
+intended as a training resource primarily for students of the field, 
+specifically in the context of utilizing experimental data and <a class="external" href="http://en.wikipedia.org/wiki/Dynamical_system"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> dynamical systems models</a>.
+ It is not directly connected to the PyDSTool software project (see the 
+menu on the sidebar for links to that) despite being hosted on the same 
+wiki at the <a class="external" href="http://www.cam.cornell.edu/"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Cornell Center for Applied Mathematics</a>.
+ The contents of this document have been compiled largely from personal 
+experience and contributions from other practitioners.  As a result it 
+is presently (and unintentionally) biased towards the fields of 
+biomechanics and neuroscience, but the aim is to keep the advice as 
+generally applicable as possible. The tone is meant to be somewhat 
+informal and not preachy -- it should contain insightful practical tips 
+and warnings but not technical material from a lecture course on 
+mathematical modeling. If it is of use to you please contribute, and 
+link to it as <tt>http://www.cam.cornell.edu/~rclewley/cgi-bin/moin.cgi/GoodPractice</tt>. </p>
+
+<h2 id="head-7b509150cb00655cff03dd52cc98171950fe6746">2. Open and collaborative wiki content</h2>
+
+<p>This document is intended to be inherently collaborative in nature, and as such this page is editable by <strong>you</strong>
+ if you would like to contribute material, or just make minor edits. 
+Because of recent wiki spam the editing of this page is now only 
+available after you set up a simple account. Please contact me (<a href="http://www.cam.cornell.edu/%7Erclewley/cgi-bin/moin.cgi/RobClewley">RobClewley</a>) to get access, and learn how to use the <a href="http://www.cam.cornell.edu/%7Erclewley/cgi-bin/moin.cgi/MoinMoin">MoinMoin</a> wiki markup language (see the <a href="http://www.cam.cornell.edu/%7Erclewley/cgi-bin/moin.cgi/HelpContents">HelpContents</a>
+ page). When you have an account you can click "Edit" in the sidebar. 
+Ideally you would add a note about your changes in the "Optional comment
+ about this change" box with your name attached. </p>
+
+<h2 id="head-0718b21b1d458b7f7a96e967843b1095850efb2f">3. Introduction</h2>
+
+<p>Accountability and maintainability of tools and methods are fundamental aspects of good practice
+ in all branches of science. From this we can aspire to widespread 
+reproducibility of results and to build confidence in our work. The 
+combination of computational modeling methodologies with applied mathematics and experimental 
+scientific research is a new and rapidly evolving domain. Unlike many 
+established branches of science, this area does not always exhibit the 
+same level of maturity in communicating the essential details of its 
+tools, methods, and data. For instance, journal publications often 
+inadequately communicate the assumptions, methodology, and algorithms 
+used in generating modeling results. This can lead to poor 
+reproducibility of results, and to frustration, uncertainty, and 
+potentially even to skepticism from the community. </p>
+<p>While administration is rarely an enjoyable task, and should never 
+become more important than the scientific objectives, we can motivate 
+ourselves by remembering that maintaining good
+ records from the beginning of a project will greatly simplify (a) the 
+generation of progress reports, theses, grant proposals, and 
+publications; and (b) the justification and validation of our scientific
+ results. What is more, this material does not necessarily have to be 
+impeccably presented or conform to any formal quality assurance 
+standards in order to achieve these benefits. Realistically, the degree 
+to which we can make detailed records depends on the needs of the 
+project and the expectations of our collaborators and ourselves, as well
+ as the available time resources. However, for anything but the most 
+trivial investigation we can benefit from any effort to systematically 
+document our work. In particular we can avoid the headache and 
+embarrassment of trying to reconstruct faded memories and old computer 
+code detailing how we calculated a certain important result from a year 
+before. Remember that it is typical, not exceptional, for our data, our 
+objectives, and our methods to remain moving targets during a project, 
+even after careful initial planning. </p>
+<p>Our goal for the auditing and documentation of a collaborative 
+modeling project should be to be able to reconstruct the process at a 
+later date, and reproduce <em>our own</em> results, even when the data 
+set, objectives, and methods may have changed in the interim. For an 
+ultimate goal such as publication, we should aim to prepare data sets, 
+algorithms, and code in a form that can be published as supplementary 
+material to the written portion of our work, e.g. in an online 
+repository associated with the research document. (There are several 
+such repositories for this, even outside of those often provided by 
+journals themselves as part of a regular publication.) </p>
+<p>This document presently assumes that you have already worked out a 
+basic plan for your modeling project. More specifically, this should 
+include how you intend to make use of real experimental data in 
+approaching scientific questions through mathematical modeling. From the
+ outset it can be very useful to have potential journals in mind for 
+publication of your results. This can guide the specific planning of 
+your experimental collaboration. </p>
+
+<h2 id="head-e44fd3a874356db0524f0e0614b2ec8ef7563cef">4. The good practice guide</h2>
+
+<p>What follows is a somewhat loosely connected list of suggestions, 
+pitfalls, and questions to ask yourself when considering the acquisition
+ and use of data from an experimental lab, whether or not you actually 
+participate in the experiments yourself. Not all of these ideas will 
+necessarily apply -- either in part or in full -- to a particular 
+data-driven modeling problem. </p>
+
+<h3 id="head-61f0bde2e2cc09ba7f0c05be240f4f5c23786385">4.1. Administrative and mental preparation</h3>
+
+<ol type="a">
+<li><p>Start a project notebook and document binder to keep your materials together </p>
+</li>
+<li><p>Learn how to use programming environments, database programs, 
+spreadsheets, etc. to organize your records and files; evolve a filing 
+system that’s suitable to your needs </p>
+</li>
+<li><p>Consider whether / how to synchronize your written notes with those kept on computer (scanning, transcription, printouts, CDs) </p>
+</li>
+<li><p>What software and computing resources will you have available? </p>
+</li>
+<li><p>Which new software tools or mathematical techniques should you learn ahead of time, or expect to learn as you go? </p>
+</li>
+<li><p>Who are your go-to people (professors, colleagues, lab techs) for
+ help when you get stuck with different types of technical or general 
+problems? </p>
+</li>
+</ol>
+
+<h3 id="head-f235fc5c9bb50ea651b7d5aee71867a22d906f8d">4.2. Before collecting data</h3>
+
+<ol type="a">
+<li><p>Experiments usually work out to be much more complex to execute in practice than expected – ensure that your ideas as simple and as focused on a small number of specific issues (e.g. <em>ONE</em>) </p>
+</li>
+<li><p>Familiarize yourself with the experimental set up; spend time in the lab </p>
+</li>
+<li><p>Detail a plan that connects the types of data you expect to acquire to its expected use in simulations, analysis, etc. </p>
+</li>
+<li><p>How do you expect to visualize or otherwise present the types of data you want to collect? </p>
+</li>
+<li><p>Become aware of data acquisition issues </p>
+<ol type="i">
+<li><p>   Noise, variability, and uncertainty inherent in the dynamics of the physical system you are observing </p>
+</li>
+<li><p>   Noise, variability, and uncertainty in the instrumentation (tolerances/precision/data sampling rates) </p>
+</li>
+<li><p>   Collect references for how the equipment is calibrated </p>
+</li>
+<li><p>   Record references to the equipment manufacturers for later citation </p>
+</li>
+<li><p>   How can things go wrong during the experiment? Can you detect when this happens? </p>
+</li>
+</ol>
+</li>
+<li><p>Prepare documentation jointly with the lab members </p>
+<ol type="i">
+<li><p>   List the acquisition processing stages involved from initial measurement to final data set (both automatic and manual steps) </p>
+</li>
+<li><p>   Create a summary chart of the process </p>
+</li>
+<li><p>   Agree upon an export data format (what to do with NaNs, column headings, etc.) </p>
+</li>
+<li><p>   Record units, conversions, and derivations needed to get final data set from raw data set </p>
+</li>
+<li><p>   Record any important references to these methods in the literature </p>
+</li>
+<li><p>   Record inherently problematic derived measurements that might 
+magnify error or introduce uncertainty, distortion, or bias (e.g. 
+reconstruction of angles, discretization, filtering (phase bias), 
+behavior of any implied algorithmic parameter fitting in the 
+derivations) </p>
+</li>
+<li><p>   Are there any “fudge” steps that are not rigorously justified? Why? </p>
+</li>
+<li><p>   Record other anecdotal or general points about the set up for future reference </p>
+</li>
+</ol>
+</li>
+<li class="gap"><p>How much data will you need? </p>
+</li>
+<li><p>How much time will it take to collect the data? </p>
+<ul>
+<li><p> Be realistic about these issues, but try to be generous to 
+yourself – you often need more than you think. Some runs might have 
+problems and need to be discarded; your methods might turn out to need 
+more data to improve accuracy, etc. </p>
+</li>
+</ul>
+</li>
+</ol>
+
+<h3 id="head-041985c8d55752608b5a17cb3264822bf520b8d2">4.3. Pilot tests and “proof of concept”</h3>
+
+<ol type="a">
+<li><p>    Analyze "dry runs" of the experiment before collecting massive amounts of data </p>
+</li>
+<li><p>    Re-assess whether you are being too ambitious too soon with 
+your modeling goals; there may be a simpler version of an experiment 
+that needs to be done first in order to demonstrate the viability of 
+your ideas </p>
+</li>
+<li><p>    Ambitious projects typically run into many small obstacles early on, both in the lab and later on the computer </p>
+<ol type="i">
+<li><p>   Follow through later modeling and analysis stages with dry run data to see where problems might lie </p>
+</li>
+<li><p>   Some obstacles may present crucial philosophical or practical 
+challenges to your objectives – prioritize these, as tackling all the 
+obstacles at once can be too resource-consuming </p>
+</li>
+<li><p>   Step back and decompose the project into smaller sub-problems 
+that might require preliminary experiments and tests in order to 
+establish the working of your methods in the “bigger picture” </p>
+</li>
+</ol>
+</li>
+</ol>
+
+<h3 id="head-e45f8cfd7897dc4c51ea313c2bd0900dda83511e">4.4. Preparation of acquired data</h3>
+
+<ol type="a">
+<li><p>    Create regular backups of data to CD/DVD/backup server and record their date! </p>
+</li>
+<li><p>    Create a chart summarizing what types of data you have and how it is broadly organized </p>
+</li>
+<li><p>    Create an interactive database for your data </p>
+<ol type="i">
+<li><p>   Store names of data types (e.g. the column headings in your 
+arrays) and indices of attributes as “mapping objects” (e.g. dictionary 
+type in Python, cell array type in Matlab) </p>
+</li>
+<li><p>   Use a real database program if your data is sufficiently complex </p>
+</li>
+<li><p>   Document how you’ve organized your database for others to use it </p>
+</li>
+</ol>
+</li>
+<li><p>    Evaluate the quality of data </p>
+<ol type="i">
+<li><p>   Decide how to evaluate the technical quality of your data </p>
+<ol type="1">
+<li><p>  Encode this in a function that calculates an appropriate measure, if possible </p>
+</li>
+</ol>
+</li>
+<li><p>   Characterize properties of data </p>
+<ol type="1">
+<li><p>  Size, “quality”, variability, skew, etc., of each data set </p>
+</li>
+</ol>
+</li>
+<li><p>   Does the data “look” reasonable from these properties? </p>
+</li>
+</ol>
+</li>
+<li><p>    Structure your data </p>
+<ol type="i">
+<li><p>   Create different “views” of data, e.g. using database queries and filters </p>
+</li>
+<li><p>   Break down the data set to according to where there is 
+greatest variability or uncertainty in measurements – you may want to 
+analyze only a high-quality sub-set of your data </p>
+</li>
+</ol>
+</li>
+</ol>
+
+<h3 id="head-cd1bee927ab39ab592331897bb756a6d57940ce1">4.5. Data analysis</h3>
+
+<ol type="a">
+<li><p>    Create regular backups of data to CD/DVD/backup server and record their date! </p>
+</li>
+<li><p>    Decide on suitability and accessibility of existing 
+algorithms and code for data analysis; collect these methods together as
+ a “toolkit” </p>
+</li>
+<li><p>    Consider writing your own implementations or translating those that are not already in a convenient form </p>
+</li>
+<li><p>    Add version numbers and dates to your analysis code </p>
+</li>
+<li><p>    Document your code in-line, and use human-readable names, etc. (see good programming practice guides) </p>
+</li>
+<li><p>    Keep your code files well structured on disc (use sub-directories, etc.) </p>
+</li>
+<li><p>    Test your analysis methods in a modular fashion using simplified surrogate data </p>
+</li>
+<li><p>    Surrogate data can mimic properties of real data – this helps
+ you be clear about your expectations of the data and your assumptions 
+about their properties </p>
+</li>
+<li><p>    Record copies of exactly what was run and when (keep old copies of code with it if necessary) </p>
+</li>
+</ol>
+
+<h3 id="head-00ed9425cc296aea42f6aea0e69ea5e07e39b2bf">4.6. Modeling issues impacted by experimental approach</h3>
+
+<p><em>[ This section is just slightly more off-topic, so perhaps future expansion of this can be moved to a new page. ]</em> </p>
+<ol type="a">
+<li><p>    Appropriate type of dynamical model </p>
+<ol type="i">
+<li><p>   Continuous vs. discrete (in time), Deterministic vs. 
+stochastic, ODE (spatially discrete) vs. PDE (spatially extended), 
+hybrid systems </p>
+</li>
+<li><p>   Background scientific theory and notation: mechanics, thermodynamics, kinetics, etc. </p>
+</li>
+</ol>
+</li>
+<li><p>    Appropriate parameters, variables </p>
+</li>
+<li><p>    Explicit or implicit constraints, reductions, symmetries and conserved quantities in model </p>
+<ol type="i">
+<li><p>   Use of differential-algebraic equations, averaging, etc. </p>
+</li>
+</ol>
+</li>
+<li><p>    Establish notation for the model (based on appropriate literature) </p>
+</li>
+<li><p>    Model simulation </p>
+<ol type="i">
+<li><p>   Numerical issues </p>
+</li>
+<li><p>   Software environment; integration with data and model analysis tools </p>
+</li>
+</ol>
+</li>
+<li><p>    Mathematical model analysis </p>
+<ol type="i">
+<li><p>   Control and systems theory </p>
+</li>
+<li><p>   Dynamical systems theory </p>
+</li>
+<li><p>   Statistics </p>
+</li>
+</ol>
+</li>
+<li><p>    Parameter estimation methods to fit models to data? </p>
+<ol type="i">
+<li><p>   Identifiability of parameters? </p>
+</li>
+<li><p>   Bias from discretization, filtering, other data processing </p>
+</li>
+</ol>
+</li>
+<li><p>    Identification of ill-conditioning (stiffness), well-posedness, multiple scales in the candidate models </p>
+<ol type="i">
+<li><p>   Understanding of numerical methods suitable for dealing with these problems </p>
+</li>
+</ol>
+</li>
+<li><p>    Mathematical goals, and roles of different analysis techniques? </p>
+<ol type="i">
+<li><p>   E.g., use of bifurcation theory, phase-plane analysis </p>
+</li>
+</ol>
+</li>
+<li><p>    Can you generate experimentally viable and scientifically interesting predictions with the model? </p>
+</li>
+</ol>
+<hr class="hr2">
+<p> </p>
+
+<h2 id="head-cec221598cd109d1fb3f135022c7ce158e46049e">5. External resources and further reading</h2>
+
+
+<h3 id="head-355e0de75c4140ec421d85d3fc1e5a7d55abdfaf">5.1. Professional</h3>
+
+<ul>
+<li><p> <a class="external" href="http://sciencecareers.sciencemag.org/career_development/tools_resources/how_to_guides/how_to_manage_a_lab_and_staff"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Laboratory management "how to" guides</a> -- at sciencecareers.org. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://sciencecareers.sciencemag.org/career_development/previous_issues/articles/0000/the_academic_scientists_toolkit/"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> The Academic Scientist's Toolkit</a> -- at sciencecareers.org. </p>
+</li>
+<li class="gap"><p> <a href="http://www.cam.cornell.edu/%7Erclewley/cgi-bin/moin.cgi/ProjectContinuity">ProjectContinuity</a> -- an outline for documenting lab work that will enable project continuity in spite of personnel changes. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://www.wellesley.edu/Chemistry/Chem105manual/Introduction/notebook.html"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Keeping a lab notebook</a> -- Chemistry department, Wellesley College. (<em>Thanks for the great quote!</em>) </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://www.communitytechnology.org/nsf_ci_report/"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> NSF report on cyberinfrastructure and eScience</a>. </p>
+</li>
+</ul>
+
+<h4 id="head-c39ee45a61b09bdb92f26c4334de3fcb7f40e51d">5.1.1. The Ten Simple Rules Series</h4>
+
+<p>* <a class="external" href="http://compbiol.plosjournals.org/perlserv/?request=get-document&amp;doi=10.1371/journal.pcbi.0030229"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Gu J, Bourne PE (2007) Ten Simple Rules for Graduate Students. PLoS Comput Biol 3(11): e229</a> doi:10.1371/journal.pcbi.0030229  </p>
+<p>* <a class="external" href="http://compbiol.plosjournals.org/perlserv/?request=get-document&amp;doi=10.1371%2Fjournal.pcbi.0010057"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Bourne PE (2005) Ten simple rules for getting published. PLoS Comp Biol 1: e57. doi:10.1371/journal.pcbi.0010057</a> </p>
+<p>* <a class="external" href="http://compbiol.plosjournals.org/perlserv/?request=get-document&amp;doi=10.1371%2Fjournal.pcbi.0020110"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Bourne PE, Korngreen A (2006) Ten simple rules for reviewers. PLoS Comp Biol 2: e110. doi:10.1371/journal.pcbi.0020110</a> </p>
+<p>* <a class="external" href="http://compbiol.plosjournals.org/perlserv/?request=get-document&amp;doi=10.1371%2Fjournal.pcbi.0020012"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Bourne PE, Chalupa LM (2006) Ten Simple Rules for Getting Grants. PLoS Comput Biol 2(2): e12 doi:10.1371/journal.pcbi.0020012</a> </p>
+<p>*  <a class="external" href="http://compbiol.plosjournals.org/perlserv/?request=get-document&amp;doi=10.1371%2Fjournal.pcbi.0020121"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11">
+ Bourne PE, Friedberg I (2006) Ten Simple Rules for Selecting a 
+Postdoctoral Position. PLoS Comput Biol 2(11): e121 
+doi:10.1371/journal.pcbi.0020121</a> </p>
+<p>* <a class="external" href="http://compbiol.plosjournals.org/perlserv/?request=get-document&amp;doi=10.1371%2Fjournal.pcbi.0030044"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11">
+ Vicens Q, Bourne PE (2007) Ten Simple Rules for a Successful 
+Collaboration. PLoS Comput Biol 3(3): e44 
+doi:10.1371/journal.pcbi.0030044</a> </p>
+<p>* <a class="external" href="http://compbiol.plosjournals.org/perlserv/?request=get-document&amp;doi=10.1371%2Fjournal.pcbi.0030077"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11">
+ Bourne PE (2007) Ten Simple Rules for Making Good Oral Presentations. 
+PLoS Comput Biol 3(4): e77 doi:10.1371/journal.pcbi.0030077</a> </p>
+<p>* <a class="external" href="http://compbiol.plosjournals.org/perlserv/?request=get-document&amp;doi=10.1371%2Fjournal.pcbi.0030102"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11">
+ Erren TC, Bourne PE (2007) Ten Simple Rules for a Good Poster 
+Presentation. PLoS Comput Biol 3(5): e102 
+doi:10.1371/journal.pcbi.0030102</a> </p>
+
+<h3 id="head-a2cd35460ee6afdb17c9ced3995028a348d192b0">5.2. Background reading and advocacy</h3>
+
+<ul>
+<li><p> <a class="external" href="http://www.spatial.maine.edu/icfs/Smith%20white%20paper%202006.pdf"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Scientific research communication: the promise and current realities of enhanced publications</a> -- Mackenzie Smith, MIT. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://www.spatial.maine.edu/icfs/papers.html"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Vision papers</a> at the Commons of Science conference, 2006. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://en.wikipedia.org/wiki/Scientific_method"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Scientific Method</a> -- at wikipedia. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://www.site.uottawa.ca/%7Eoren/pubs-pres/2005/pub-0512-maturing.pdf"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Maturation Phase of the Modeling and Simulation Discipline</a> -- Tuncer Oren, U Ottawa. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://en.wikipedia.org/wiki/Scientific_computing"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Scientific Computing</a> -- at wikipedia. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://www.cra.org/CRN/html/9803/affiliate/jg.3_1_t.shtml"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Numerical Computation in the Information Age</a> -- John Guckenheimer, Cornell University. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://www.cam.cornell.edu/%7Erclewley/Computational_science_JG.pdf"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Dynamical Systems and Computational Science -- SIAM Past President Lecture</a> -- John Guckenheimer, Cornell University. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://www.cam.cornell.edu/%7Erclewley/Where_do_we_go_from_here_JG.pdf"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Dynamical Systems -- Where do we go from here?</a> -- Slides presented by John Guckenheimer, Cornell University at the <a class="external" href="http://www.enm.bris.ac.uk/anm/colston.html"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Bristol conference</a> on Nonlinear Dynamics and Chaos, 2000. </p>
+</li>
+</ul>
+
+<h3 id="head-424497829ba4e45ea4049d78729b81f5bec6fe9c">5.3. Technical</h3>
+
+<ul>
+<li><p> <a class="external" href="http://www.stat.sdu.dk/matstat/Design/index.html"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Experimental design FAQ</a> -- Department of Statistics, U Southern Denmark. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://en.wikipedia.org/wiki/Mathematical_biology"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Mathematical Biology</a> -- at wikipedia. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://www.statsoft.com/textbook/stdatmin.html"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Data Mining</a> -- at statsoft.com. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://en.wikipedia.org/wiki/Data_acquisition"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Data Acquisition</a> -- at wikipedia. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://en.wikipedia.org/wiki/Exploratory_data_analysis"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Exploratory Data Analysis</a> -- at wikipedia. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://www.functionaldata.org/"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Functional Data Analysis</a>. </p>
+</li>
+<li class="gap"><p> <a class="external" href="http://www.scholarpedia.org/"><img src="GoodPractice_files/moin-www.html" alt="[WWW]" height="11" width="11"> Scholarpedia</a> -- science-oriented wiki-style encyclopedia (especially oriented to computational neuroscience and dynamical systems). </p>
+</li>
+</ul>
+<hr class="hr6">
+<p> </p>
+<p><strong>This wiki page is maintained by Robert Clewley, but suggestions and contributions are welcomed and encouraged.</strong> This page is editable by you once you sign up for a user account on this wiki. </p>
+<a id="bottom"></a>
+
+</div>
+<div id="pagebottom"></div>
+<p id="pageinfo" class="info" dir="ltr" lang="en">last edited 2009-03-27 03:37:06 by <span title="c-76-105-103-142.hsd1.ga.comcast.net"><a href="http://www.cam.cornell.edu/%7Erclewley/cgi-bin/moin.cgi/RobClewley">RobClewley</a></span></p>
+
+</div> <!-- end page -->
+
+
+</div></body></html>

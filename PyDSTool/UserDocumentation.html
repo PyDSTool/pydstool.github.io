@@ -1,0 +1,530 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><title>UserDocumentation - PyDSTool</title></head>
+<body dir="ltr" lang="en">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h2>User Documentation</h2>
+
+<ol>
+
+<li>
+<a href="#head-3ec9fbf83bbc08809f01e1b1b2605c95188feca9">PyDSTool basics</a>
+<ol>
+
+<li>
+<a href="#head-865e0fdb97aec11a22e4cb96e90e47324fa7f8b6">Modularity and embedding</a>
+</li>
+
+<li>
+<a href="#head-895a8a0be3a1add117961e948075c8ac160a718e">Design philosophies</a>
+</li>
+
+<li>
+<a href="#head-d3b76c805191f8d54469c3807c66a9ac3ebbaee0">Numerical classes</a>
+</li>
+
+<li>
+<a href="#head-1052342cce3268272af287387b5aa8bf16d9c880">Symbolic classes</a>
+</li>
+
+<li>
+<a href="#head-d2eaef070a29c7e68af4c3c5964f5a3de64a3321">Solver classes</a></li>
+
+<li><a href="#head-other">Other classes</a> </li>
+
+</ol>
+
+</li><li>
+<a href="#head-ab2f4c242a5eebe5fb2a243f9bd395b0a26b2718">Starting your own modeling project</a>
+<ol>
+
+<li>
+<a href="#head-ddba7866329b679c715f48d40144c7ccaba41556">Filespace preparation</a>
+</li>
+
+<li>
+<a href="#head-d9cb935bdadb07936f7bc8ba0bff85dad44de629">Mathematical preparation</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-2ac8cfdceabbad75ac93d7becb1f81b38f319082">Basic I/O and object manipulation</a>
+<ol>
+
+<li>
+<a href="#head-dde1e664e12cae149618eb5ab400fd75f9624008">Loading and saving data and objects</a>
+</li>
+
+<li>
+<a href="#head-17ec64154aeb60b456242aa841e10a53c7c00a2d">Deletion</a>
+</li>
+
+<li>
+<a href="#head-8bf32afb43ee570086e24055d14eb620590c5076">Sessions</a>
+</li>
+
+<li>
+<a href="#head-2ab20fb5287f48f13d2d101e5fe3dd86167a7802">Memory management</a>
+</li>
+
+<li>
+<a href="#head-9cfeda281ecb5985eed475b006cdddf2f54db018">Copying of PyDSTool data structures</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-e03894e260423e0c1ec0ddab1078c3bea920a588">Visualization</a>
+</li>
+
+<li>
+<a href="#head-34aea6e86b54249d02b1eff049b7b98fbdf22d69">System specification</a>
+<ol>
+
+<li>
+<a href="#head-2c9dedc099c3e34dbe9421d94598e6c3ade88568">Two routes to specification</a>
+</li>
+</ol>
+</li>
+
+<li>
+<a href="#head-8bb69b45e39d4947ca78953b7fb61080c864d68a">Solving for trajectories</a>
+<ol>
+
+<li>
+<a href="#head-93afc106f3bbfbc2b590313a4f5d9c3329300546">Generators</a>
+</li>
+
+<li>
+<a href="#head-91a37495b71ce3d408430f37cce6e647a1655dc2">Trajectories</a>
+</li>
+
+<li>
+<a href="#head-538824d629763ee082c222fcf10329ba0f9836b0">"Models" and hybrid dynamical systems</a> </li>
+
+</ol>
+
+</li>
+<li><a href="#head-77d020136e6cba213472e8c458988b869cf469f6">Bounds and constraints</a>
+</li>
+
+<li>
+<a href="#head-b2c5616c5e66a154c607551c14f3910765155c37">Continuation and bifurcation analysis</a>
+</li>
+
+<li>
+<a href="#head-aa">Toolboxes for special tasks</a>
+</li>
+
+<li>
+<a href="#head-c0dcd117891746e51d26c60f540909c915ba0374">Porting models between PyDSTool and other packages</a>
+</li>
+
+</ol>
+<p> </p>
+<hr>
+<p> </p>
+
+<h2 id="head-3ec9fbf83bbc08809f01e1b1b2605c95188feca9">1. PyDSTool basics</h2>
+
+<p>Python is a high level, interpreted, language with powerful object 
+orientation. PyDSTool is primarily a scripting environment for working with dynamical systems models. This is achieved through a set of Python classes for use 
+within a regular, interactive, Python session. These classes themselves 
+rely on several SciPy and NumPy classes, particularly the <tt>array</tt> class. </p>
+<p>The user can build objects from the PyDSTool classes interactively, 
+and can manipulate them using PyDSTool utility functions, or using 
+scripts or modules that the user has written. Visualization tools are 
+provided via Matplotlib to study the results of computations, in much the 
+same way as is done in Matlab. Being built to work with common packages 
+such as SciPy, the user benefits from being able to apply well-known algorithms from other packages to PyDSTool objects. </p>
+<p>For a full introduction please see the page <a href="./ProjectOverview.html">ProjectOverview</a> and the first <a href="./Tutorial/Tutorial_linear.html">Tutorial</a>. </p>
+
+<h3 id="head-865e0fdb97aec11a22e4cb96e90e47324fa7f8b6">1.1. Modularity and embedding</h3>
+
+<p>As well as providing simulation and analysis routines of its own, 
+PyDSTool is also intended to provide an environment for embedding 
+numerical calculations within each other, in a hierarchical fashion 
+(a.k.a. "nesting"). A design goal was to make the embedding as 
+straightforward and as general-purpose as possible, with the least 
+amount of effort required by the user. PyDSTool provides core Python 
+classes from which a user can take <em>existing</em> numerical 
+computation packages and apply them to high level objects. This is often
+ done by "wrapping" the external packages, providing them with a common 
+API for use within Python. The packages may take the form of simple 
+executables, or as shared libraries that can be loaded into Python after
+ they are wrapped (e.g. using SWIG). Embedding is also made more 
+transparent through Python's dynamic typing system, whereby different 
+classes can be treated in common ways by providing common interface 
+methods. </p>
+
+<h3 id="head-895a8a0be3a1add117961e948075c8ac160a718e">1.2. Design philosophies</h3>
+
+<ul>
+<li> Index-free data structures
+<ul>
+<li> Mainly through Python dictionaries
+</li>
+</ul>
+</li>
+<li> Context-heavy data structures, for instance:
+  <ul>
+  <li> Enhanced version of arrays -- Points and Pointsets</li>
+<li> Scalar Intervals for domains and ranges</li>
+</ul>
+</li>
+<li> Objects and manipulations should be as mathematically meaningful and intuitive as possible
+</li>
+<li> Use of dynamic typing to simplify embedding of objects inside computations as callable user-supplied "functions"
+</li>
+<li> Object-oriented programming (OOP) techniques help to
+ implement the dynamic typing, and also lead to intuitive separation of 
+data and control structures.
+</li>
+</ul>
+
+<p>The core elements of PyDSTool are the classes that represent or 
+relate to trajectories of dynamical systems, which are discussed next. </p>
+
+
+<h3 id="head-d3b76c805191f8d54469c3807c66a9ac3ebbaee0">1.3. Numerical classes</h3>
+
+<p><em>From the bottom up</em>: </p>
+<ul>
+<li><p> <strong>Point</strong> (N-dimensional). Context-laden <tt>N&nbsp;x&nbsp;1</tt> array, always non-parameterized. May possess a text label. (See <a href="./Pointsets.html">Pointsets</a>) </p>
+</li>
+<li><p> <strong>Pointset</strong> (N-dimensional ordered set of points). Context-laden <tt>N&nbsp;x&nbsp;M</tt>
+ arrays, where M is the variable length of a data array. A Pointset may 
+be either parameterized or not. May also contain point labels. (See <a href="./Pointsets.html">Pointsets</a>) </p>
+</li>
+<li>
+  <p> <strong>Variable</strong>. 1-dimensional parameterized curve, in
+ the form of a named scalar variable. Optional bounds and domain checks 
+are built in to its access. </p>
+<ul>
+<li> Calls to a variable return a numerical value if called at an <em>individual</em> (scalar) value of the "curve parameter". Calls return an array if called at multiple (vector) values. (See <a href="./TechDocumentation.html">TechDocumentation</a>)
+</li>
+</ul>
+</li>
+<li>
+  <p> <strong>Trajectory (curve)</strong>. N-dimensional curve, made 
+    up of Variable objects for each dimension, and may or may not be 
+    parameterized. (See section on solving for trajectories <a href="#head-8bb69b45e39d4947ca78953b7fb61080c864d68a">below</a>.) </p></li>
+</ul>
+
+<p><small>Note that in discrete spaces, a "curve" refers to an ordered set of discrete points (a "discretized curve").</small> </p>
+<p>A companion class is the <strong>Interval</strong>. This class is used like its mathematical equivalent, to indicate scalar intervals of real numbers or integers, depending on their desired type. See <a href="./Intervals.html">Intervals</a> for details.</p>
+<h3 id="head-1052342cce3268272af287387b5aa8bf16d9c880">1.4. Symbolic classes</h3>
+
+<p>See the page <a href="./Symbolic.html">Symbolic</a> for more details.</p>
+<p><em>From the bottom up</em>: </p>
+<ul>
+<li>
+  <p> <strong>str</strong>: PyDSTool symbolic expressions are built upon the in-built string class. </p>
+</li>
+<li><p> <strong>QuantSpec</strong>: The specification of a symbolic 
+expression, from a string. Typically returned as the result of 
+operations on Quantity classes. </p>
+</li>
+<li><strong>Quantity</strong>: Principal symbolic quantity, with an associated name. Can be created from a string or a QuantSpec object.
+  <ul>
+    <li> <strong>Var</strong>, <strong>Par</strong>, <strong>Fun</strong>, <strong>Input</strong>: Specialized sub-classes of Quantity, corresponding to basic constituents of a functional specification (see Section 5.2).</li>
+  </ul>
+</li>
+</ul>
+<br>
+
+<h3 id="head-d2eaef070a29c7e68af4c3c5964f5a3de64a3321">1.5. Solvers</h3>
+
+<p>Beyond the numerical classes are those that create them as part of solving systems of dynamical equations. <strong>Generator</strong> objects create Trajectories, for instance. A <strong>Model</strong>
+ object allows one or more Generators to be combined into (possibly 
+hybrid) dynamical systems models, also providing many additional user 
+utilities for interacting with the model. </p>
+
+<ul>
+<li>
+  <p> Generator class: This is a generic class to support the many 
+ways in which trajectories (or, more generally, parameterized curves) may be generated. The class incorporates 
+dynamical systems prescriptions for trajectories, and also explicit and 
+implicit descriptions of trajectories using mathematical functions, or 
+extrapolated from data sets. See <a href="#head-8bb69b45e39d4947ca78953b7fb61080c864d68a">below</a> and the page on <a href="./Generators.html">Generators</a>. </p>
+</li>
+<li class="gap">
+  <p> Model class: This class supports more structured naming for variables and parameters, as well as hybrid and non-hybrid dynamical systems. See the <a href="./Model.html">Model</a>, <a href="./ModelSpec.html">ModelSpec</a> and <a href="./HybridSystems.html">HybridSystems</a> pages. </p>
+</li>
+</ul>
+
+<br>
+
+<h3 id="head-other">1.6 Other classes</h3>
+
+<ul>
+<li class="gap">
+  <p> <a href="./Events.html">Event</a> class: This implements user-defined events for
+ stopping generation of trajectories, e.g. for creating Poincare maps or as the basis for 
+switching vector fields in hybrid systems. </p>
+</li>
+<li class="gap">
+  <p> <a href="./PyCont.html">PyCont</a> class: This class provides continuation and bifurcation analysis functionality (including a programmatic interface to AUTO). </p>
+</li>
+<li class="gap"><p> Toolbox classes: There are several of these, detailed on the page <a href="./ToolboxDocumentation.html">ToolboxDocumentation</a>, and include classes for parameter estimation (also see <a href="./ParamEst.html">ParamEst</a>), neural dynamics, phase plane analysis, and data analysis. </p>
+</li>
+</ul>
+
+<br>
+
+<h2 id="head-ab2f4c242a5eebe5fb2a243f9bd395b0a26b2718">2. Starting your own modeling project</h2>
+
+
+<h3 id="head-ddba7866329b679c715f48d40144c7ccaba41556">2.1. Filespace preparation</h3>
+
+<p>Create a directory somewhere using the name of your project. Make 
+sure the path to the PyDSTool package is in Python's path. In a new 
+Python script that will execute your computations, an easy way to do this is to put</p>
+
+<pre>from PyDSTool import *</pre>
+
+<p>in the header. Any project-specific compilation of program components 
+(e.g. using numerical integrators implemented in C) will require 
+temporary files to be created. These will appear in automatically 
+generated sub-directories of your project directory. If you are worried about &quot;polluting your namespace&quot; then just use</p>
+
+<pre>import PyDSTool as dst</pre>
+
+<p>(or a similar short abbreviation) for convenience. All commands will then be entered with the prefix <tt>dst.</tt></p>
+
+
+<h3 id="head-d9cb935bdadb07936f7bc8ba0bff85dad44de629">2.2. Mathematical preparation</h3>
+
+<p>It is recommended that, to the fullest possible extent, variables and
+ parameters of the dynamical systems studied using PyDSTool are scaled 
+so that they are "order 1" in magnitude. This helps the software 
+accurately deal with occasional rounding errors in the resolution of 
+intervals (see the section on Bounds and Constraints on this page). </p>
+
+<br>
+<h2 id="head-2ac8cfdceabbad75ac93d7becb1f81b38f319082">3. Basic input/output and object manipulation</h2>
+
+<h3 id="head-dde1e664e12cae149618eb5ab400fd75f9624008">3.1. Loading and saving data and objects</h3>
+
+<p>The reading and writing of text-format data files is supported. This 
+can be used to import or export trajectory data, for instance. The 
+commands for these are <tt>importPointset</tt> and <tt>exportPointset</tt>. To export arrays more easily than using <tt>numpy.io</tt>, run <tt>exportPointset(arrayToPointset(a),&nbsp;{'fname.dat':&nbsp;[]})</tt> to save the array in text format to file 'fname.dat'. </p>
+<p>It is also possible to load and save  PyDSTool objects, as well as any numpy arrays, numeric values, lists, dictionaries, etc., for re-use in a different session. These functions are <tt>loadObjects</tt> and <tt>saveObjects</tt>.
+ Multiple objects can be saved in a single file, and named objects (such
+ as trajectories or generators) can be loaded individually from a file 
+containing multiple objects. For instance, suppose a user wants to store a list of arrays, a Trajectory and a Generator for another session.</p>
+
+<pre>
+# supposed Generator g exists
+a = array([1, Inf])
+traj = g.compute('test')
+saveObjects('mystuff.sav', [a, traj, g])
+</pre>
+
+<p>This last call stores ('serializes') those objects into the given filename. Any file extension can be used, as is your preference. This call will fail if the file already exists. To <em>force</em> the file to be overwritten regardless of whether it exists, append the argument <tt>force=True</tt>. To reload the objects in a different session:</p>
+
+<pre>
+a, traj, g = loadObjects('mystuff.sav')
+</pre>
+
+<p>If you only want some of the objects back, you can either specify an index or indices into the list returned from loadObjects, as in <tt>loadObjects('mystuff.sav')[1]</tt> or you can specify a list of string names as a second argument that match the 'name' attributes of any objects stored in the file which have that attribute, as in <tt>loadObjects('mystuff.sav', ['test'])</tt>. Note that if you save a singleton object, e.g. <tt>saveObjects(a, 'mystuff.sav')</tt>, then it will actually be stored as a list of one element, requiring you to reload with <tt>a = loadObjects('mystuff.sav')[0]</tt> or by broadcasting with the syntax <tt>a, = loadObjects('mystuff.sav')</tt> (note the comma).</p>
+
+<p>There are a few less commonly used classes defined in PyDSTool whose instances cannot be saved using these functions, and have to be recreated from their initialization arguments afresh in each session. Work is underway to ensure that all objects can be saved and loaded. For large Trajectories, this form of saving is actually not as memory efficient as recreating from a binary-stored file of the underlying array and metadata.</p>
+<p>N.B. For Windows users, saving and loading PyDSTool objects may be a 
+  little slow. This is because there is a bug in Python's "pickler" in 
+Windows implementations that concerns IEEE 754 special values such as <tt>Inf</tt> and <tt>NaN</tt>. As a result, the workaround is a non-binary data format which is less compact. </p>
+
+<h3 id="head-17ec64154aeb60b456242aa841e10a53c7c00a2d">3.2. Deletion</h3>
+
+<p>The regular Python command <tt>del</tt> can be used on any PyDSTool object in order to delete it from memory. The whole session can be cleared using the <tt>restart</tt> command (see below, under Memory Management). </p>
+
+<h3 id="head-8bf32afb43ee570086e24055d14eb620590c5076">3.3. Sessions</h3>
+
+<p>The current PyDSTool session can be saved and reloaded using the commands <tt>saveSession</tt> and <tt>loadSession</tt>. By default, saving the session will only save objects that belong to PyDSTool classes. Setting the argument <tt>deepSearch=True</tt> in a call to <tt>saveSession</tt>
+ will cause the system to search all top-level lists, dictionaries and 
+tuples for PyDSTool objects, and save those top-level lists, etc. if 
+there is a match. The list of classes searched for is given by the global list <tt>_pyDSToolTypes</tt>.</p>
+<h3 id="head-2ab20fb5287f48f13d2d101e5fe3dd86167a7802">3.4. Memory management</h3>
+
+<p>PyDSTool objects presently resident in memory can be identified using the <tt>who</tt> command. <tt>who</tt>
+ can take an optional argument, either an individual type name or a list
+ of type names, that filter the output to only include PyDSTool objects 
+of those types. </p>
+<p>A more specialized option is to add the <tt>returnlevel=N</tt> option, where N &gt; 0. In the argument's absence, N defaults to 0. When N is 1, the call to <tt>who</tt>
+ does not print anything to the screen. Instead, it returns a list of 
+the objects found. This can be useful when you want to pass to a 
+function all objects of a certain type that have been defined in the 
+default namespace. N = 2 causes <tt>who</tt> to return a dictionary of object name keys mapping to the objects. </p>
+<p>The default namespace for the search is the <tt>globals()</tt> dictionary of the calling scope. To specify an alternative namespace, add the option <tt>objdict=&lt;scope_name_dictionary&gt;</tt> to the call. </p>
+<p>The optional argument <tt>deepSearch=True</tt> will search for 
+PyDSTool objects contained up to one-level deep in lists, tuples and 
+dictionaries defined in the supplied namespace <tt>objdict</tt> (defaults to the calling namespace's <tt>globals</tt> dictionary). </p>
+<p>The current session can be restarted using the <tt>restart</tt> command. By default this merely clears the global registries of declared symbolic and <a href="./ModelSpec.html">ModelSpec</a> names, but the additional argument <tt>delall=X</tt>
+ where X=1 or 2 will delete all PyDSTool objects (X=2 causes a "deep 
+search" to find them contained in lists, tuples, and dictionaries). </p>
+<p><strong>Important:</strong> At this time, <tt>restart</tt> cannot 
+clear from memory any dynamically loaded C-based ODE integrators such as
+ Dopri and Radau. This is a problem with the underlying behaviour of 
+Python itself, and we hope to fix this in the future. </p>
+
+<h3 id="head-9cfeda281ecb5985eed475b006cdddf2f54db018">3.5. Copying of PyDSTool data structures</h3>
+
+<p>The larger data structures in PyDSTool generally contain several 
+levels of objects, which themselves include arrays, IEEE754 Floating 
+Point special values, and sometimes dynamically created method 
+functions, etc. This includes classes such as <tt>Model</tt>, <tt>Generator</tt>, <tt>Trajectory</tt>, <tt>Variable</tt>, <tt>Pointset</tt>, and the symbolic and model specification classes <tt>QuantSpec</tt>, <tt>Quantity</tt>, <tt>ModelSpec</tt>, and so on. </p>
+<p>The standard Python <tt>copy</tt> and <tt>deepcopy</tt> functions 
+will both behave identically for all these major PyDSTool classes, and 
+will always create full copies without references. This has been 
+implemented for the sake of safety, as shallow copy-by-reference is 
+rarely a desirable outcome for these large data structures. </p>
+<p>Copying may however be a little slow for very large data structures, 
+as the only typesafe way to deep copy complex classes is through a 
+tweaked version of the standard Python  "pickler". A web search will 
+show that there are problems with using <tt>deepcopy</tt> on complex 
+data types, and even the C pickler cannot be relied upon to deal with 
+IEEE754 special values properly (at least not on Windows platforms). 
+Hence, we use a patched version of the standard pickler, which on 
+Windows platforms uses a non-binary data format and is therefore less 
+efficient. This issue is discussed further, in relation to handling 
+dynamically-created functions, on the <a href="./TechDocumentation.html">TechDocumentation</a> page. </p>
+
+<br>
+<h2 id="head-e03894e260423e0c1ec0ddab1078c3bea920a588">4. Visualization</h2>
+
+<p>Matplotlib is the graphics library currently recommended the 
+most for 2D graphics, although no core PyDSTool functionality relies on 
+any particular graphics library. The command interface of Matplotlib is 
+intentionally similar to that of Matlab. For 3D plots, you are free to 
+choose your own as there is no obvious standard yet, although MayaVi is a leading competitor. A 3D toolkit emerged for Matplotlib 
+called  mplot3D. See the <a href="http://matplotlib.sourceforge.net/">Matplotlib web site</a> for documentation and tutorials on plotting.</p>
+
+<p>The most important thing to remember when plotting trajectories is that a <em>sample</em>
+ of the trajectory must be extracted from the trajectory object. This is
+ partly because trajectory objects hide their underlying time mesh, but 
+also because the plotted mesh resolution often has to be chosen 
+differently to the time mesh of the original data source anyway.
+
+<!-- Trajectories that can be sampled with default 
+options (by calling <tt>sample</tt> with no arguments) will be acceptable <tt>plot</tt> call arguments, without first needing to be converted to Pointsets or arrays. </p> -->
+
+<p>Matplotlib's pyplot plotting namespace is automatically imported when PyDSTool is imported (or 
+ignored if it is not present) as <tt>plt</tt>. See the <a href="./Tutorial.html">Tutorials</a> for examples.</p>
+
+<br>
+
+<h2 id="head-34aea6e86b54249d02b1eff049b7b98fbdf22d69">5. System specification</h2>
+
+
+<h3 id="head-2c9dedc099c3e34dbe9421d94598e6c3ade88568">5.1. Two routes to specification</h3>
+
+<p>There are two routes to the specification of a dynamical system. </p>
+<ul>
+<li><p> Directly supply all of the requisite information to a Generator 
+class in creating an instance of that class. This is recommended for 
+small systems. See page <a href="./FunctionalSpec.html">FunctionalSpec</a> for details. </p>
+</li>
+<li class="gap"><p> Create a hierarchy of model <tt>component</tt> 
+objects, each containing symbolic definitions of variables, bounds, and 
+so forth, using an abstract specification syntax. This hierarchy, once 
+self-consistently defined, can be "flattened" and transformed into a 
+target language specification (e.g., for Python, C, or Matlab-ADMC++ 
+targets). See page <a href="./ModelSpec.html">ModelSpec</a> for details. </p>
+</li>
+</ul>
+<p>In addition, you can import a vector field definition from <a href="http://math.colgate.edu/%7Ewweckesser/software/vfgen/">VFGEN</a> using an XML format, or from <a href="http://sloppycell.sourceforge.net/">SloppyCell</a> using an included conversion tool (demonstrated in <a href="http://pydstool.bzr.sourceforge.net/bzr/pydstool/annotate/head%3A/tests/sloppycell_example.py">this example script</a>).</p>
+<p> <br>
+</p>
+<h2>6. Solving for trajectories</h2>
+
+
+<p class="line862">The Generator classes represent the basic simulation objects of PyDSTool, implementing ODE/DAE integration, and the computation of discrete maps. More generally, they are also sources of <em>curves</em>, which may or may not be interpreted as trajectories. For instance, explicit or implicit functions (including those that are parameterized) can be used to specify Generators. <span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span>
+<p class="line874">In programming terms, Generators are class instances that produce Trajectory objects (also viewed as curves, especially if they are not parameterized) on demand (see description of Trajectory class below). They take many forms, and may or may not use user-specified parameters and initial condition specifications in order to determine the exact Trajectory object that they produce. <span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span>
+<h3 id="head-93afc106f3bbfbc2b590313a4f5d9c3329300546">6.1. Generators</h3>
+
+<p>The abstract and target-language independent specification of 
+dynamical systems described in Section 5 is converted into target simulation objects that 
+perform trajectory computations on demand. The target class is <tt>Generator</tt>, and has many sub-types corresponding to the different types of dynamical system supported.</p>
+<h3 id="head-91a37495b71ce3d408430f37cce6e647a1655dc2">6.2. Trajectories</h3>
+
+<p>The trajectory class can represent continuous curves or discrete sets
+ of ordered points. In the former case, it provides the illusion of <em>dense</em>
+ output for trajectories that are defined only by an underlying discrete
+ mesh. This is usually done by linear interpolation between mesh points. Trajectories defined by explicit functions 
+(including Taylor series, which will be implemented at a later date), 
+are intrinsically dense.</p>
+<p>The Generator and Trajectory classes are discussed in detail on the page <a href="./Generators.html">Generators</a>. The implementation of Trajectory objects is described on the page <a href="./TechDocumentation.html">TechDocumentation</a>. </p>
+
+<br>
+<h3 id="head-538824d629763ee082c222fcf10329ba0f9836b0">6.3. "Models" and hybrid dynamical systems</h3>
+
+<p>The PyDSTool <tt>Model</tt> class builds upon Generators and serves two purposes. The first is to 
+generalize the forms of dynamical system that can be simulated in 
+PyDSTool, by supporting <em>hybrid</em> dynamical systems (see the page <a href="./HybridSystems.html">HybridSystems</a>).
+ The second is to provide support for a &quot;hierarchical naming&quot; scheme used by ModelSpec, useful for building complex structured models.
+ See the <a href="./Model.html">Models</a> page for details.</p>
+ <br>
+ 
+<h2 id="head-77d020136e6cba213472e8c458988b869cf469f6">7. Bounds and constraints</h2>
+
+<p>PyDSTool supports the optional specification of bounds on variables 
+and parameters. This is most useful when performing parameter and model 
+estimation, but also provides a means to check the consistency of 
+iterative processes as they run. Variable domains may be 
+intervals or singleton values, but parameter domains must be 
+an interval. At initialization or using the 'set' method, such bounds on variables are specified to a generator using the <tt>xdomain</tt> key, while those on parameters use the <tt>pdomain</tt> key. An example of using these bounds in hybrid models is the Single-leg Inverted Pendulum (SLIP) model in the <tt>/tests/</tt> directory.</p>
+<p>These issues are described further on the <a href="./BoundsSafety.html">BoundsSafety</a> page. </p>
+
+<br>
+<h2 id="head-b2c5616c5e66a154c607551c14f3910765155c37">8. Continuation and bifurcation analysis</h2>
+
+<p>PyDSTool incorporates the sub-package <a
+href="./PyCont.html">PyCont</a>, written by Drew Lamar as part of the
+PyDSTool group. PyCont provides a suite of
+continuation and bifurcation tools that can be applied to existing
+PyDSTool <tt>Model</tt> objects. Further information about the package
+can be found in the link above. </p>
+
+<br>
+
+<h2 id="head-aa">9. Toolboxes for special tasks</h2>
+
+<p>Various toolboxes are available for parameter estimation, phase
+plane analysis, model reduction, mechanical modeling, data analysis,
+and neural modeling. Details are given on the page <a
+href="./ToolboxDocumentation.html">ToolboxDocumentation</a>.</p>
+
+<br>
+<h2 id="head-c0dcd117891746e51d26c60f540909c915ba0374">10. Porting models between PyDSTool and other packages</h2>
+
+<p>Access to <strong>automatic differentiation</strong> via the older <a href="http://www.math.cornell.edu/~gucken/software.html">ODETools</a> Matlab package is provided by creating a model as an instance of the <tt>ADMC_ODEsystem</tt> class of Generators. </p>
+
+<p>PyDSTool provides access to a large subset of the <a href="http://sbml.org/">Systems Biology Markup Language</a> (SBML) through third-party packages (see this <a href="Tutorial/Tutorial_SBML.html">tutorial page</a>), and to the NineML language's abstraction layer (see this <a href="Tutorial/Tutorial_NineML.html">tutorial page</a>). Exporting functionality is in development.</p>
+
+<p>Other helpful tools to translate between dynamical systems model descriptions are already provided by <a href="http://math.colgate.edu/%7Ewweckesser/software/vfgen/">VFGEN</a>. </p>
+
+<hr>
+
+<br>
+
+<p>PyDSTool source code is hosted by: </p>
+<a href="http://sourceforge.net/projects/pydstool"><img src="./sflogo.png" alt="Get PyDSTool at SourceForge.net. Fast, secure and Free Open Source software downloads" border="0" height="40" width="150"></a>
+</div>
+<div id="pagebottom"></div>
+
+</div> <!-- end page -->
+
+
+</div></body></html>

@@ -1,0 +1,891 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><title>GettingStarted - PyDSTool</title></head>
+<body dir="ltr" lang="en">
+
+<p>Site navigation:</p>
+<ul id="navibar">
+<li><a href="./ProjectOverview.html">ProjectOverview</a></li>
+<li><a href="./CodeTopics.html">CodeTopics</a></li>
+<li><a href="./GettingStarted.html">GettingStarted</a></li>
+<li><a href="./Tutorial.html">Tutorial</a></li>
+<li><a href="./UserDocumentation.html">UserDocumentation</a></li>
+<li><a href="./ToolboxDocumentation.html">ToolboxDocumentation</a></li>
+<li><a href="./TechDocumentation.html">TechDocumentation</a></li>
+</ul>
+
+<hr>
+<h1>Installation and getting started</h1>
+
+<div id="page" dir="ltr" lang="en"><!-- start page -->
+
+<ol>
+
+<li>
+<a href="#head-9f5f50a2ee28db96604cce98996399f105b1d64e">Installation and setup</a>
+<ol>
+
+<li>
+<a href="#head-433b921a8287ad39913fedfdb11d30d261e23e02">Python version and library dependencies</a>
+<ol>
+
+<li>
+<a href="#head-66b498ac6669f5a3be702be44c3024f6635d3a6f">PyDSTool 0.84 and later</a>
+</li>
+
+<li>
+<a href="#head-446ea2743b86682f12aa16b955ee195c68343be4">PyDSTool 0.83.3 and earlier</a>
+</li>
+
+<li>
+<a href="#head-20575181a0254b7f388bb37bf93f2cf243638355">For C-based integrator and AUTO support (optional)</a>
+<ol>
+
+<li>
+<a href="#head-a0d8e24369bee9e328d05911e9a0ca95495b9c62">64-bit machines</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-97f8764c1a1bf260618d2dc580e3cdedae037e99">Windows-specific information</a>
+<ol>
+
+<li>
+<a href="#head-3167e02d73f54084ce9f42988848531e6343858a">Vista</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-9cdf0ee598b3fb0bb287209fa9b15f588efff03e">Mac-specific information</a>
+</li>
+
+<li>
+<a href="#head-e089f6aee9a00114d7c9b93f0d93cb6e3742da76">Working platforms</a>
+</li>
+
+<li>
+<a href="#head-3faf4e7e2e3e7a778a66ee6d111dd76f97b0c7e2">Other library issues</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-607f3c0ee247904b85ccb5001f8b0a7ff13392f6">Integrated Development Environment (IDE)</a>
+</li>
+
+<li>
+<a href="#head-0ca613c21f3134ef2f1b1ee485004261680e547f">Installing PyDSTool</a>
+</li>
+
+<li>
+<a href="#head-fac1fbe3d8aaad68689ce71a932ad61343abd87d">Setting up on Linux / OS X</a>
+<ol>
+
+<li>
+<a href="#head-a9c7bed83118e31be5a20775dab615bd947849b0">Python installation quirks for C/Fortran-based integrators (Dopri and Radau)</a>
+<ol>
+
+<li>
+<a href="#head-e52c3c7848dba95746022ddf11bb225e248d3a45">64 bit Mac specifics</a>
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-1ca618f00a22af8c8194649ba346987014534269">Path</a>
+</li>
+
+<li>
+<a href="#head-0dbc6ce0ffa4ab235d64e6ae085885f81a868073">Linear algebra library problems with SciPy</a>
+</li>
+
+<li>
+<a href="#head-7972b2169db0e23c66760c3dd413b0c528ba748b">Configuring MatPlotLib for interactive plotting</a>
+</li>
+
+<li>
+<a href="#head-3291f8d7261566153d06280e506dfbf4803206f2">Supporting C-code integrators</a>
+<ol>
+
+<li>
+<a href="#head-6389f2fe605f13767296b2c423c2135131533863">Install SWIG</a>
+</li>
+
+<li>
+<a href="#head-63f212ef2851036b30451f2a200a78cdb80880da">Compiler problems with SciPy</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-1f38ca5c60b2f42844a6a6424d6e1d1a76d1bcd8">Setting up on Win32</a>
+<ol>
+
+<li>
+<a href="#head-1ca618f00a22af8c8194649ba346987014534269-2">Path</a>
+</li>
+
+<li>
+<a href="#head-8efbabbd9379c860c279f7027d7e2926add17a9a">Linear algebra library issues</a>
+</li>
+
+<li>
+<a href="#head-7972b2169db0e23c66760c3dd413b0c528ba748b-2">Configuring MatPlotLib for interactive plotting</a>
+</li>
+
+<li>
+<a href="#head-3291f8d7261566153d06280e506dfbf4803206f2-2">Supporting C-code integrators</a>
+<ol>
+
+<li>
+<a href="#head-14047dfe676c8e4ca1479512ddfdda315bbc8d66">MinGW (or Cygwin) gcc</a>
+</li>
+
+<li>
+<a href="#head-47194024e56f072a7f718cb895f9230a5e52426c">Create libpython23.a (for Python 2.3 and earlier only)</a>
+</li>
+
+<li>
+<a href="#head-86b536357f5aab3ca9e3ebdbf86709b0149053d5">Tweak distutils (for Python 2.2 and earlier only)</a>
+</li>
+
+<li>
+<a href="#head-6389f2fe605f13767296b2c423c2135131533863-2">Install SWIG</a>
+</li>
+
+<li>
+<a href="#head-d5db151679b36997660b874f19ed6852a8fdd538">Compiler availability</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+
+</li><li>
+<a href="#head-b9ecb570c3d121fa4cb047706d52f244df1ee16e">Compatibility between PyDSTool 0.84 data files and earlier versions</a>
+</li>
+
+<li>
+<a href="#head-d3d5f685bedeb3069bc09be90629a8a5c8308b50">Running the tests and examples</a>
+</li>
+
+<li>
+<a href="#head-9a06733219665b0beed1443cad2033e3ff980560">First steps and basic orientation</a>
+<ol>
+
+<li>
+<a href="#head-d41c5f5456fbb272bc10831f75bcc6d61ed0a973">Assumed background</a>
+</li>
+
+<li>
+<a href="#head-846bb51c4409aec1282f5218cebc1a7be3e20f66">Introspection</a>
+</li>
+
+<li>
+<a href="#head-53f0e845c116eb2aa24c7f82b51f11334d967c80">Object APIs</a>
+</li>
+
+<li>
+<a href="#head-ed9f5dbf90b01aaa40edfee0065b5e7c755acea1">Running the built-in regression tests and examples</a> </li><li>
+<a href="#head-5239f6a66e24f504ef41d2dc08f345387877e3ac">Tutorial and next steps</a>
+</li>
+
+</ol>
+
+</li>
+
+</ol>
+<p> </p>
+<hr>
+<p> </p>
+
+<h2 id="head-9f5f50a2ee28db96604cce98996399f105b1d64e">1. Installation and setup</h2>
+
+
+<h3 id="head-433b921a8287ad39913fedfdb11d30d261e23e02">1.1. Python version and library dependencies</h3>
+
+<p>Further information about the packages mentioned here can be found from the page <a href="http://wiki.python.org/moin/NumericAndScientific">Numeric And Scientific</a>.</p>
+<p>&nbsp; </p>
+
+<h4 id="head-66b498ac6669f5a3be702be44c3024f6635d3a6f">1.1.1. PyDSTool 0.84 and later</h4>
+
+<p>PyDSTool requires Python version 2.4--2.7 (<a class="external" href="http://www.python.org/download/">download it here</a>). <em>It is not yet tested on later versions (3.x) and may not work.</em> I will fix this in due course. Multiple versions of python can usually be installed on a machine concurrently. </p>
+<p>PyDSTool relies on the following packages, which can be installed in this order over Python before using PyDSTool: </p>
+<ul>
+<li><p> <a class="external" href="http://www.scipy.org/"> numpy</a>: version 1.0.1 or later is recommended. May not work with the latest version. </p>
+</li>
+<li>
+  <p> <a class="external" href="http://www.scipy.org/"> scipy</a>: version 0.5.2 or later is recommended. May not work with the latest version. </p>
+</li>
+<li>
+  <p> <a class="external" href="http://matplotlib.sourceforge.net/">MatPlotLib</a>: version 0.91 or later is recommended. May not work with the latest version. </p>
+</li>
+</ul>
+<p><strong>Optional packages:</strong> </p>
+<ul>
+<li><p> An Integrated Development Environment (optional, but recommended): </p>
+<ul>
+<li><p> <a class="external" href="http://ipython.scipy.org/"> IPython</a>, which does not come with an editor, but is great for interactive sessions. </p>
+</li>
+<li><p> <a class="external" href="http://www.wingware.com/products">Wing IDE</a>,
+ which is a great python development environment (and used to develop 
+PyDSTool). Wing IDE 101 is a free package and has most of the 
+functionality you will need to get started. </p>
+</li>
+</ul>
+</li>
+<li class="gap"><p> PyDSTool can also take advantage of the following packages for data analysis, model inference and parameter estimation: </p>
+<ul>
+<li><p> <a class="external" href="http://mdp-toolkit.sourceforge.net/">MDP</a> Modular toolkit for Data Processing. </p>
+</li>
+<li><p> <a class="external" href="http://labix.org/python-constraint">constraint</a> logical constraints package. </p>
+</li>
+</ul>
+</li>
+</ul>
+
+<h4 id="head-446ea2743b86682f12aa16b955ee195c68343be4">1.1.2. PyDSTool 0.83.3 and earlier [NOT RECOMENDED FOR NEW USERS]</h4>
+
+<p>PyDSTool requires Python version 2.3.5 or 2.4 (<a class="external" href="http://www.python.org/download/">download it here</a>).
+ Users have reported difficulties with some components of PyDSTool 
+working properly with Python 2.3.4 (which has inferior support for 
+pickling), and so we now recommend one of the 2.3.5 releases.  </p>
+<p>PyDSTool relies on the following packages, which can be installed in this order over Python 2.3.5 before using PyDSTool: </p>
+<ul>
+<li><p> <a class="external" href="http://sourceforge.net/project/showfiles.php?group_id=1369&amp;package_id=1351">Numeric</a>.
+ We recommend version 23.8. I have been able to get Numeric 24.2 running
+ PyDSTool with Numarray 1.5.1 on a Windows machine, but not using 
+Enthought's pre-packaged versions. </p>
+</li>
+<li><p> <a class="external" href="http://www.stsci.edu/resources/software_hardware/numarray">Numarray</a>:
+ We recommend version 1.3.3, although 1.4.1 or 1.5.1 may work, depending
+ on your platform (they seem fine on my Windows platform with Numeric 
+23.8 or 24.2). (Download it <a class="external" href="http://sourceforge.net/project/showfiles.php?group_id=1369&amp;package_id=32367"> here</a>.)  </p>
+</li>
+<li><p> <a class="external" href="http://www.scipy.org/">SciPy</a>: version 0.3.2 is recommended  -- this is "old SciPy", not the new version with the NumPy core. </p>
+</li>
+<li><p> <a class="external" href="http://matplotlib.sourceforge.net/">MatPlotLib</a>: version 0.83.2 is recommended, but all pre-0.86 versions are compatible with old SciPy. </p>
+</li>
+<li><p> <a class="external" href="http://www.gnuplot.info/download.html">gnuplot</a> version 4 is recommended for 3D graphics support (optional). </p>
+</li>
+<li><p> An IDE such as <a class="external" href="http://ipython.scipy.org/">IPython</a> (optional). </p>
+  <br>
+</li>
+</ul>
+
+<h4 id="head-20575181a0254b7f388bb37bf93f2cf243638355">1.1.3. For C-based integrator and AUTO support (optional)</h4>
+
+<p>You can try PyDSTool without installing these additional packages, 
+but you will be able to use only the scipy-provided VODE integrator. It 
+is at least an order of magnitude slower to solve ODEs with this 
+integrator. </p>
+<ul>
+<li><p> <a class="external" href="http://www.swig.org/Doc1.3/Python.html">SWIG</a>: version 1.3.25 or later is recommended. </p>
+</li>
+<li><p> <a class="external" href="http://gcc.gnu.org/releases.html">gcc</a> version 3.3 or 3.5 (including g77) is recommended (version 4 and above <em>will not work</em> unless you have gfortran instead of g77). Win32 users will need to install something like <a class="external" href="http://www.mingw.org/">MinGW</a> 3.1 or <a class="external" href="http://www.cygwin.com/">Cygwin</a> in order to use gcc. (Newer versions of MinGW may not work with the Radau integrator -- see below for a link to version 3.1) </p>
+</li>
+</ul>
+
+<h5 id="head-a0d8e24369bee9e328d05911e9a0ca95495b9c62">1.1.3.1. 64-bit machines</h5>
+
+<p>If you are using a 64 bit machine, the default libraries may be 
+incompatible with the 32 bit code that comes with PyDSTool. For now, it 
+is unresolved whether you will be able to get the legacy C-based 
+integrators to compile correctly in 64-bit mode. In some cases, this
+is a limitation of how your numpy and python installations themselves.
+The 0.90 version release of PyDSTool will resolve this if numpy and
+python are correctly set up. If you have any success in tweaking the code 
+yourself to work on a 64 bit machine, please send me details so that I 
+can incorporate them in future releases. </p>
+
+<p>In the meantime, there are some things you can try. If the Dopri
+and Radau tests don't run out of the box, try removing the '-m32'
+flags in the files mentioned in the FAQ that is provided in the
+PyDSTool root directory. If you are on linux, make sure that the 'dev'
+version of python is installed, as well as the 32-bit compatible
+libraries: these may include things like ia32-libs, libc6-i386, and
+libc6-dev-i386, and a 'build-essential' package (on Ubuntu).</p>
+
+<p>There may also be problems with the compatibility of the compilers
+that numpy sees by default and those which PyDSTool tries to
+use. Details of investigating and resolving this for AMD and Intel
+linux are detailed in these <a href="./numpy_fortran.txt">notes</a>.</p>
+
+
+<h4 id="head-97f8764c1a1bf260618d2dc580e3cdedae037e99">1.1.4. Windows-specific information</h4>
+
+<p>Some people find the all-in-one <em>platform independent</em> distribution for Python from <a class="external" href="http://www.activestate.com/Products/ActivePython/">ActiveState</a> or <a class="external" href="http://code.enthought.com/enthon/">Enthought</a>
+ (<em>free for academic use</em>) preferable. However, installation of the individual components from 
+binary installers is very simple windows, and gives you more control 
+over the versions that will be most compatible with the current PyDSTool
+ version. We strongly recommend installing the packages individually. </p>
+<p>For the older version of PyDSTool, the Enthought distribution contains the recommended versions of Python, SciPy, SWIG, MinGW, IPython, among other libraries (which you may not need), but <em>does not</em> contain MatPlotLib. You will have to install those separately. Also (<strong>very important!</strong>),
+ you will have to retrograde the included Numeric 24.2 (and possibly 
+Numarray) versions simply by running their installers for the 
+above-mentioned recommended versions available at the sites mentioned 
+above. But unless you can't put MinGW and SWIG together yourself, I 
+don't think you'll be in better shape than if you install all the 
+recommended versions individually. I ended up with the same pickling 
+error as Python 2.3.4 gave me when I tried installing with Enthought, so
+ I don't really recommend this route. If you get it work and have any 
+advice, please let me know so that I can update this information. </p>
+
+<h5 id="head-3167e02d73f54084ce9f42988848531e6343858a">1.1.4.1. Vista</h5>
+
+<p>You must remove Vista's User Account Control <strong>before</strong> 
+installing any of the python core and library software, otherwise you 
+will get confusing error messages claiming that libraries are not 
+present when you attempt to import them. </p>
+<ol type="1">
+<li><p>Click Start, and then click Control Panel. </p>
+</li>
+<li><p>In Control Panel, click User Accounts. </p>
+</li>
+<li><p>In the User Accounts window, click User Accounts. </p>
+</li>
+<li><p>In the User Accounts tasks window, click Turn User Account Control on or off. </p>
+</li>
+<li><p>If UAC is currently configured in Admin Approval Mode, the User Account Control message appears. Click Continue. </p>
+</li>
+<li><p>Clear the Use User Account Control (UAC) to help protect your computer check box, and then click OK. </p>
+</li>
+<li><p>Click Restart Now to apply the change right away, or click Restart Later and close the User Accounts tasks window. </p>
+</li>
+</ol>
+<p>It might be the case that you can switch this back on once every 
+package that you want (numpy, scipy, etc.) has been installed. I'm not 
+certain, I don't use Vista. </p>
+<p>You may also have to do this add the python folder installation (e.g. C:\python25) to the PATH environment variable: </p>
+<ol type="1">
+<li><p>First go to the Windows button, and open control panel. You will need the classic view which is in the upper left hand corner. </p>
+</li>
+<li><p>Click the System icon. </p>
+</li>
+<li><p>Click on the Advanced system settings which is in the upper left hand corner. </p>
+</li>
+<li><p>Once this opens, click the Advanced tab. </p>
+<ol type="a">
+<li><p>Click the Environment Variables button. </p>
+</li>
+</ol>
+<ul>
+<li style="list-style-type: none;"><p>b. In the second box labeled System variables, scroll down to the variable called Path and double click on this. </p>
+<p>c. You will need to add some text to this box. NOTE: Do not delete what is already there!! Add <tt>C:\Python25;</tt> to the front of the existing string. Then press Ok and its ready to go. It should look something like <tt>C:\Python25;%\...........</tt> </p>
+<p>d. Some people have reported that they need to put the <tt>C:\Python25</tt> in double quotes... i.e. <tt>"C:\Python25";</tt> </p>
+</li>
+</ul>
+</li>
+</ol>
+<p>There are known problems with the PyWin32 libraries on Windows Vista which can make using python IDE functionality and graphics through IPython or PyScripter problematic. </p>
+<p>Additionally, Python 2.5's distutils has some problems building extensions for the C-based integrators <em>if</em>
+ you use path names that include spaces. I don't know if these problems 
+have gone away for Python 2.6, but it is hard to patch distutils to fix 
+this, and you would be better off changing your filespace to avoid 
+spaces in filenames. </p>
+
+<h4 id="head-9cdf0ee598b3fb0bb287209fa9b15f588efff03e">1.1.5. Mac-specific information</h4>
+
+<p>First, you will need to have installed XCode on your Mac. There is
+ an installation disk for "Developer Tools" that comes with your
+ Mac. You can install it from there. The very latest version is not
+ important. We recommend using <a class="external"
+ href="http://fink.sourceforge.net/"> fink</a> to install Python and the related
+ packages. (Numpy, etc. are not available through Macports.) Install
+ the Fink binary and run it. Fink will then create a <tt>/sw</tt>
+ directory where everything will be installed. You should ignore the 
+python system in Framework because it's harder to configure and adapt 
+that to our needs. The two are fine co-existing, but you will just need 
+to update your path and alisases so that the fink-installed version is 
+default. To install with fink, I recommend the command line interface
+ only (not Fink Commander). In a terminal:</p>
+
+<p><i>$ fink configure</i></p>
+
+<p>in which you must select the use of the "unstable" branch of
+packages in order to get access to numpy, etc. This is not sketchy in the way that it sounds! Then run</p>
+
+<p><i>$ fink selfupdate</i></p>
+
+<p>which may take a LONG time to complete. Then run</p>
+
+<p><i>$ fink index<br>
+$ fink scanpackages<br>
+$ fink install scipy-py26<br>
+$ fink install matplotlib-py26<br>
+$ fink install swig</i></p>
+
+<p>where the last package, SWIG, is optional, but necessary to run the
+C-based integrators Dopri and Radau. Lastly, see the additional set-up
+notes below for OS X / Linux.</p>
+<p>&nbsp;</p>
+<h4 id="head-e089f6aee9a00114d7c9b93f0d93cb6e3742da76">1.1.6. Working platforms</h4>
+
+<p>The present version of PyDSTool has been built and tested using
+Windows XP/7 (using MinGW, not Cygwin), Mac OS X 10.4-10.7 and Linux (including Ubuntu and Gentoo).</p>
+<p>&nbsp;</p>
+<h4 id="head-3faf4e7e2e3e7a778a66ee6d111dd76f97b0c7e2">1.1.7. Other library issues</h4>
+
+<p>Pylab's MatPlotLib is the 2D graphics library used by PyDSTool at present. MatPlotLib appears to be the <em>de facto</em> standard for 2D graphics in Python, and there is progress in extending this to 3D graphics (see <a class="external" href="http://www.scipy.org/Wiki/Cookbook/Matplotlib/mplot3D"> mplot3D</a>).
+ It also requires a minimal number of additional libraries to be 
+installed. MatPlotLib has several dependencies, depending on which 
+backend you wish to use with it. You may have to install wxPython, PyGTK
+ (including the development package), GLIB, tkinter, libpng, among 
+others. There are some OS and IDE compatibility issues with the 
+different <a class="external" href="http://matplotlib.sourceforge.net/backends.html">backends</a>, which are discussed further in a sub-section below. </p>
+<p>Gnuplot is optional (apparently support for this via a SciPy 
+interface is dwindling, although I think it fills a need), but is 
+recommended to support basic 3-dimensional plotting.  </p>
+<p>gcc 4.0 has given us problems with g77 support for the Radau C-based integrator (see page <a href="./Generators.html">Generators</a>), and we recommend using only 3.X versions. </p>
+<p>Some parts of PyDSTool can also take advantage of <a class="external" href="http://psyco.sourceforge.net/">Psyco</a> optimization, although this only works for x86 platforms. </p>
+
+<h3 id="head-607f3c0ee247904b85ccb5001f8b0a7ff13392f6">1.2. Integrated Development Environment (IDE)</h3>
+
+<p>We recommend installing the platform-independent <a class="external" href="http://ipython.scipy.org/">IPython</a>
+ IDE for PyDSTool, although IDLE on Windows (bundled with Python) works 
+well too, and comes with its own script editor. It may be difficult to 
+make <a class="external" href="http://sourceforge.net/projects/pywin32/"> PythonWin</a>
+ work with MatPlotLib, depending on the availability of the different 
+graphics back-ends (see platform-specific notes below). Follow the 
+platform-specific instructions later in this page for tweaking 
+MatPlotLib to work with your IDE. </p>
+<p>Note that on Windows you may need to install <a class="external" href="http://ipython.scipy.org/Wiki/PyReadline/Intro">pyreadline</a>, and the <a class="external" href="http://sourceforge.net/project/showfiles.php?group_id=78018"> PyWin32</a> tools for optimum use of IPython (and  <a class="external" href="http://starship.python.net/crew/theller/ctypes">ctypes</a> for older Python versions pre-2.5). Latest versions of these tools can be found on SourceForge. </p>
+
+<h3 id="head-0ca613c21f3134ef2f1b1ee485004261680e547f">1.3. Installing PyDSTool</h3>
+
+<p>The PyDSTool package does not need to be installed <em>per se</em>. You simply unzip it to its target directory (e.g., <tt>c:\PyDSTool\</tt>). No call to <tt>setup</tt> (part of the distutils package) is necessary (and you do <em>not</em> have to copy the code to Python's <tt>lib\site-packages</tt> directory). We aim to provide a <tt>setup.py</tt> installer in version 0.90. </p>
+<p>However, there are several things you may need to do in order to run PyDSTool successfully. </p>
+<p>For instance, you will need to update your system's path so that 
+Python can find the package. We now explain how to do this, depending on
+ your platform. </p>
+<p>We recommend you run the test scripts of the package dependencies (SciPy,
+ MatPlotLib, etc.) to check that they are OK before running any PyDSTool
+ test scripts (discussed in Section 2). In case you encounter problems, 
+the following sub-sections describe how to configure your system 
+correctly. </p>
+
+<h3 id="head-fac1fbe3d8aaad68689ce71a932ad61343abd87d">1.4. Setting up on Linux / OS X</h3>
+
+<p>You will need to edit the <tt>$HOME/.profile</tt> file to add a
+variable PYTHONPATH with all the directories leading up to PyDSTool,
+and a variable PYTHON set to <tt>/sw/bin/python2.6</tt>. You may also
+wish to make an alias for python and ipython to point to the versions
+in this bin directory in case of conflicts with any built-in or
+previously installed versions of python.</p>
+
+<p>We recommend the GTKagg backend to Matplotlib, which seems to be
+the most reliable in its interaction with ipython on these platforms.</p>
+
+<p>If you happen to use Gentoo you might find Shai Revzen's page <a href="./InstallOnGentoo.html">InstallOnGentoo</a>
+ helpful, although Shai has other good advice there for linux systems in
+ general. You will need a backend such as Tkinter for graphics if you 
+don't already have one installed. </p>
+<p>You must ensure that you have write permissions in the unzipped 
+PyDSTool folder (a.k.a. "installation directory") for Python to write 
+.pyc files from the .py code. You can do this with the command <tt>chmod&nbsp;-R&nbsp;a+rwx&nbsp;PyDSTool</tt>. </p>
+
+<h4 id="head-a9c7bed83118e31be5a20775dab615bd947849b0">1.4.1. Python installation quirks for C/Fortran-based integrators (Dopri and Radau)</h4>
+
+<p>Depending on your linux flavor, you may need to be add some 
+non-default packages to your python installation to be able to use 
+PyDSTool. For both integrators you must have the '-dev' version of 
+python that includes the header files necessary for distutils to compile
+ extensions using numpy types. You will need a fortran compiler (g77 or 
+gfortran) for Radau to work. </p>
+<p>One further quirk is that on Ubuntu Hardy with numpy 1.1 and Python 2.5, <tt>cfunc.h</tt>
+ was provided in the "wrong" directory and needed to be copied into its 
+parent directory in order that the standard library includes during the 
+gcc calls to build the Dopri and Radau integrators. </p>
+
+<h5 id="head-e52c3c7848dba95746022ddf11bb225e248d3a45">1.4.1.1. 64 bit Mac specifics</h5>
+
+<p>Leopard and Snow Leopard are nominally 64-bit OS's, but it is common 
+to be installing 32-bit software on these systems. If that is the case 
+(especially packages on fink) you will need some special tweaks for 
+getting Dopri, Radau, and AUTO (via <a
+href="./PyCont.html">PyCont</a>) to work.
+See the notes earlier for 64 bit installation issues.</p>
+
+<h4 id="head-1ca618f00a22af8c8194649ba346987014534269">1.4.2. Path</h4>
+
+<p>You will need to add the following lines in your shell's rc file so 
+that the Python interpreter knows where to find the PyDSTool package, 
+assuming you installed PyDSTool directly in your home directory. </p>
+<p>Using <em>.bashrc</em> 
+</p>
+<pre>PYTHONPATH=$PYTHONPATH:$HOME/:$HOME/PyDSTool/:$HOME/PyDSTool/tests/
+export PYTHONPATH
+</pre>
+<p>Using <em>.cshrc</em> 
+</p>
+<pre>setenv PYTHONPATH $PYTHONPATH:$HOME/:$HOME/PyDSTool:$HOME/PyDSTool/tests/
+</pre>
+<p>You may also want to make sure that Python's <tt>site-packages</tt> 
+directory is included in your path, if it is not set correctly by Python
+ already. e.g. prepend the paths in the above examples with something 
+like <tt>/usr/local/lib/python2.4/site-packages:</tt>. </p>
+<p>You may have to add the following file to your Python installation, in order to instruct Python where to look for your package: <tt>/usr/local/lib/python2.4/site-packages/PyDSTool.pth</tt>. This file should contain text resembling the following: </p>
+
+<pre>$HOME/
+$HOME/src/
+$HOME/src/PyDSTool/
+</pre>
+<p>or whatever your PyDSTool path is. <strong>It seems that if you don't <em>explicitly</em> add the parent directories to this file then Python cannot see any the sub-directories.</strong> </p>
+
+<h4 id="head-0dbc6ce0ffa4ab235d64e6ae085885f81a868073">1.4.3. Linear algebra library problems with SciPy</h4>
+
+<p>If the ATLAS libraries have not been properly installed as part of 
+SciPy, you may find that certain of SciPy's linear algebra library 
+functions (those from LAPACK, I believe) will not import. One solution 
+is to remove the ATLAS libraries from the installation sequence of 
+SciPy.  </p>
+<p>Some linux distributions (e.g. Fedora Core 4) have LAPACK and BLAS 
+rpms in their "Extras" collection. Installation of these (or other 
+ATLAS-free sources) prior to a rebuild of SciPy may make everything work
+ as desired. </p>
+<p>Further information can be found at the "Known installation problems" sub-section of the <a class="external" href="http://www.scipy.org/FAQ"><img src="GettingStarted_files/moin-www.html" alt="[WWW]" height="11" width="11"> SciPy FAQ</a>. </p>
+
+<h4 id="head-7972b2169db0e23c66760c3dd413b0c528ba748b">1.4.4. Configuring MatPlotLib for interactive plotting</h4>
+
+<p>On a Linux installation with MatPlotLib 0.82 and above the default 
+setup may have problems with interactive plotting. For instance, we had 
+to close the plot window to get back to the python prompt, precluding 
+having more than one plot window open at at time. </p>
+<p>To fix this on your system, you might want to change the back-end
+used for windowing: </p>
+<p>1. Download a copy of the <tt>.matplotlibrc</tt> file provided <a
+class="external"
+href="http://matplotlib.sourceforge.net/.matplotlibrc"><img
+src="GettingStarted_files/moin-www.html" alt="[WWW]" height="11"
+width="11"> here</a>.  You can place this in your home directory's
+.matplotlib directory, which will now override the built-in default rc
+file for matplotlib. (On binary-only linux/OSX installations, the default rc
+file may be in /etc if you really want to edit that).</p>
+<p>2. Change the "backend" line to TkAgg. </p>
+<p>3. Change the "interactive" line to True. </p>
+<p>4. If not using IPython, you <em>might</em> only be able to regain
+a prompt after plotting by commenting out the line "Tk.mainloop()" in
+the <tt>show</tt> function of
+<tt>site-packages/matplotlib/backends/backend_tkagg.py</tt>. If you
+are using a binary-based installation you will not have this option!</p>
+<p>See <a class="external" href="http://matplotlib.sourceforge.net/interactive.html"><img src="GettingStarted_files/moin-www.html" alt="[WWW]" height="11" width="11"> this page</a> for more information about interactive plotting. Also see <a class="external" href="http://groups.google.com/group/comp.lang.python/browse_thread/thread/462f02a4fa19264a/7c4fedbc8cbd02b4?lnk=st&amp;q=matplotlib+tkagg&amp;rnum=8&amp;hl=en#7c4fedbc8cbd02b4"><img src="GettingStarted_files/moin-www.html" alt="[WWW]" height="11" width="11"> this post</a> for a discussion at the comp.lang.python newsgroup. </p>
+<p>Mac OS X users:  This fix is known to work for TclTk version 8.4.6-2. </p>
+<p>Also, making this change fixes a problem with XWindow session 
+forwarding -- now local plotting graphs created on a remote terminal 
+works if you have used <tt>ssh&nbsp;-X</tt>  to login to the remote machine. </p>
+<p>Depending on your setup, you may need to remove the final <tt>show()</tt>
+ statements from your scripts (and our test scripts) in order to have 
+the figures appear "and" return you to the interactive prompt. For 
+instance, I know this is what I needed to do with Python 2.4, matplotlib
+ 0.90 on Windows XP. </p>
+
+<h4 id="head-3291f8d7261566153d06280e506dfbf4803206f2">1.4.5. Supporting C-code integrators</h4>
+
+<p>You do not need to follow these instructions to use the inbuilt (scipy-provided) VODE integrator. </p>
+
+<h5 id="head-6389f2fe605f13767296b2c423c2135131533863">1.4.5.1. Install SWIG</h5>
+
+<p>SWIG is a wrapper for C/C++ sources. It allows you to use C/C++ 
+functions and classes from withing Python with a minimum effort. </p>
+<p>Download SWIG from <a class="external" href="http://www.swig.org/"><img src="GettingStarted_files/moin-www.html" alt="[WWW]" height="11" width="11"> http://www.swig.org</a> (use macswig for Mac OS/X). Follow the instructions to compile and build the package. </p>
+
+<h5 id="head-63f212ef2851036b30451f2a200a78cdb80880da">1.4.5.2. Compiler problems with SciPy</h5>
+
+<p>PyDStool appears to be compatible only with version 3.X of gcc. We 
+have had problems with the Radau integrator with version 4.0. </p>
+<p>If you are expecting to use gcc to compile C code versions of vector 
+fields (e.g. with the Dopri integrator), then you should ensure that the
+ CC variable is set to gcc in the Python installation Makefile  
+</p>
+<pre>&lt;python_installation_root&gt;/lib/python2.3/config/Makefile
+</pre>
+<p>If this is not properly set when you try to activate PyDSTool's Dopri code you may get an error (see the FAQ on the <a href="./MainProjectPage.html">MainProjectPage</a>). </p>
+<p>The CC environment variable of your unix shell may also need to be set to gcc (or whatever compiler you wish to be using). </p>
+
+<h3 id="head-1f38ca5c60b2f42844a6a6424d6e1d1a76d1bcd8">1.5. Setting up on Win32</h3>
+
+<p>If you only intend to use native Python/SciPy
+ functionality within PyDSTool, you only need to follow the instructions
+ under the Path and MatPlotLib sub-headings, otherwise to use C-based 
+integrators you should read <em>all</em> of the instructions below. </p>
+
+<h4 id="head-1ca618f00a22af8c8194649ba346987014534269-2">1.5.1. Path</h4>
+
+<p>On a Windows platform, you may have to add the following file to your
+ Python installation, in order to instruct Python where to look for your
+ package: <tt>C:\Python-2.3.5\Lib\site-packages\PyDSTool.pth</tt>. This file should contain text resembling the following: </p>
+
+<pre>C:\\
+C:\\Tools\\
+C:\\Tools\\PyDSTool\\
+</pre>
+<p>or whatever your PyDSTool path is. <strong>It seems that if you don't <em>explicitly</em> add the parent directories to this file then Python cannot see any sub-directories of it!</strong> If you are using the PythonWin IDE, you can make these changes to the path from the Tools -&gt; Edit Python Path menu. </p>
+<p>If you have not done so already, you may also wish to add the path to <tt>python.exe</tt> to your <tt>AUTOEXEC.BAT</tt>
+ file and to the Windows Environment Variables (in Control Panel\System)
+ so that python can be run directly on scripts from the command prompt. 
+The paths of MinGW, CygWin, and SWIG will have to be added the same way if you are using those for C-based integrators. </p>
+<p>We recommend the IDLE environment for working with PyDSTool in Windows, as it is the most easy to work with MatPlotLib. </p>
+
+<h4 id="head-8efbabbd9379c860c279f7027d7e2926add17a9a">1.5.2. Linear algebra library issues</h4>
+
+<p>If you install SciPy from binaries then there should be no problem getting the LAPACK and 
+ATLAS libraries to work correctly. If you are compiling from sources you
+ may need to follow the instructions given above for Linux / OS X 
+platforms. </p>
+
+<h4 id="head-7972b2169db0e23c66760c3dd413b0c528ba748b-2">1.5.3. Configuring MatPlotLib for interactive plotting</h4>
+
+<p>Make sure you install the <a class="external" href="http://sourceforge.net/projects/pywin32/">PythonWin</a>
+ extensions first. See the following links for information on how to 
+configure your system for bug-free interactive graphing with MatPlotLib.
+ </p>
+<ul>
+<li><p> <a class="external" href="http://matplotlib.sourceforge.net/interactive.html">http://matplotlib.sourceforge.net/interactive.html</a> </p>
+</li>
+<li><p> <a class="external" href="http://matplotlib.sourceforge.net/backends.html"> http://matplotlib.sourceforge.net/backends.html</a> </p>
+</li>
+<li><p> <a class="external" href="http://mail.python.org/pipermail/edu-sig/2005-January/004362.html"> http://mail.python.org/pipermail/edu-sig/2005-January/004362.html</a> (somewhat out of date) </p>
+</li>
+</ul>
+<p>If it has been created, your <tt>matplotlibrc</tt> file can probably be found in <tt>C:\Python27\share\matplotlib\</tt>, otherwise download a sample file provided <a class="external" href="http://matplotlib.sourceforge.net/users/customizing.html">here</a>,
+ and follow the instructions on that page.</p>
+ 
+<p>The TkAgg back-end is probably the easiest to configure, so choose 
+that one if it's not already selected. Then set the 'interactive' option
+ to True. </p>
+
+<p>MatPlotLib configuration problems will depend on which IDE you choose. We recommend using <a class="external" href="http://ipython.scipy.org/"> IPython</a> (with the -pylab option built into your shortcut) or <a class="external" href="http://www.python.org/idle/"> IDLE</a> (with the -n option built into your shortcut -- see below). </p>
+<p><strong>Instructions for IDLE:</strong></p>
+<p>In the start menu, change the properties for the link to idle from 
+</p>
+<pre>C:\Python27\pythonw.exe "C:\Python27\Lib\idlelib\idle.pyw"
+</pre>
+<p>to 
+</p>
+<pre>C:\Python27\pythonw.exe "C:\Python27\Lib\idlelib\idle.pyw" "-n"
+</pre>
+<p><strong>For IPython: </strong></p>
+<p>To fix interactive plotting on your system, you might want to change the back-end used for windowing:</p>
+<p>2. Change the "backend" line in your matplotlibrc file to TkAgg (unfortunately this option may 
+  not be compatible with the PythonWin IDE). </p>
+<p>3. Change the "interactive" line to True. </p>
+<p>4. If not using IPython, you might only be able to regain a prompt 
+after plotting by commenting out the line "Tk.mainloop()" in the <tt>show</tt> function of <tt>site-packages/matplotlib/backends/backend_tkagg.py</tt>. </p>
+<p>Now try "import pylab" from the python prompt. If you get an error 
+about a DLL not found, it is most likely msvcp71.dll that is missing 
+from your Windows\System directory, in which case you can download it 
+from a reputable website such as <a class="external" href="http://dll-files.com/">http://dll-files.com</a>. </p>
+
+<h4 id="head-3291f8d7261566153d06280e506dfbf4803206f2-2">1.5.4. Supporting C-code integrators</h4>
+
+<p>You do not need to follow these instructions to use the inbuilt (scipy-provided) VODE integrator. </p>
+
+<h5 id="head-14047dfe676c8e4ca1479512ddfdda315bbc8d66">1.5.4.1. MinGW (or Cygwin) gcc</h5>
+
+<p>Next, install MinGW gcc. This is the recommended way to use gcc with 
+PyDSTool on Win32 platforms. There is a version of the MinGW gcc 
+compiler available through Cygwin, but you'll still need to change the 
+compiler name in any scripts you run that use the C integrators (see 
+Compiler Availability subsection below). </p>
+<p>The most recent versions of MinGW include versions of gcc
+ are compatible with the SciPy runtime libraries. If you have problems, you can try using versions of 
+MinGW before 3.3, and the .exe installer for version 3.1
+ can be downloaded <a class="external" href="http://www2.gsu.edu/%7Ematrhc/MinGW-3.1.0-1.zip">here</a> or by an internet search for "MinGW-3.1.0". Other downloads are available at <a href="http://www.mingw.org/"> http://www.mingw.org</a>.
+ You only need to download the installer for MinGW, which contains the 
+whole compiler, support utilities, documentation, libraries and header 
+files. This gcc compiler runs under Windows and compiled programs are 
+more independent from the runtime system than when using Cygwin gcc 
+(from what I've been told). </p>
+<p>Once uncompressed, you should add the \bin directory of MinGW to your
+ path environment variable. (Example : Under Windows 95/98/ME, if you 
+installed MinGW to <tt>c:\gcc</tt>, you would add <tt>SET&nbsp;PATH=c:\gcc\bin;%PATH%</tt> to your <tt>AUTOEXEC.BAT</tt>.) </p>
+<p>If installed properly, you should be able to run <tt>gcc&nbsp;--version</tt> anywhere. </p>
+<p>Now, create the file  <tt>c:\\Python2.7\\Lib\\distutils\\distutils.cfg</tt> or the equivalent path for your python installation. It will contain these lines: 
+</p>
+<pre>[build]
+compiler=mingw32
+</pre>
+
+<h5 id="head-47194024e56f072a7f718cb895f9230a5e52426c">1.5.4.2. Create libpython23.a (for Python 2.3 and earlier only)</h5>
+
+<p><em>Note, for Python 2.4 or later you do not have to create the corresponding libpython24.a file, it is already present.</em></p>
+<p>In order for PyDSTool to create Python extensions, as part of using 
+C-based integrators, it needs to link against the Python library. 
+Unfortunately, most Python distributions are provided with <tt>Python23.lib</tt>, a library in Microsoft Visual C++ format. GCC expects a <tt>.a</tt> file (<tt>libpython23.a</tt> to be precise.). Here's how to convert <tt>python23.lib</tt> to <tt>libpython23.a</tt> if it is not already present in your <tt>C:\python23\libs\</tt> directory: </p>
+<p>Download pexport (you'll have to search for that online<a class="external" href="http://starship.python.net/crew/kernr/mingw32/pexports-0.42h.zip"></a>). Get <tt>Python23.dll</tt> (it should be in <tt>C:\WINNT\System32\</tt>). Run: 
+</p>
+<pre>pexports python23.dll &gt; python23.def
+</pre>
+<p>This will extract all symbols from <tt>python23.dll</tt> and write them into <tt>python23.def</tt>. Now run: 
+</p>
+<pre>dlltool --dllname python23.dll --def python23.def --output-lib libpython23.a
+</pre>
+<p>This will create <tt>libpython23.a</tt> (dlltool is part of MinGW utilities). Copy <tt>libpython23.a</tt> to <tt>C:\python23\libs\</tt> (in the same directory as <tt>python23.lib</tt>).
+ This trick should work for all Python versions, including future 
+releases of Python. You can also use this trick to convert other 
+libraries. </p>
+<p>Advice on other web pages has also recommended copying <tt>python23.dll</tt> from <tt>C:\WINNT\System32\</tt> to your Python <tt>libs</tt> directory. </p>
+
+<h5 id="head-86b536357f5aab3ca9e3ebdbf86709b0149053d5">1.5.4.3. Tweak distutils (for Python 2.2 and earlier only)</h5>
+
+<p>This tweak is necessary with Python 2.2, but it is fixed in 2.3.5 and
+ later. I don't know at which version change in-between these the fix 
+was made. So just in case you need to do it yourself... </p>
+<p>Locate <tt>build_ext.py</tt> in your Python directory (should be somewhere around <tt>C:\Python22\Lib\distutils\command\</tt>). </p>
+<p>Change the following two lines: 
+</p>
+<pre>#new_sources.append(base + target_ext) # old
+new_sources.append(base + '_wrap' + target_ext) # new
+
+#swig_cmd = [swig, "-python", "-dnone", "-ISWIG"] # old
+swig_cmd = [swig, "-python"] # new
+</pre>
+
+<h5 id="head-6389f2fe605f13767296b2c423c2135131533863-2">1.5.4.4. Install SWIG</h5>
+
+<p>SWIG is a wrapper for C/C++ sources. It allows you to use C/C++ 
+functions and classes from withing Python with a minimum effort. </p>
+<p>Download SWIG binaries for Windows from <a class="external" href="http://www.swig.org/">http://www.swig.org</a>, uncompress them and add the SWIG directory to your path in <tt>AUTOEXEC.BAT</tt> (i.e., the directory where <tt>swig.exe</tt> is located). </p>
+<p>Set these environment variables, usually from the Control Panel\System\Advanced\Environment Variables dialog. </p>
+<p>PYTHON_INCLUDE : Set this to the directory that contains python.h 
+PYTHON_LIB : Set this to the python library including path for linking </p>
+<p>Example using Python 2.3: 
+</p>
+<pre>PYTHON_INCLUDE: d:\python23\include
+PYTHON_LIB: d:\python23\libs\python23.lib
+</pre>
+<p>Also see <a class="external" href="http://www.mingw.org/MinGWiki/index.php/Python%20extensions">http://www.mingw.org/MinGWiki/index.php/Python%20extensions</a>. </p>
+
+<h5 id="head-d5db151679b36997660b874f19ed6852a8fdd538">1.5.4.5. Compiler availability</h5>
+
+<p>On Win32 platforms, it is assumed that "mingw32" is present in your 
+Python installation. Any use of modules that require compilation in C 
+will require you to be sure that you have a C compiler available and 
+visible to PyDSTool. On Linux-type platforms, this should only require 
+you to <em>not</em> provide a 'compiler' option in the initialization of any such objects, unless you wish to specify a particular compiler.  </p>
+<p>If you only use Cygwin on a Win32 platforms, you need to specify the 
+compiler option as "cygwin" in initialization of any C-code based 
+Generator. PyDSTool uses the <tt>numpy_distutils</tt> version of the distutils interface to the gcc compiler, although for Cygwin-based compilation you will need to add this <a class="external" href="http://www.cam.cornell.edu/%7Erclewley/cygwinccompiler.py">cygwinccompiler.py</a> file to your <tt>C:\Python23\Lib\site-packages\numpy_distutils\</tt> directory in order to get the Radau integrator to work. </p>
+
+<h2 id="head-b9ecb570c3d121fa4cb047706d52f244df1ee16e">2. Compatibility between PyDSTool 0.84 data files and earlier versions</h2>
+
+<p>If you are upgrading to PyDSTool 0.84 from an earlier version, and 
+you have previously saved PyDSTool or Scipy data objects, you may be 
+able to still use <tt>loadObjects</tt>, etc. to load the data. If you install numarray 1.5.2 alongside numpy, this makes the old PyDSTool array classes visible to <tt>loadObjects</tt>
+ when it tries to recover old data. This installation will not conflict 
+with the numpy namespace if you remember not to import from numarray 
+yourself! Note that this compatibility is not available through the 
+numpy.oldnumeric module. </p>
+
+<h2 id="head-d3d5f685bedeb3069bc09be90629a8a5c8308b50">3. Running the built-in regression tests and examples</h2>
+
+<p>In the directory <tt>PyDSTool/tests/</tt> you will find a number of basic tests and examples. </p>
+<p>Once you have set up your system you may like to run all the tests in batch mode. This can be done by running the script <tt>/tests/run_all_tests.py</tt>, e.g. by calling <tt>python&nbsp;-i&nbsp;run_all_tests.py</tt>
+ from the prompt, in the tests directory. There is a simple option at 
+the top of that file that you may need to edit in order to select 
+whether the external compiler tests should be run (in case you do not 
+have gcc working on your system). By default the script assumes that you
+ have gcc working. </p>
+<p>Note that on some platforms you will see an error report when the 
+script tries to automatically close graph windows, to the effect of: </p>
+<p><tt>Fatal&nbsp;Python&nbsp;error:&nbsp;PyEval_RestoreThread:&nbsp;NULL&nbsp;tstate</tt>.  </p>
+<p>This error can be ignored. Depending on the settings for your matplotlib installation, you may also (<em>a</em>) get a slew of warnings at end of each test script, and (<em>b</em>)
+ need to close any plot windows yourself in order to proceed to the next
+ test. The batch script should report any errors that you get from the 
+test scripts if they fail, in which case please let us know so that we 
+can address the problem. </p>
+<p>A few of the tests depend on files already having been created by 
+other tests, so read the preamble of the files first if you wish to run 
+them individually. Some of the scripts are rather substantial examples 
+of mini-projects, and may take a long time to run and produce a lot of 
+output. In most cases, the scripts themselves provide instruction on 
+basic PyDSTool features and the screen output may simulate live 
+interactions at the prompt. </p>
+<p>The default compiler for PyDSTool in Windows is assumed to be MinGW, 
+so if you are running Cygwin instead then you will need to add the 
+keyword <tt>compiler='cygwin'</tt> to all initializations of C-based integrators (Dopri and Radau) in order for them to correctly access gcc through Cygwin. </p>
+<p>Note that the most problematic issue seems to be running g77 as part 
+of the Radau integrator's setup. If you see g77 compiler errors as part 
+of these tests then please let us know what the problem is and we'll try
+ to help you figure it out. You may like to remove those scripts from 
+the list to execute in <tt>run_all_tests.py</tt> or use Dopri instead (where possible). </p>
+<p>PyDSTool has been successfully tested on the popular 32-bit platforms, based on the instructions given on this page (and some 64-bit platforms - see above notes). If you cannot understand why you still have problems after carefully following the above instructions then please post a message on the main <a href="http://sourceforge.net/projects/pydstool/forums/forum/472291">User Help forum</a>. That is preferred to emailing for general installation and setup inquiries.</p>
+
+<h2 id="head-9a06733219665b0beed1443cad2033e3ff980560">4. First steps and basic orientation</h2>
+
+
+<h3 id="head-d41c5f5456fbb272bc10831f75bcc6d61ed0a973">4.1. Assumed background</h3>
+
+<p>In this section we will assume that you have set up PyDSTool successfully, and that you are already familiar with using Python, SciPy, and NumPy. Tutorials on these can be found at <a href="http://www.python.org/">http://www.python.org</a>, a <a href="http://www.scipy.org/SciPy_Tutorial">SciPy/NumPy tutorial</a>, and a basic <a href="http://homes.esat.kuleuven.be/%7Epython/doc/numpy/array.html">NumPy tutorial</a>. If you are used to an environment such as Matlab rather than Python, you might like to consult this page about <a class="external" href="http://www.scipy.org/NumPy_for_Matlab_Users">NumPy for Matlab users</a>. See also the <a href="./PythonResources.html">PythonResources</a> page.</p>
+<h3 id="head-846bb51c4409aec1282f5218cebc1a7be3e20f66">4.2. Introspection</h3>
+
+<p>The most helpful Python feature available during an interactive PyDSTool session is <em>introspection</em>. There is a great article on this in the <a href="./PythonResources.html">PythonResources</a> section. Typing <tt>dir(&lt;object_name&gt;)</tt> will list the method and attribute names associated with that object. <tt>type(&lt;name&gt;)</tt> will tell you what type is associated with that name, so that you can understand how to use it. </p>
+<p>Many PyDSTool objects have the method <tt>info</tt>, which provides 
+various levels of detail depending on the optional "verbose level" 
+argument. The default value for this level is usually 0, but is 
+sometimes 1. Some objects provide even more detailed information at 
+level 2. (For PyDSTool objects, typing <tt>help(&lt;object_name&gt;)</tt> is equivalent to printing the results from the info method called with its default verbose level.) </p>
+<p>For instance, suppose we have a Pointset object <tt>p</tt> in memory. </p>
+
+<div class="codearea" dir="ltr" lang="en"><pre id="CA-a7096a4da1caa493284f6bd1aaedcad20e31ef48_000" dir="ltr" lang="en"><span class="line"><span class="Operator">&gt;&gt;</span><span class="Operator">&gt;</span> <span class="ResWord">print</span> <span class="ID">p</span><span class="Operator">.</span><span class="ID">info</span><span class="Operator">(</span><span class="Number">0</span><span class="Operator">)</span></span>
+<span class="line"><span class="ID">Pointset</span></span>
+<span class="line"><span class="Operator">&gt;&gt;</span><span class="Operator">&gt;</span> <span class="ResWord">print</span> <span class="ID">p</span><span class="Operator">.</span><span class="ID">info</span><span class="Operator">(</span><span class="Number">1</span><span class="Operator">)</span></span>
+<span class="line"><span class="ID">Pointset</span></span>
+<span class="line"><span class="ID">Independent</span> <span class="ID">variable</span><span class="Operator">:</span></span>
+<span class="line"><span class="ID">t</span><span class="Operator">:</span>  <span class="Operator">[</span> <span class="Number">0.</span>  <span class="Number">1.</span>  <span class="Number">2.</span>  <span class="Number">3.</span><span class="Operator">]</span></span>
+<span class="line"><span class="ID">Coordinates</span><span class="Operator">:</span></span>
+<span class="line"><span class="ID">x0</span><span class="Operator">:</span>  <span class="Operator">[</span> <span class="Number">4.456</span>    <span class="Number">4.11103</span>  <span class="Number">7.3431</span>   <span class="Number">5.443</span>  <span class="Operator">]</span></span>
+<span class="line"><span class="ID">x1</span><span class="Operator">:</span>  <span class="Operator">[</span><span class="Operator">-</span><span class="Number">1.00336000e+001</span> <span class="Operator">-</span><span class="Number">5.60000000e-001</span> <span class="Operator">-</span><span class="Number">3.23221000e+000</span> <span class="Operator">-</span><span class="Number">1.00000000e-002</span><span class="Operator">]</span></span>
+<span class="line"><span class="ID">x2</span><span class="Operator">:</span>  <span class="Operator">[</span> <span class="Number">300000.</span>    <span class="Number">4000.</span>  <span class="Number">330000.</span>  <span class="Number">280000.</span><span class="Operator">]</span><span class="Text"></span></span>
+</pre>
+</div>
+<p>PyDSTool provides the function <tt>who</tt>, which works in a similar
+ way to the Matlab function of the same name. This function returns 
+information about all the PyDSTool objects currently defined. The 
+optional keyword argument <tt>verboselevel</tt> selects the level of detail that will be displayed about each object, via the objects' <tt>info</tt> methods. An optional <tt>typelist</tt> list of PyDSTool types makes <tt>who</tt> return only objects of those types. The general-purpose pretty printer function <tt>info</tt> is also useful to display the contents of objects and dictionaries when they do not have a dedicated <tt>info</tt> method. </p>
+
+<h3 id="head-53f0e845c116eb2aa24c7f82b51f11334d967c80">4.3. Object APIs</h3>
+
+<p>PyDSTool's API command returns a string containing all the (non-underscored) attributes and methods of an object, with their docstrings where available. The full API documentation of all PyDSTool functions, classes, constants, etc. is provided in the bundled auto-created HTML documentation (see the local README file to get started).</p>
+<h3 id="head-ed9f5dbf90b01aaa40edfee0065b5e7c755acea1">4.4. Running and understanding a test script</h3>
+
+
+<pre>cd PyDSTool/tests
+python -i interp_vode_test.py
+</pre>
+
+<p>For an interactive session, the principal import statement in a script is</p>
+<p><tt>from&nbsp;PyDSTool&nbsp;import&nbsp;*</tt></p>
+
+<p>from which most of the names from scipy, numpy, and math, become 
+  available without prefixing, in addition to the core PyDSTool names.</p>
+<h3 id="head-5239f6a66e24f504ef41d2dc08f345387877e3ac">4.5. Tutorial and next steps</h3>
+
+<p>There are two sources of further help. Primarily, there is a growing online <a href="./Tutorial.html">Tutorial</a>. For a wider range of examples, you are encouraged to read and run the other examples in the <tt>PyDSTool/tests/</tt>
+ directory. Many of these contain significant code commenting to explain
+ the set ups, and also display graphs and text-based information about 
+the examples.  </p>
+<hr>
+<p> </p>
+<p>PyDSTool source code is hosted by SourceForge: </p>
+<a href="http://sourceforge.net/projects/pydstool"><img src="./sflogo.png" alt="Get PyDSTool at SourceForge.net. Fast, secure and Free Open Source software downloads" border="0" height="40" width="150"></a><p> </p>
+<a id="bottom"></a>
+
+</div>
+<div id="pagebottom"></div>
+
+
+</div> <!-- end page -->
+
+
+</div></body></html>
